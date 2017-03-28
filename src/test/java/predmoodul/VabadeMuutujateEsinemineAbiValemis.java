@@ -50,10 +50,6 @@ public class VabadeMuutujateEsinemineAbiValemis {
     // M(x,y,z) ;= x*x + y*y = z*z
     // M(a,b,c)
 
-    //M(x,y,z) := AxAy(x=y) & z <- see on vale. Z on defineerimata vaba muutuja, ei oska evalida, v.a M(x,y,z)
-    ////M(x,y) := Ay(x=y)<- see on õige M(1,0)
-    //"M(x,y) := AmAn(m=n) <- see võiks olla korrektne
-
     @Test
     public void testVabadeMuutujateErind1() throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud {
         AbiValem abivalem = tagastaAbiValem("M(x) := AmAnEy(x = m * n -> m = 1 v n = 1 v y=1) & -(x = 1)\n M(x)");
