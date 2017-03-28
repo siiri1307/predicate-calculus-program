@@ -15,9 +15,9 @@ import java.util.Set;
 public class AtomaarneValemPredSümboliga extends Valem {
 
     private ValemiID id;
+    private List<TermiPaar> termArgumendid;
     private Valem valem;
     //private String predSümbol;
-    private List<TermiPaar> termArgumendid;
     //private boolean valemiTõeväärtus;
 
     /*public AtomaarneValemPredSümboliga(String predSümbol, List<Term> termArgumendid, boolean tõeVäärtus) {
@@ -44,12 +44,14 @@ public class AtomaarneValemPredSümboliga extends Valem {
 
     @Override
     public boolean vaartusta(Map<Character, Double> vaartustus) {
-        for(TermiPaar paar : termArgumendid){
-            if(paar.getTerm() instanceof NullTerm){
-                vaartustus.put(paar.getTahis(), 0.0);
-            }
-            else if(paar.getTerm() instanceof ÜksTerm){
-                vaartustus.put(paar.getTahis(), 1.0);
+        if(termArgumendid != null){
+            for(TermiPaar paar : termArgumendid){
+                if(paar.getTerm() instanceof NullTerm){
+                    vaartustus.put(paar.getTahis(), 0.0);
+                }
+                else if(paar.getTerm() instanceof ÜksTerm){
+                    vaartustus.put(paar.getTahis(), 1.0);
+                }
             }
         }
         return valem.vaartusta(vaartustus);

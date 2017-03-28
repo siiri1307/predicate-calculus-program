@@ -47,6 +47,10 @@ public class AtomaarneValem extends Valem {
 
     @Override
     public Set<Character> getVabadMuutujad() {
-        return null;
+        Set s = new HashSet<>();
+        for (IndiviidTerm id : getIndiviidTermid()) {
+            s.add(id.getTahis());
+        }
+        return s;
     }
 }

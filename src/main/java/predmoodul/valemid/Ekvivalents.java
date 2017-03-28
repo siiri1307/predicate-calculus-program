@@ -48,7 +48,10 @@ public class Ekvivalents extends Valem {
     public Set<Character> getVabadMuutujad() {
         Set<Character> vabad = new HashSet<>();
         for(Valem valem : implikatsiooniValemid){
-            vabad.addAll(valem.getVabadMuutujad());
+            Set<Character> vabadMuutujad = valem.getVabadMuutujad();
+            if (vabadMuutujad != null) {
+                vabad.addAll(vabadMuutujad);
+            }
         }
         return vabad;
     }

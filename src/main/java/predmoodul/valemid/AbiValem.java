@@ -61,12 +61,12 @@ public class AbiValem extends Valem {
     @Override
     public Set<Character> getVabadMuutujad() {
         Set<Character> vabad = valem.getVabadMuutujad();
-        System.out.println("Abivalemi vabad muutujad on: " + vabad);
+        //System.out.println("Abivalemi vabad muutujad on: " + vabad);
         return vabad;
     }
 
     public boolean vabadeMuutujateEsinemineKorrektne() {
-        //return getVabadMuutujad().containsAll(argumendid); //See peaks olema õige kui indiviidmuutuja x võib esineda valemis nii kinnise kui seotuna
+        //return getVabadMuutujad().containsAll(argumendid);
         return new HashSet<Character>(argumendid).equals(valem.getVabadMuutujad());
     }
 
