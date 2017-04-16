@@ -53,4 +53,13 @@ public class AtomaarneValem extends Valem {
         }
         return s;
     }
+
+    @Override
+    public List<TõesuspuuTipp> reegel(boolean tõeväärtus) {
+
+        return new ArrayList<>();
+        //Arrays.asList(new TõesuspuuTipp(this, tõeväärtus));
+    }
+
+
 }
