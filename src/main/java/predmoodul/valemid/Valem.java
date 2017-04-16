@@ -2,6 +2,7 @@ package predmoodul.valemid;
 
 import predmoodul.termid.IndiviidTerm;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -18,5 +19,7 @@ public abstract class Valem extends AstNode {
     public abstract Set<IndiviidTerm> getIndiviidTermid();
 
     public abstract Set<Character> getVabadMuutujad();
+
+    public abstract List<TõesuspuuTipp> reegel(boolean tõeväärtus);
 
 }
