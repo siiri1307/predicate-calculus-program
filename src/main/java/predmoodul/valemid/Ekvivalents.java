@@ -27,7 +27,7 @@ public class Ekvivalents extends Valem {
     public boolean vaartusta(Map<Character, Double> vaartustus) {
 
         return ekvivalents(vasakLaps.vaartusta(vaartustus), paremLaps.vaartusta(vaartustus));
-        
+
     }
 
     private boolean ekvivalents(boolean valem1, boolean valem2) {
