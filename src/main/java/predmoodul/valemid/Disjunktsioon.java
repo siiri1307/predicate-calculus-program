@@ -26,7 +26,7 @@ public class Disjunktsioon extends Valem{
     public boolean vaartusta(Map<Character, Double> vaartustus) {
 
         return vasakLaps.vaartusta(vaartustus) || paremLaps.vaartusta(vaartustus);
-        
+
     }
 
     @Override
