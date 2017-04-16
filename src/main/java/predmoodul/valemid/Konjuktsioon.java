@@ -1,6 +1,5 @@
 package predmoodul.valemid;
 
-import predmoodul.kvantorid.Kvantor;
 import predmoodul.termid.IndiviidTerm;
 
 import java.util.*;
@@ -10,30 +9,49 @@ import java.util.*;
  */
 public class Konjuktsioon extends Valem {
 
-    private List<Kvantor> kvantorid;
-    private Valem valem;
-    private boolean eitus;
+    //private List<Kvantor> kvantorid;
+    //private Valem valem;
+    //private boolean eitus;
 
-    public Konjuktsioon(List<Kvantor> kvantorid, Valem valem, boolean eitus){
-        this.kvantorid = kvantorid;
-        this.valem = valem;
-        this.eitus = eitus;
+    private Valem vasakLaps;
+    private Valem paremLaps;
+
+    public Konjuktsioon(Valem valem1, Valem valem2){
+        this.vasakLaps = valem1;
+        this.paremLaps = valem2;
+        //this.kvantorid = kvantorid;
+        //this.valem = valem;
+        //this.eitus = eitus;
     }
 
     @Override
     public List<Object> getChildren() {
-        return Arrays.asList((Object) kvantorid,valem, eitus);
+        return Arrays.asList((Object) vasakLaps, paremLaps);
     }
 
     @Override
     public Set<IndiviidTerm> getIndiviidTermid() {
-        return valem.getIndiviidTermid();
+
+        Set<IndiviidTerm> indiviidTermid = new HashSet<>();
+
+        indiviidTermid.addAll(vasakLaps.getIndiviidTermid());
+        indiviidTermid.addAll(paremLaps.getIndiviidTermid());
+
+        return indiviidTermid;
+        //return valem.getIndiviidTermid();
     }
 
     @Override
     public Set<Character> getVabadMuutujad() {
 
-        Set<Character> kvantoritegaSeotud = new HashSet<>();
+        Set<Character> vabad = new HashSet<>();
+
+        vabad.addAll(vasakLaps.getVabadMuutujad());
+        vabad.addAll(paremLaps.getVabadMuutujad());
+
+        return vabad;
+
+        /*Set<Character> kvantoritegaSeotud = new HashSet<>();
         Set<Character> koikMuutujad = new HashSet<>();
 
         for(Kvantor kv : kvantorid){
@@ -51,20 +69,22 @@ public class Konjuktsioon extends Valem {
 
         System.out.println("Vabad muutujad on: " + koikMuutujad);
 
-        return koikMuutujad;
+        return koikMuutujad;*/
     }
 
     @Override
     public boolean vaartusta(Map<Character, Double> vaartustus) {
 
-        if(eitus){
+        return vasakLaps.vaartusta(vaartustus) && paremLaps.vaartusta(vaartustus);
+
+        /*if(eitus){
             return !vaartustaAbi(vaartustus, new ArrayList<>(kvantorid));
         }
 
-        return vaartustaAbi(vaartustus, new ArrayList<>(kvantorid));
+        return vaartustaAbi(vaartustus, new ArrayList<>(kvantorid));*/
     }
 
-    boolean vaartustaAbi(Map<Character, Double> vaartustus, List<Kvantor> kvantorid){
+    /*boolean vaartustaAbi(Map<Character, Double> vaartustus, List<Kvantor> kvantorid){
 
         if (kvantorid.isEmpty()) {
             return valem.vaartusta(vaartustus);
@@ -82,6 +102,37 @@ public class Konjuktsioon extends Valem {
 
         return !kvantor.lõpetamiseTingimus();
 
+    }*/
+
+    public static Valem looKonjuktsioonid(List<Valem> alamValemid) {
+
+        Valem vasak = alamValemid.get(0);
+
+        for(int i = 1; i < alamValemid.size(); i++){
+            vasak = new Konjuktsioon(vasak, alamValemid.get(i));
+
+        }
+
+        return vasak;
     }
 
+    public List<TõesuspuuTipp> reegel(boolean tõeväärtus) {
+
+        if(tõeväärtus){
+
+            TõesuspuuTipp laps = new TõesuspuuTipp(this.vasakLaps, true);
+            TõesuspuuTipp lapseLaps = new TõesuspuuTipp(this.paremLaps, true);
+
+            laps.setVasakLaps(lapseLaps);
+
+            return Arrays.asList(laps);
+        }
+        else{
+
+            TõesuspuuTipp vasakLaps = new TõesuspuuTipp(this.vasakLaps, false);
+            TõesuspuuTipp paremLaps = new TõesuspuuTipp(this.paremLaps, false);
+
+            return Arrays.asList(vasakLaps, paremLaps);
+        }
+    }
 }
