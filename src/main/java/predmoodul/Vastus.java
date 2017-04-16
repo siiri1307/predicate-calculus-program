@@ -1,13 +1,11 @@
 package predmoodul;
 
-import predmoodul.erindid.AbiValemEiOleDefineeritud;
-import predmoodul.erindid.VaarVabadeMuutujateEsinemine;
-import predmoodul.kvantorid.Eks;
-import predmoodul.kvantorid.Iga;
-import predmoodul.kvantorid.Kvantor;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
+import predmoodul.erindid.AbiValemEiOleDefineeritud;
+import predmoodul.erindid.VaarVabadeMuutujateEsinemine;
+import predmoodul.kvantorid.*;
 import predmoodul.termid.*;
 import predmoodul.valemid.*;
 
@@ -138,7 +136,9 @@ public class Vastus {
                     Valem ekv = createValem(valemContext.getChild(i), abivalemid, väärtustus);
                     alamValemid.add(ekv);
                 }
-                return new PredValem(alamValemid);
+
+                return Ekvivalents.looEkvivalentsid(alamValemid);
+                //return new PredValem(alamValemid);
             }
         }
 
@@ -154,7 +154,8 @@ public class Vastus {
                     Valem ekv = createValem(valemContext.getChild(i), abivalemid, väärtustus);
                     alamValemid.add(ekv);
                 }
-                return new Ekvivalents(alamValemid);
+                return Implikatsioon.looImplikatsioonid(alamValemid);
+                //return Ekvivalents.looEkvivalentsid(alamValemid);
             }
         }
 
@@ -170,7 +171,8 @@ public class Vastus {
                     Valem ekv = createValem(valemContext.getChild(i), abivalemid, väärtustus);
                     alamValemid.add(ekv);
                 }
-                return new Implikatsioon(alamValemid);
+                return Disjunktsioon.looDisjunktsioonid(alamValemid);
+                //return Implikatsioon.looImplikatsioonid(alamValemid);
             }
         }
 
@@ -188,7 +190,8 @@ public class Vastus {
                 alamValemid.add(ekv);
             }
 
-            return new Disjunktsioon(alamValemid);
+            return Konjuktsioon.looKonjuktsioonid(alamValemid);
+            //return Disjunktsioon.looDisjunktsioonid(alamValemid);
         }
 
         else if(valemContext instanceof PredParser.KonjvalemContext){
@@ -197,19 +200,19 @@ public class Vastus {
                 return createValem(valemContext.getChild(0), abivalemid, väärtustus);
             }
 
-            List<Kvantor> kvantorid = new ArrayList<Kvantor>();
+            List<Modifier> kvantorid = new ArrayList<>();
             boolean eitus = false;
 
             for(int i = 0; i < valemContext.getChildCount()-1; i++){
                 ParseTree vaadeldavLaps = valemContext.getChild(i);
                 if(vaadeldavLaps instanceof PredParser.IgaContext){
-                    kvantorid.add(new Iga(vaadeldavLaps.getChild(1).getChild(0).getText().charAt(0)));
+                    kvantorid.add(new ModifierIga(vaadeldavLaps.getChild(1).getChild(0).getText().charAt(0)));
                 }
                 else if(vaadeldavLaps instanceof PredParser.EksContext){
-                    kvantorid.add(new Eks(vaadeldavLaps.getChild(1).getChild(0).getText().charAt(0)));
+                    kvantorid.add(new ModifierEks(vaadeldavLaps.getChild(1).getChild(0).getText().charAt(0)));
                 }
                 else if(vaadeldavLaps.getText().charAt(0) == '-'){
-                    eitus = true;
+                    kvantorid.add(new ModifierEitus());
                 }
             }
 
@@ -221,9 +224,8 @@ public class Vastus {
                 valem = createValem(valemContext.getChild(valemContext.getChildCount()-1).getChild(1), abivalemid, väärtustus); //muuda Valemiks nt ja kaota Korgvalem ära, child 1 et sulud välja jätta
             }
 
-            Konjuktsioon konjuktsioon = new Konjuktsioon(kvantorid, valem, eitus);
+            return looModifierid(kvantorid, valem);
 
-            return konjuktsioon;
         }
 
         else if(valemContext instanceof PredParser.KorgvalemContext){
@@ -294,6 +296,25 @@ public class Vastus {
 
         throw new UnsupportedOperationException();
 
+    }
+
+    private Valem looModifierid(List<Modifier> kvantorid, Valem valem) {
+
+        if(kvantorid.isEmpty()){
+            return valem;
+        }
+        Modifier mod = kvantorid.remove(0);
+        if(mod instanceof ModifierEitus){
+            return new Eitus(looModifierid(kvantorid, valem));
+        }
+        else if(mod instanceof ModifierEks){
+            return new Eks(looModifierid(kvantorid,valem), ((ModifierEks) mod).indiviidmuutuja);
+        }
+        else if(mod instanceof ModifierIga){
+            return new Iga(looModifierid(kvantorid, valem), ((ModifierIga) mod).indiviidmuutuja);
+        }
+
+        throw new IllegalStateException();
     }
 
 
