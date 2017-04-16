@@ -6,7 +6,6 @@ package predmoodul.kvantorid;
 public interface Kvantor {
 
     Character getIndiviidMuutuja();
-
-    boolean lõpetamiseTingimus();
+    
 }
 
