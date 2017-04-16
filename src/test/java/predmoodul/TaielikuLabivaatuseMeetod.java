@@ -22,9 +22,41 @@ public class TaielikuLabivaatuseMeetod {
     @Test
     public void testVaartustamine2() throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud {
         String pakkumine = "1 = 0";
-        String vastus = "x + 1 = x";
+        String vastus = "y + 1 = y";
         Kontroll kontrollimine = new Kontroll(LoppValem.tagastaValem(pakkumine), LoppValem.tagastaValem(vastus));
         assertFalse(kontrollimine.eiOleSamavaarne());
     }
 
+    @Test
+    public void testVaartustamineAbiPredikaat() throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud {
+        String pakkumine = "" +
+                "P := 1 = 0" +
+                "P";
+        String vastus = "y + 1 = y";
+        Kontroll kontrollimine = new Kontroll(LoppValem.tagastaValem(pakkumine), LoppValem.tagastaValem(vastus));
+        assertFalse(kontrollimine.eiOleSamavaarne());
+    }
+
+    @Test
+    public void testVaartustamineAbiPredikaadid() throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud {
+        String pakkumine = "" +
+                "P := 1 = 0" +
+                "Q(x) := x = 0" +
+                "Q(0) & P";
+        String vastus = "y + 1 = y";
+        Kontroll kontrollimine = new Kontroll(LoppValem.tagastaValem(pakkumine), LoppValem.tagastaValem(vastus));
+        assertFalse(kontrollimine.eiOleSamavaarne());
+    }
+
+
+    @Test
+    public void testVaartustamineAbiPredikaadidKvantoritega() throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud {
+        String pakkumine = "" +
+                "P := Ex(x=1)" +
+                "Q(x) := x = 0" +
+                "Q(0) v P";
+        String vastus = "y + 1 = y";
+        Kontroll kontrollimine = new Kontroll(LoppValem.tagastaValem(pakkumine), LoppValem.tagastaValem(vastus));
+        assertTrue(kontrollimine.eiOleSamavaarne());
+    }
 }
