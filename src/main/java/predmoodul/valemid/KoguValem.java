@@ -46,4 +46,10 @@ public class KoguValem extends Valem {
         }
         return vabad;
     }
+
+    @Override
+    public List<TõesuspuuTipp> reegel(boolean tõeväärtus) {
+
+        return children.get(children.size()-1).reegel(tõeväärtus);
+    }
 }
