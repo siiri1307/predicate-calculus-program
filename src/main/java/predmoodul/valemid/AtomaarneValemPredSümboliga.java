@@ -4,10 +4,7 @@ import predmoodul.termid.IndiviidTerm;
 import predmoodul.termid.NullTerm;
 import predmoodul.termid.ÜksTerm;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by siiri on 19/03/17.
@@ -65,5 +62,10 @@ public class AtomaarneValemPredSümboliga extends Valem {
     @Override
     public Set<Character> getVabadMuutujad() {
         return valem.getVabadMuutujad();
+    }
+
+    @Override
+    public List<TõesuspuuTipp> reegel(boolean tõeväärtus) {
+        return valem.reegel(tõeväärtus);
     }
 }
