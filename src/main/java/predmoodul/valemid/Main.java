@@ -19,7 +19,11 @@ public class Main {
 //        if (true) {
 //            throw new Exception();
 //        }
-        String sisend = "M := AxEy(x + 1 = y) M";
+        String sisend = "M := 1=0 B := 0=0 -(M->B)v-(B->M)";
+
+                //"M := 1=0 B := 0=0 -(M->B)v-(B->M)";
+
+                //"M := AxEy(x + 1 = y) M";
 
                 //"M(x) := AmAn(x = m * n -> m = 1 v n = 1) & -(x = 1) & z\n" + "M(x)";
                 //"T(x,y) := Ea(x * a = y)\n M(x,y)";
@@ -63,6 +67,9 @@ public class Main {
         AstNode ast = answer.createAST(pt, abivalemid, m); //AST abivalemitega
         //AstNode loppValemAst = answer.createAST(pt, 0, astAbivalemitest, m);
         System.out.println(ast.toString());
+        Tõesuspuu tõesuspuu = Tõesuspuu.looTõesuspuu((Valem)ast.getChildren().get(ast.getChildren().size()-1), false);
+        tõesuspuu.looPuu();
+        System.out.println(tõesuspuu);
         //System.out.println(((Valem)(ast.getChildren().get(ast.getChildren().size()-1))).getVabadMuutujad());
         //System.out.println(((AbiValem)(ast.getChildren().get(0))).vabadeMuutujateEsinemineKorrektne());
 
