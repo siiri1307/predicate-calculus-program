@@ -1,6 +1,7 @@
 package predmoodul.valemid;
 
 import predmoodul.termid.IndiviidTerm;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.*;
 
@@ -63,6 +64,12 @@ public class AbiValem extends Valem {
         Set<Character> vabad = valem.getVabadMuutujad();
         //System.out.println("Abivalemi vabad muutujad on: " + vabad);
         return vabad;
+    }
+
+    @Override
+    public List<TõesuspuuTipp> reegel(boolean tõeväärtus) {
+
+        throw new NotImplementedException();
     }
 
     public boolean vabadeMuutujateEsinemineKorrektne() {
