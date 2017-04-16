@@ -33,7 +33,10 @@ public class Vaartustamine {
 
     @Test
     public void test2IgaAbivalemiga() throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud {
-        assertFalse(LoppValem.tagastaValem("M := AxEy(x + 1 = y) M").vaartusta(new HashMap<>()));
+        assertFalse(LoppValem.tagastaValem("" +
+                "M := AxEy(x + 1 = y) " +
+                "M" +
+                "").vaartusta(new HashMap<>()));
     }
 
     @Test
