@@ -78,4 +78,24 @@ public class Disjunktsioon extends Valem{
             return Arrays.asList(laps);
         }
     }
+
+    @Override
+    public boolean equals(Valem valem) {
+
+        if(this == valem){
+            return true;
+        }
+        if(valem == null || this.getClass() != valem.getClass()){
+            return false;
+        }
+
+        Disjunktsioon disjunktsiooniValem = (Disjunktsioon) valem;
+
+        return vasakLaps.equals(disjunktsiooniValem.vasakLaps) && paremLaps.equals(disjunktsiooniValem.paremLaps);
+    }
+
+    @Override
+    public String dot() {
+        return  vasakLaps.dot() + " v " + paremLaps.dot();
+    }
 }
