@@ -31,6 +31,21 @@ public class IndiviidTerm extends Term {
     }
 
     @Override
+    public boolean equals(Term term) {
+
+        if(this == term){
+            return true;
+        }
+        if(term == null || this.getClass() != term.getClass()){
+            return false;
+        }
+
+        IndiviidTerm indiviidTerm = (IndiviidTerm) term;
+
+        return this.a == indiviidTerm.a;
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
@@ -48,5 +63,11 @@ public class IndiviidTerm extends Term {
 
     public Character getTahis() {
         return a;
+    }
+
+    @Override
+    public String dot() {
+
+        return a.toString();
     }
 }
