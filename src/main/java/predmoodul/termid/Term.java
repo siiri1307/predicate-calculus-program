@@ -22,4 +22,8 @@ public abstract class Term extends AstNode {
                 .reduce(tehe).get();
     }
 
+    public abstract boolean equals(Term term);
+
+    public abstract String dot();
+
 }
