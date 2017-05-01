@@ -20,4 +20,17 @@ public class JagamisTerm extends TehteTerm {
 
     //return  alamTermid.stream().flatMap(x -> x.getIndiviidTermid().stream()).collect(Collectors.toSet());
 
+    @Override
+    public String dot() {
+
+        String jagamisterm = "/Term(";
+
+        for(int i = 0; i < alamTermid.size()-1; i++){
+            jagamisterm += alamTermid.get(i).dot() + ",";
+        }
+
+        jagamisterm += alamTermid.get(alamTermid.size()-1) + ")";
+
+        return jagamisterm;
+    }
 }
