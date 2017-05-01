@@ -52,4 +52,28 @@ public class KoguValem extends Valem {
 
         return children.get(children.size()-1).reegel(tõeväärtus);
     }
+
+    @Override
+    public boolean equals(Valem valem) {
+
+        if(this == valem){
+            return true;
+        }
+        if(valem == null || this.getClass() != valem.getClass()){
+            return false;
+        }
+
+        KoguValem koguValem = (KoguValem) valem;
+
+        for(int i = 0; i < children.size(); i++){
+            //this.children.get(i).equals(koguValem.children.get(i));
+        }
+
+        return false;
+    }
+
+    @Override
+    public String dot() {
+        return children.get(children.size()-1).dot();
+    }
 }
