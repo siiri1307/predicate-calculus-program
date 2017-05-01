@@ -135,4 +135,24 @@ public class Konjuktsioon extends Valem {
             return Arrays.asList(vasakLaps, paremLaps);
         }
     }
+
+    @Override
+    public boolean equals(Valem valem) {
+
+        if(this == valem){
+            return true;
+        }
+        if(valem == null || this.getClass() != valem.getClass()){
+            return false;
+        }
+
+        Konjuktsioon konjuktsiooniValem = (Konjuktsioon) valem;
+
+        return vasakLaps.equals(konjuktsiooniValem.vasakLaps) && paremLaps.equals(konjuktsiooniValem.paremLaps);
+    }
+
+    @Override
+    public String dot() {
+        return vasakLaps.dot() + " & " + paremLaps.dot();
+    }
 }
