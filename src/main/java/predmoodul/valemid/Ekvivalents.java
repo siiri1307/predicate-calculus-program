@@ -116,4 +116,24 @@ public class Ekvivalents extends Valem {
             return Arrays.asList(vasakLaps, paremLaps);
         }
     }
+
+    @Override
+    public boolean equals(Valem valem) {
+
+        if(this == valem){
+            return true;
+        }
+        if(valem == null || this.getClass() != valem.getClass()){
+            return false;
+        }
+
+        Ekvivalents ekvivalentsiValem = (Ekvivalents) valem;
+
+        return vasakLaps.equals(ekvivalentsiValem.vasakLaps) && paremLaps.equals(ekvivalentsiValem.paremLaps);
+    }
+
+    @Override
+    public String dot() {
+        return "Ekv(" + vasakLaps.dot() + ", " + paremLaps.dot() + ")";
+    }
 }
