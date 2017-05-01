@@ -1,9 +1,7 @@
+
 package predmoodul.valemid;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -14,7 +12,7 @@ public class TõesuspuuTipp {
     private final Valem valem;
     private final boolean tõeväärtus;
     private boolean analüüsitud;
-    private boolean annabVastuolu;
+    private Optional<Boolean> annabVastuolu; //true, false, empty
 
     private TõesuspuuTipp vasakLaps;
     private TõesuspuuTipp paremLaps;
@@ -23,11 +21,14 @@ public class TõesuspuuTipp {
     public TõesuspuuTipp(Valem valem, boolean väärtus) {
         this.valem = valem;
         this.tõeväärtus = väärtus;
+        this.annabVastuolu = Optional.empty(); //algväärtustatakse tühjaks, et tähistada, et tõeväärtust ei ole veel välja arvutatud
     }
+
 
     public TõesuspuuTipp(TõesuspuuTipp tipp){ //copy constructor
         this.valem = tipp.valem;
         this.tõeväärtus = tipp.tõeväärtus;
+        this.annabVastuolu = Optional.empty();
         if(tipp.vasakLaps != null){
             this.setVasakLaps(new TõesuspuuTipp(tipp.vasakLaps));
         }
@@ -39,6 +40,7 @@ public class TõesuspuuTipp {
     public TõesuspuuTipp(AtomaarneValem atomaarneValem, boolean tõeväärtus) {
         this.valem = atomaarneValem;
         this.tõeväärtus = tõeväärtus;
+        this.annabVastuolu = Optional.empty();
         this.analüüsitud = true;
 
     }
@@ -49,6 +51,14 @@ public class TõesuspuuTipp {
 
     public boolean getTõeväärtus() {
         return tõeväärtus;
+    }
+
+    public TõesuspuuTipp getVasakLaps() {
+        return vasakLaps;
+    }
+
+    public TõesuspuuTipp getParemLaps() {
+        return paremLaps;
     }
 
     public void setVasakLaps(TõesuspuuTipp vasakLaps) {
@@ -65,12 +75,16 @@ public class TõesuspuuTipp {
         this.vanem = vanem;
     }
 
-    @Override
-    public String toString() {
-        return "TõesuspuuTipp{" +
-                "valem=" + valem +
-                ", tõeväärtus=" + tõeväärtus +
-                '}';
+    public boolean sisaldabVastuolu() { //public meetod
+        if (!annabVastuolu.isPresent()) { //kui see väli on tühi, siis arvuta see välja
+            annabVastuolu = Optional.of(leidubVastuolu());
+        }
+        return annabVastuolu.get();
+    }
+
+    public TõesuspuuTipp getVanem(){
+
+        return this.vanem;
     }
 
     public void lisaLapsed(List<TõesuspuuTipp> lapsed) {
@@ -112,4 +126,113 @@ public class TõesuspuuTipp {
     public void setAnalüüsitud(boolean analüüsitud) {
         this.analüüsitud = analüüsitud;
     }
+
+    private boolean leidubVastuolu(){
+        return leidubVastuolu(getVanem());
+    }
+
+    private boolean leidubVastuolu(TõesuspuuTipp vanemTipp){ //kas vaadeldav tipp on vastuolus mõne oma ülemise vanemaga, või
+        //mõni ülemine vanem on vastuolus oma mõne ülemise vanemaga
+
+        if(vanemTipp == null) {
+            return false;
+        }
+        else if(this.valem.equals(vanemTipp.valem) && !samadTõeväärtused(this, vanemTipp)){
+            return true;
+            //this.annabVastuolu = true;
+            //System.out.println("----------------------");
+            //System.out.println("Laps: " + this.toString());
+            //System.out.println("Tipp, millega on vastuolus: " + vanemTipp.toString());
+            //System.out.println("----------------------");
+        }
+        else{
+            return vanemTipp.sisaldabVastuolu() || leidubVastuolu(vanemTipp.vanem);
+        }
+        //return annabVastuolu;
+    }
+
+    private boolean samadTõeväärtused(TõesuspuuTipp tõesuspuuTipp, TõesuspuuTipp vanemTipp) {
+
+        return tõesuspuuTipp.tõeväärtus == vanemTipp.tõeväärtus;
+    }
+
+    public Map<String, Boolean> tagastaVaartustused(){
+
+        Map<String, Boolean> vaartustused = new HashMap<>();
+
+        /*if(this.vanem == null) {
+            if (this.getValem() instanceof AtomaarneValemPredSümboliga) {
+                AtomaarneValemPredSümboliga valem = (AtomaarneValemPredSümboliga) this.getValem();
+                vaartustused.put(valem.getId().getPredSümbol(), tõeväärtus);
+            }
+            return vaartustused;
+        }*/
+
+        if(!(this.vanem == null || this == null)){
+            if (this.getValem() instanceof AtomaarneValemPredSümboliga) {
+                AtomaarneValemPredSümboliga valem = (AtomaarneValemPredSümboliga) this.getValem();
+                vaartustused.put(valem.getId().getPredSümbol(), tõeväärtus);
+            }
+            vaartustused.putAll(this.vanem.tagastaVaartustused());
+        }
+
+        //if(this.vanem == null){
+          //  return vaartustused;
+        //}
+
+
+
+
+        return vaartustused;
+    }
+
+    /*public Map<String, Boolean> tagastaVaartustused(TõesuspuuTipp vanemTipp){
+
+        Map<String, Boolean> vaartustused = new HashMap<>();
+
+        if(vanemTipp == null){
+            if(this.getValem() instanceof AtomaarneValemPredSümboliga){
+                AtomaarneValemPredSümboliga valem = (AtomaarneValemPredSümboliga) this.getValem();
+                vaartustused.put(valem.getId().getPredSümbol(), tõeväärtus);
+            }
+            return vaartustused;
+        }
+        else{
+            if(this.getValem() instanceof AtomaarneValemPredSümboliga){
+                AtomaarneValemPredSümboliga valem = (AtomaarneValemPredSümboliga) this.getValem();
+                vaartustused.put(valem.getId().getPredSümbol(), tõeväärtus);
+                tagastaVaartustused(vanemTipp.vanem);
+            }
+            if(vanem.getValem() instanceof AtomaarneValemPredSümboliga){
+                AtomaarneValemPredSümboliga valem = (AtomaarneValemPredSümboliga) vanem.getValem();
+                vaartustused.put(valem.getId().getPredSümbol(), tõeväärtus);
+                tagastaVaartustused(vanemTipp.vanem);
+            }
+        }
+
+        return vaartustused;
+
+    }*/
+
+    public String dotFormaat(){
+
+        String id = this.hashCode() + " [label=" + "\"" + this.getValem().dot() + " : " + Boolean.toString(this.tõeväärtus) + "\"" + "]; \n";
+
+        if(this.getVanem() != null){
+            return id + "\n" + this.getVanem().hashCode() + " -- " + this.hashCode() + "\n";
+        }
+
+        return id + "\n";
+
+    }
+
+    @Override
+    public String toString() {
+        return "TõesuspuuTipp{" +
+                "valem=" + valem +
+                ", tõeväärtus=" + tõeväärtus +
+                ", annabVastuolu=" + annabVastuolu +
+                '}';
+    }
+
 }
