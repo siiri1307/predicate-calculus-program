@@ -61,5 +61,23 @@ public class AtomaarneValem extends Valem {
         //Arrays.asList(new TõesuspuuTipp(this, tõeväärtus));
     }
 
+    @Override
+    public boolean equals(Valem valem) {
 
+        if(this == valem){
+            return true;
+        }
+        if(valem == null || this.getClass() != valem.getClass()){
+            return false;
+        }
+
+        AtomaarneValem atomaarneValem = (AtomaarneValem) valem;
+
+        return this.vasakTerm.equals(atomaarneValem.vasakTerm) && this.paremTerm.equals(atomaarneValem.paremTerm);
+    }
+
+    @Override
+    public String dot() {
+        return   vasakTerm.dot() + " = " + paremTerm.dot();
+    }
 }
