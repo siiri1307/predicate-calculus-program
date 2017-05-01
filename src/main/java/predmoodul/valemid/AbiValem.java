@@ -72,9 +72,32 @@ public class AbiValem extends Valem {
         throw new NotImplementedException();
     }
 
+    @Override
+    public boolean equals(Valem valem) {
+
+        if(this == valem){
+            return true;
+        }
+        if(valem == null || this.getClass() != valem.getClass()){
+            return false;
+        }
+
+        AbiValem abiValem = (AbiValem) valem;
+
+        if(!this.id.getPredSümbol().equals(abiValem.id.getPredSümbol()) && this.id.getArgumentideArv() != abiValem.id.getArgumentideArv()){
+            return false;
+        }
+
+        return this.valem.equals(abiValem.valem);
+    }
+
     public boolean vabadeMuutujateEsinemineKorrektne() {
         //return getVabadMuutujad().containsAll(argumendid);
         return new HashSet<Character>(argumendid).equals(valem.getVabadMuutujad());
     }
 
+    @Override
+    public String dot() {
+        return "Abi(" + valem.dot() + ")";
+    }
 }
