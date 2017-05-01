@@ -76,4 +76,24 @@ public class Eks extends Valem implements Kvantor {
 
         throw new NotImplementedException();
     }
+
+    @Override
+    public boolean equals(Valem valem) {
+
+        if(this == valem){
+            return true;
+        }
+        if(valem == null || this.getClass() != valem.getClass()){
+            return false;
+        }
+
+        Eks leidubValem = (Eks) valem;
+
+        return this.valem.equals(leidubValem.valem);
+    }
+
+    @Override
+    public String dot() {
+        return "E(" + valem.dot() + ")";
+    }
 }
