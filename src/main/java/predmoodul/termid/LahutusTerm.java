@@ -7,7 +7,6 @@ import java.util.*;
  */
 public class LahutusTerm extends TehteTerm {
 
-
     public LahutusTerm(List<Term> termid) {
         super(termid);
     }
@@ -17,6 +16,20 @@ public class LahutusTerm extends TehteTerm {
 
         return teeTehe(vaartustus, alamTermid, (vahe,lahutatav) -> vahe-lahutatav);
 
+    }
+
+    @Override
+    public String dot() {
+
+        String lahutusterm = "-Term(";
+
+        for(int i = 0; i < alamTermid.size()-1; i++){
+            lahutusterm += alamTermid.get(i).dot() + ",";
+        }
+
+        lahutusterm += alamTermid.get(alamTermid.size()-1) + ")";
+
+        return lahutusterm;
     }
 
 }
