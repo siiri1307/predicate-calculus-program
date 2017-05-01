@@ -104,4 +104,24 @@ public class Implikatsioon extends Valem {
 
         }
     }
+
+    @Override
+    public boolean equals(Valem valem) {
+
+        if(this == valem){
+            return true;
+        }
+        if(valem == null || this.getClass() != valem.getClass()){
+            return false;
+        }
+
+        Implikatsioon implikatsiooniValem = (Implikatsioon) valem;
+
+        return vasakLaps.equals(implikatsiooniValem.vasakLaps) && paremLaps.equals(implikatsiooniValem.paremLaps);
+    }
+
+    @Override
+    public String dot() {
+        return  vasakLaps.dot() + " -> " + paremLaps.dot();
+    }
 }
