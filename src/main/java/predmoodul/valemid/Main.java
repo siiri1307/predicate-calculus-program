@@ -1,11 +1,17 @@
 package predmoodul.valemid;
 
+import org.antlr.v4.runtime.tree.ParseTree;
 import predmoodul.Kontroll;
 import predmoodul.Vastus;
 import predmoodul.erindid.AbiValemEiOleDefineeritud;
 import predmoodul.erindid.VaarVabadeMuutujateEsinemine;
-import org.antlr.v4.runtime.tree.ParseTree;
 
+import java.io.ByteArrayInputStream;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -19,9 +25,17 @@ public class Main {
 //        if (true) {
 //            throw new Exception();
 //        }
-        String sisend = "M := 1=0 B := 0=0 -(M->B)v-(B->M)";
+        String sisend = "M := 0=1 B := 0=0 C:= 1=1 (M->(B->C))->((M->B)->(M->C))";
 
-                //"M := 1=0 B := 0=0 -(M->B)v-(B->M)";
+                //"M := 0=1 B := 0=0 -(M->B)v-(B->M)";
+
+                //"M := 0=1 B := 0=0 C:= 1=1 -B&-(-C-> -BvM)";
+
+
+                //"V:=1=1 B := 0=1 C:=1=1 (V->(B->C))->((V->B)->(V->C))";
+
+
+                //"(V->(B->C))->((V->B)->(V->C))";
 
                 //"M := AxEy(x + 1 = y) M";
 
@@ -69,7 +83,18 @@ public class Main {
         System.out.println(ast.toString());
         Tõesuspuu tõesuspuu = Tõesuspuu.looTõesuspuu((Valem)ast.getChildren().get(ast.getChildren().size()-1), false);
         tõesuspuu.looPuu();
-        System.out.println(tõesuspuu);
+        System.out.println(tõesuspuu.vaartustusedVastavaltEeldusele());
+
+        Files.copy(new ByteArrayInputStream(
+                ("graph graphname { " + tõesuspuu.dot() + "}").getBytes(StandardCharsets.UTF_8)), Paths.get("/tmp","toesuspuu2.dot"), StandardCopyOption.REPLACE_EXISTING);
+        ProcessBuilder pb = new ProcessBuilder("dot", "-Tpng", "/tmp/toesuspuu2.dot");
+        Path pic = Paths.get("/tmp", "toesuspuu4.png");
+        pb.redirectOutput(ProcessBuilder.Redirect.to(pic.toFile()));
+        Process process = pb.start();
+
+
+        //Files.copy(new ByteArrayInputStream(
+                //("graph graphname { " + tõesuspuu.dot() + "}").getBytes(StandardCharsets.UTF_8)), Paths.get("/tmp","toesuspuu2.dot"), StandardCopyOption.REPLACE_EXISTING);
         //System.out.println(((Valem)(ast.getChildren().get(ast.getChildren().size()-1))).getVabadMuutujad());
         //System.out.println(((AbiValem)(ast.getChildren().get(0))).vabadeMuutujateEsinemineKorrektne());
 
