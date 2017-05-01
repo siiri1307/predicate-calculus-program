@@ -5,6 +5,7 @@ import predmoodul.termid.NullTerm;
 import predmoodul.termid.ÜksTerm;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Created by siiri on 19/03/17.
@@ -26,6 +27,7 @@ public class AtomaarneValemPredSümboliga extends Valem {
     public AtomaarneValemPredSümboliga(ValemiID id, Valem valem){
         this.id = id;
         this.valem = valem;
+        this.termArgumendid = new ArrayList<>();
     }
 
     public AtomaarneValemPredSümboliga(ValemiID id, List<TermiPaar> termArgumendid, Valem valem) {
@@ -64,8 +66,36 @@ public class AtomaarneValemPredSümboliga extends Valem {
         return valem.getVabadMuutujad();
     }
 
+    public ValemiID getId() {
+        return id;
+    }
+
     @Override
     public List<TõesuspuuTipp> reegel(boolean tõeväärtus) {
         return valem.reegel(tõeväärtus);
+    }
+
+    @Override
+    public boolean equals(Valem valem) {
+
+        if(this == valem){
+            return true;
+        }
+        if(valem == null || this.getClass() != valem.getClass()){
+            return false;
+        }
+
+        AtomaarneValemPredSümboliga atomaarnePredValem = (AtomaarneValemPredSümboliga) valem;
+
+        if(!this.id.equals(atomaarnePredValem.id)){
+            return false;
+        }
+
+        return this.valem.equals(atomaarnePredValem.valem);
+    }
+
+    @Override
+    public String dot() {
+        return "[" + id.dot() + "(" + String.join(",", termArgumendid.stream().map(x -> x.getTahis().toString()).collect(Collectors.toList())) +  ") := " + valem.dot() + "]";
     }
 }
