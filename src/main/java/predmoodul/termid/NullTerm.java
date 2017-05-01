@@ -28,4 +28,25 @@ public class NullTerm extends Term {
     public Set<IndiviidTerm> getIndiviidTermid() {
         return new HashSet<>();
     }
+
+    @Override
+    public boolean equals(Term term) {
+
+        if(this == term){
+            return true;
+        }
+        if(term == null || this.getClass() != term.getClass()){
+            return false;
+        }
+
+        NullTerm nullTerm = (NullTerm) term;
+
+        return this.c == nullTerm.c;
+
+    }
+
+    @Override
+    public String dot() {
+        return c.toString() ;
+    }
 }
