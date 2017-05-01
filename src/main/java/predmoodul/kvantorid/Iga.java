@@ -74,4 +74,24 @@ public class Iga extends Valem implements Kvantor {
 
         throw new NotImplementedException();
     }
+
+    @Override
+    public boolean equals(Valem valem) {
+
+        if(this == valem){
+            return true;
+        }
+        if(valem == null || this.getClass() != valem.getClass()){
+            return false;
+        }
+
+        Iga universaalKvantorValem = (Iga) valem;
+
+        return this.valem.equals(universaalKvantorValem.valem);
+    }
+
+    @Override
+    public String dot() {
+        return "A(" + valem.dot() + ")";
+    }
 }
