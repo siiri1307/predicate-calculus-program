@@ -29,7 +29,22 @@ public abstract class TehteTerm extends Term {
         }
 
     @Override
+    public boolean equals(Term term) {
+
+        if(this == term){
+            return true;
+        }
+        if(term == null || this.getClass() != term.getClass()){
+            return false;
+        }
+
+        TehteTerm tehteTerm = (TehteTerm) term;
+
+        return this.alamTermid == tehteTerm.alamTermid;
+    }
+    @Override
     public List<Object> getChildren() {
         return Arrays.asList(alamTermid);
     }
+
 }
