@@ -56,4 +56,24 @@ public class Eitus extends Valem implements Kvantor {
             return Arrays.asList(new TõesuspuuTipp(this.valem, true));
         }
     }
+
+    @Override
+    public boolean equals(Valem valem) {
+
+        if(this == valem){
+            return true;
+        }
+        if(valem == null || this.getClass() != valem.getClass()){
+            return false;
+        }
+
+        Eitus eitus = (Eitus) valem;
+
+        return this.valem.equals(eitus.valem);
+    }
+
+    @Override
+    public String dot() {
+        return "!(" + valem.dot() + ")";
+    }
 }
