@@ -7,11 +7,9 @@ import java.util.*;
  */
 public class KorrutisTerm extends TehteTerm {
 
-
     public KorrutisTerm(List<Term> termid) {
        super(termid);
     }
-
 
     @Override
     public double vaartusta(Map<Character, Double> vaartustus) {
@@ -23,6 +21,20 @@ public class KorrutisTerm extends TehteTerm {
             loppVaartus *= term.vaartusta(vaartustus);
         }
         return loppVaartus;*/
+    }
+
+    @Override
+    public String dot() {
+
+        String korrutisterm = "*Term(";
+
+        for(int i = 0; i < alamTermid.size()-1; i++){
+            korrutisterm += alamTermid.get(i).dot() + ",";
+        }
+
+        korrutisterm += alamTermid.get(alamTermid.size()-1) + ")";
+
+        return korrutisterm;
     }
 
 }
