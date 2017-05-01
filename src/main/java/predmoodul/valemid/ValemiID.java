@@ -51,4 +51,9 @@ public class ValemiID extends AstNode {
     public List<Object> getChildren() {
         return Arrays.asList(predSümbol, argumentideArv);
     }
+
+    public String dot() {
+
+        return predSümbol;
+    }
 }
