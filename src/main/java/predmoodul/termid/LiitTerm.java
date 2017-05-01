@@ -17,4 +17,18 @@ public class LiitTerm extends TehteTerm {
         return teeTehe(vaartustus, alamTermid, (summa,liidetav) -> summa + liidetav);
 
     }
+
+    @Override
+    public String dot() {
+
+        String liitterm = "+Term(";
+
+        for(int i = 0; i < alamTermid.size()-1; i++){
+            liitterm += alamTermid.get(i).dot() + ",";
+        }
+
+        liitterm += alamTermid.get(alamTermid.size()-1) + ")";
+
+        return liitterm;
+    }
 }
