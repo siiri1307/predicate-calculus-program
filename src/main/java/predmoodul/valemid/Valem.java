@@ -22,4 +22,7 @@ public abstract class Valem extends AstNode {
 
     public abstract List<TõesuspuuTipp> reegel(boolean tõeväärtus);
 
+    public abstract boolean equals(Valem valem);
+
+    public abstract String dot();
 }
