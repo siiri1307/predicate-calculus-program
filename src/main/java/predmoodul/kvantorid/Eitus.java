@@ -1,8 +1,10 @@
 package predmoodul.kvantorid;
 
 import predmoodul.termid.IndiviidTerm;
+import predmoodul.valemid.Termikuulaja;
 import predmoodul.valemid.TõesuspuuTipp;
 import predmoodul.valemid.Valem;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.*;
 
@@ -45,7 +47,7 @@ public class Eitus extends Valem implements Kvantor {
         return Arrays.asList((Object) valem);
     }
 
-    public List<TõesuspuuTipp> reegel(boolean tõeväärtus) {
+    public List<TõesuspuuTipp> reegel(boolean tõeväärtus, Set<Character> puusEsinenudTermid, Set<Termikuulaja> kuulajad) {
 
         if(tõeväärtus){
 
@@ -75,5 +77,15 @@ public class Eitus extends Valem implements Kvantor {
     @Override
     public String dot() {
         return "!(" + valem.dot() + ")";
+    }
+
+    @Override
+    public void uusKonstantSumbol(Character sumbol) {
+        valem.uusKonstantSumbol(sumbol);
+    }
+
+    @Override
+    public Valem koopia() {
+        throw new NotImplementedException();
     }
 }
