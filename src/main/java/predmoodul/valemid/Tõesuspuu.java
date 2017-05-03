@@ -9,6 +9,10 @@ public class Tõesuspuu {
 
     private final TõesuspuuTipp juurtipp;
 
+    private Set<Character> puusEsinenudTermid = new HashSet<>();
+    private List<TõesuspuuTipp> lisamataTipud = new ArrayList<>();
+    private Set<Termikuulaja> kuulajad = new HashSet<>();
+
     private Tõesuspuu(TõesuspuuTipp juurtipp) {
         this.juurtipp = juurtipp;
     }
@@ -26,7 +30,14 @@ public class Tõesuspuu {
 
         while(!jrk.isEmpty()){
 
+            /*if(lisamataTipud.size() != 0 && !puusEsinenudTermid.isEmpty()){
+                TõesuspuuTipp lisan = lisamataTipud.remove(0);
+                //System.out.println("seni lisamata: " + lisan);
+                jrk.add(lisan);
+            }*/
+
             TõesuspuuTipp tipp = jrk.remove();
+            System.out.println("Eemaldasin tipu: " + tipp);
 
             if(tipp.sisaldabVastuolu()){ //kui tipp annab vastuolu, siis ei lisa teda töödeldavate tippude järjekorda
                 continue;
@@ -36,7 +47,24 @@ public class Tõesuspuu {
                 continue;
             }
 
-            List<TõesuspuuTipp> alampuud = tipp.getValem().reegel(tipp.getTõeväärtus());
+            Set vanadTermid = new HashSet<>(puusEsinenudTermid);
+
+            List<TõesuspuuTipp> alampuud = tipp.getValem().reegel(tipp.getTõeväärtus(), puusEsinenudTermid, kuulajad);
+
+//            Set<Character> uuedTermid = new HashSet<>(puusEsinenudTermid);
+//            uuedTermid.removeAll(vanadTermid);
+//
+//            for (Character c : uuedTermid) {
+//                for (Termikuulaja kuulaja : kuulajad) {
+//                    List<TõesuspuuTipp> tipud = kuulaja.kuulaKonstantSumbolit(c);
+//                }
+//            }
+
+
+            Optional<Termikuulaja> kuulaja = tipp.getValem().getKuulaja(tipp.getTõeväärtus());
+            if (kuulaja.isPresent()) {
+                kuulajad.add(kuulaja.get());
+            }
 
             if(alampuud.size() == 0){
                 continue;
@@ -62,6 +90,7 @@ public class Tõesuspuu {
                     lisaJärjekorda(jrk, paremLaps);
                     leht.setParemLaps(paremLaps);
                 }
+
             }
 
             tipp.setAnalüüsitud(true);
@@ -69,10 +98,31 @@ public class Tõesuspuu {
     }
 
     private void lisaJärjekorda(Queue<TõesuspuuTipp> jrk, TõesuspuuTipp tõesuspuuTipp) {
+        //System.out.println("Lisan järjekorda sellise tõesuspuutipu: " + tõesuspuuTipp.toString());
+
+        /*if((tõesuspuuTipp.getValem() instanceof Iga && tõesuspuuTipp.getTõeväärtus()) || (tõesuspuuTipp.getValem() instanceof Eks && !tõesuspuuTipp.getTõeväärtus())){
+            for (TõesuspuuTipp tipp : tõesuspuuTipp.getLapsed()) {
+                System.out.println("Ja tema sellise lapse: " + tipp);
+                lisaJärjekorda(jrk, tipp);
+            }
+            lisamataTipud.add(tõesuspuuTipp);
+            //jrk.add(tõesuspuuTipp);
+        }*/
+
         jrk.add(tõesuspuuTipp);
         for (TõesuspuuTipp tipp : tõesuspuuTipp.getLapsed()) {
+            //System.out.println("Ja tema sellise lapse: " + tipp);
             lisaJärjekorda(jrk, tipp);
         }
+        /*else{
+            jrk.add(tõesuspuuTipp);
+            for (TõesuspuuTipp tipp : tõesuspuuTipp.getLapsed()) {
+                System.out.println("Ja tema sellise lapse: " + tipp);
+                lisaJärjekorda(jrk, tipp);
+            }
+        }*/
+
+        //System.out.println("----------------");
     }
 
     public void looPuu() {
