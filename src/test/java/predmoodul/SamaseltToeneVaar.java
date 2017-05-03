@@ -59,4 +59,22 @@ public class SamaseltToeneVaar {
         Set<Map<String, Boolean>> vaartustused = new HashSet<>();
         assertEquals(vaartustused, tp.vaartustusedVastavaltEeldusele());
     }
+
+    //Testid kvantoritega
+    @Test
+    //õpikust lk 65: iga kvantori distributiivsus
+    public void onSamavaarne1() throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud {
+        Tõesuspuu tp = konstrueeriPuu("F(x) := x=1 G(x) := x=0 Ax(F(x)&G(x)) ~ AxF(x)&AxG(x)", false);
+        Set<Map<String, Boolean>> vaartustused = new HashSet<>();
+        assertEquals(vaartustused, tp.vaartustusedVastavaltEeldusele());
+    }
+
+    @Test
+    //Bugi
+    //õpikust lk 65: leidub kvantori distributiivsus. Eeldus, et leidub väärtustus, mil valem on väär, on vale (tagastatav väärtustuste hulk on tühi), seega valem on samaselt tõene.
+    public void onSamavaarne2() throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud {
+        Tõesuspuu tp = konstrueeriPuu("F(x) := x=1 G(x) := x=0 Ex(F(x)vG(x)) ~ ExF(x)vExG(x)", false);
+        Set<Map<String, Boolean>> vaartustused = new HashSet<>();
+        assertEquals(vaartustused, tp.vaartustusedVastavaltEeldusele()); //ei arvesta harus esinevaid konstantsümboleid: see tuleb SIIN ESILE!
+    }
 }
