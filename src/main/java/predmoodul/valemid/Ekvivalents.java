@@ -1,6 +1,7 @@
 package predmoodul.valemid;
 
 import predmoodul.termid.IndiviidTerm;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.*;
 
@@ -80,7 +81,7 @@ public class Ekvivalents extends Valem {
         return vasak;
     }
 
-    public List<TõesuspuuTipp> reegel(boolean tõeväärtus) {
+    public List<TõesuspuuTipp> reegel(boolean tõeväärtus, Set<Character> puusEsinenudTermid, Set<Termikuulaja> kuulajad) {
 
         TõesuspuuTipp vasakLaps;
         TõesuspuuTipp lapseLapsVasakul;
@@ -134,6 +135,18 @@ public class Ekvivalents extends Valem {
 
     @Override
     public String dot() {
-        return "Ekv(" + vasakLaps.dot() + ", " + paremLaps.dot() + ")";
+        return "Ekv(" + vasakLaps.dot() + " ~ " + paremLaps.dot() + ")";
+    }
+
+    @Override
+    public void uusKonstantSumbol(Character sumbol) {
+
+        vasakLaps.uusKonstantSumbol(sumbol);
+        paremLaps.uusKonstantSumbol(sumbol);
+    }
+
+    @Override
+    public Valem koopia() {
+        throw new NotImplementedException();
     }
 }

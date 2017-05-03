@@ -18,6 +18,11 @@ public class AtomaarneValem extends Valem {
         this.paremTerm = parem;
     }
 
+    public AtomaarneValem(AtomaarneValem av){
+        this.vasakTerm = av.vasakTerm.koopia();
+        this.paremTerm = av.paremTerm.koopia();
+    }
+
     @Override
     public List<Object> getChildren() {
         return Arrays.asList((Object) vasakTerm, paremTerm);
@@ -55,7 +60,7 @@ public class AtomaarneValem extends Valem {
     }
 
     @Override
-    public List<TõesuspuuTipp> reegel(boolean tõeväärtus) {
+    public List<TõesuspuuTipp> reegel(boolean tõeväärtus, Set<Character> puusEsinenudTermid, Set<Termikuulaja> kuulajad) {
 
         return new ArrayList<>();
         //Arrays.asList(new TõesuspuuTipp(this, tõeväärtus));
@@ -79,5 +84,17 @@ public class AtomaarneValem extends Valem {
     @Override
     public String dot() {
         return   vasakTerm.dot() + " = " + paremTerm.dot();
+    }
+
+    @Override
+    public void uusKonstantSumbol(Character sumbol) {
+
+        vasakTerm.uusKonstantSumbol(sumbol);
+        paremTerm.uusKonstantSumbol(sumbol);
+    }
+
+    @Override
+    public Valem koopia() {
+        return new AtomaarneValem(this);
     }
 }

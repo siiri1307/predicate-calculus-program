@@ -27,6 +27,12 @@ public class AbiValem extends Valem {
         this.valem = valem;
     }
 
+    public AbiValem(AbiValem av){
+        this.id = av.id;
+        this.argumendid = av.argumendid;
+        this.valem = av.valem.koopia();
+    }
+
     //public String getID() {
       //  return ID;
     //}
@@ -67,7 +73,7 @@ public class AbiValem extends Valem {
     }
 
     @Override
-    public List<TõesuspuuTipp> reegel(boolean tõeväärtus) {
+    public List<TõesuspuuTipp> reegel(boolean tõeväärtus, Set<Character> puusEsinenudTermid, Set<Termikuulaja> kuulajad) {
 
         throw new NotImplementedException();
     }
@@ -99,5 +105,16 @@ public class AbiValem extends Valem {
     @Override
     public String dot() {
         return "Abi(" + valem.dot() + ")";
+    }
+
+    @Override
+    public void uusKonstantSumbol(Character sumbol) {
+
+        valem.uusKonstantSumbol(sumbol);
+    }
+
+    @Override
+    public Valem koopia() {
+        return new AbiValem(this);
     }
 }

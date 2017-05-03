@@ -13,7 +13,16 @@ public class KoguValem extends Valem {
 
     public KoguValem(List<Valem> children){
         this.children = children;
+    }
 
+    public KoguValem(KoguValem kv){
+
+        List<Valem> lapsed = new ArrayList<>();
+
+        for(Valem valem : kv.children){
+            lapsed.add(valem.koopia());
+        }
+        this.children = lapsed;
     }
 
     @Override
@@ -48,9 +57,9 @@ public class KoguValem extends Valem {
     }
 
     @Override
-    public List<TõesuspuuTipp> reegel(boolean tõeväärtus) {
+    public List<TõesuspuuTipp> reegel(boolean tõeväärtus, Set<Character> puusEsinenudTermid, Set<Termikuulaja> kuulajad) {
 
-        return children.get(children.size()-1).reegel(tõeväärtus);
+        return children.get(children.size()-1).reegel(tõeväärtus, puusEsinenudTermid, kuulajad);
     }
 
     @Override
@@ -75,5 +84,15 @@ public class KoguValem extends Valem {
     @Override
     public String dot() {
         return children.get(children.size()-1).dot();
+    }
+
+    @Override
+    public void uusKonstantSumbol(Character sumbol) {
+        children.get(children.size()-1).uusKonstantSumbol(sumbol);
+    }
+
+    @Override
+    public Valem koopia() {
+        return new KoguValem(this);
     }
 }

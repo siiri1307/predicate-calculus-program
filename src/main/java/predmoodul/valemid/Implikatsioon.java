@@ -18,6 +18,12 @@ public class Implikatsioon extends Valem {
         this.paremLaps = valem2;
     }
 
+    //copy constructor
+    public Implikatsioon(Implikatsioon impl){
+        this.vasakLaps = impl.vasakLaps.koopia();
+        this.paremLaps = impl.paremLaps.koopia();
+    }
+
     public Valem getVasakLaps() {
         return vasakLaps;
     }
@@ -88,7 +94,7 @@ public class Implikatsioon extends Valem {
         return vasak;
     }
 
-    public List<TõesuspuuTipp> reegel(boolean tõeväärtus){
+    public List<TõesuspuuTipp> reegel(boolean tõeväärtus, Set<Character> puusEsinenudTermid, Set<Termikuulaja> kuulajad){
 
         if(tõeväärtus){
 
@@ -123,5 +129,18 @@ public class Implikatsioon extends Valem {
     @Override
     public String dot() {
         return  vasakLaps.dot() + " -> " + paremLaps.dot();
+    }
+
+    @Override
+    public void uusKonstantSumbol(Character sumbol) {
+
+        vasakLaps.uusKonstantSumbol(sumbol);
+        paremLaps.uusKonstantSumbol(sumbol);
+    }
+
+    @Override
+    public Valem koopia() {
+
+        return new Implikatsioon(this);
     }
 }

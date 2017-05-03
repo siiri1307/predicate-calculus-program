@@ -24,6 +24,12 @@ public class Konjuktsioon extends Valem {
         //this.eitus = eitus;
     }
 
+    //copy constructor
+    public Konjuktsioon(Konjuktsioon k){
+        this.vasakLaps = k.vasakLaps.koopia();
+        this.paremLaps = k.paremLaps.koopia();
+    }
+
     @Override
     public List<Object> getChildren() {
         return Arrays.asList((Object) vasakLaps, paremLaps);
@@ -116,7 +122,7 @@ public class Konjuktsioon extends Valem {
         return vasak;
     }
 
-    public List<TõesuspuuTipp> reegel(boolean tõeväärtus) {
+    public List<TõesuspuuTipp> reegel(boolean tõeväärtus, Set<Character> puusEsinenudTermid, Set<Termikuulaja> kuulajad) {
 
         if(tõeväärtus){
 
@@ -154,5 +160,18 @@ public class Konjuktsioon extends Valem {
     @Override
     public String dot() {
         return vasakLaps.dot() + " & " + paremLaps.dot();
+    }
+
+    @Override
+    public void uusKonstantSumbol(Character sumbol) {
+
+        vasakLaps.uusKonstantSumbol(sumbol);
+        paremLaps.uusKonstantSumbol(sumbol);
+    }
+
+    @Override
+    public Valem koopia() {
+
+        return new Konjuktsioon(this);
     }
 }

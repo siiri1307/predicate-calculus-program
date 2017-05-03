@@ -17,6 +17,12 @@ public class Disjunktsioon extends Valem{
         this.paremLaps = valem2;
     }
 
+    //copy constructor
+    public Disjunktsioon(Disjunktsioon d){
+        this.vasakLaps = d.vasakLaps.koopia();
+        this.paremLaps = d.paremLaps.koopia();
+    }
+
     @Override
     public List<Object> getChildren() {
         return Arrays.asList((Object) vasakLaps, paremLaps);
@@ -63,7 +69,7 @@ public class Disjunktsioon extends Valem{
         return vasak;
     }
 
-    public List<TõesuspuuTipp> reegel(boolean tõeväärtus) {
+    public List<TõesuspuuTipp> reegel(boolean tõeväärtus, Set<Character> puusEsinenudTermid, Set<Termikuulaja> kuulajad) {
 
         if(tõeväärtus){
             return Arrays.asList(new TõesuspuuTipp(this.vasakLaps, true), new TõesuspuuTipp(this.paremLaps, true));
@@ -97,5 +103,17 @@ public class Disjunktsioon extends Valem{
     @Override
     public String dot() {
         return  vasakLaps.dot() + " v " + paremLaps.dot();
+    }
+
+    @Override
+    public void uusKonstantSumbol(Character sumbol) {
+
+        vasakLaps.uusKonstantSumbol(sumbol);
+        paremLaps.uusKonstantSumbol(sumbol);
+    }
+
+    @Override
+    public Valem koopia() {
+        return new Disjunktsioon(this);
     }
 }

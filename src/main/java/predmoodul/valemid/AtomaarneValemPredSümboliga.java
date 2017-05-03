@@ -36,6 +36,18 @@ public class AtomaarneValemPredSümboliga extends Valem {
         this.valem = valem;
     }
 
+    public AtomaarneValemPredSümboliga(AtomaarneValemPredSümboliga avps){
+
+        List<TermiPaar> argumendid = new ArrayList<>();
+
+        this.id = avps.id;
+        for(TermiPaar tp : avps.termArgumendid){
+            argumendid.add(new TermiPaar(tp));
+        }
+        this.termArgumendid = argumendid;
+        this.valem = avps.valem.koopia();
+    }
+
     @Override
     public List<Object> getChildren() {
         return Arrays.asList(id, termArgumendid, valem);
@@ -71,8 +83,8 @@ public class AtomaarneValemPredSümboliga extends Valem {
     }
 
     @Override
-    public List<TõesuspuuTipp> reegel(boolean tõeväärtus) {
-        return valem.reegel(tõeväärtus);
+    public List<TõesuspuuTipp> reegel(boolean tõeväärtus, Set<Character> puusEsinenudTermid, Set<Termikuulaja> kuulajad) {
+        return valem.reegel(tõeväärtus, puusEsinenudTermid, kuulajad);
     }
 
     @Override
@@ -97,5 +109,22 @@ public class AtomaarneValemPredSümboliga extends Valem {
     @Override
     public String dot() {
         return "[" + id.dot() + "(" + String.join(",", termArgumendid.stream().map(x -> x.getTahis().toString()).collect(Collectors.toList())) +  ") := " + valem.dot() + "]";
+    }
+
+    @Override
+    public void uusKonstantSumbol(Character sumbol) {
+
+        for(TermiPaar tp : termArgumendid){
+            if(tp.getTahis() == 'x'){
+                tp.setTahis(sumbol);;
+            }
+        }
+
+        valem.uusKonstantSumbol(sumbol);
+    }
+
+    @Override
+    public Valem koopia() {
+        return new AtomaarneValemPredSümboliga(this);
     }
 }

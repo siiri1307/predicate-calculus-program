@@ -25,7 +25,27 @@ public class Main {
 //        if (true) {
 //            throw new Exception();
 //        }
-        String sisend = "M := 0=1 B := 0=0 C:= 1=1 (M->(B->C))->((M->B)->(M->C))";
+        String sisend = "F(x) := x=1 G(x) := x=0 Ex(F(x)vG(x)) ~ ExF(x)vExG(x)";
+
+                //"-AxF(x) & AxF(x)";
+                //;
+                //"Ax(M(x)->B(x))->(ExM(x)->AxB(x))";
+                //;
+
+                //"M(x):=x=1 B(x):= x=0 (ExM(x)->AxB(x))->Ax(M(x)->B(x))";
+
+                //"Ax(M(x)->B(x))->(ExM(x)->AxB(x))";
+
+
+                //;
+
+                //"M(x) := x = 1 B(x) := x=0 Ax(M(x)->B(x))";
+
+                //"M(x):=x=1 B(x):= x=0 (ExM(x)->AxB(x))->Ax(M(x)->B(x))";
+
+
+
+                //"M := 0=1 B := 0=0 C:= 1=1 (M->(B->C))->((M->B)->(M->C))";
 
                 //"M := 0=1 B := 0=0 -(M->B)v-(B->M)";
 
@@ -86,9 +106,9 @@ public class Main {
         System.out.println(tõesuspuu.vaartustusedVastavaltEeldusele());
 
         Files.copy(new ByteArrayInputStream(
-                ("graph graphname { " + tõesuspuu.dot() + "}").getBytes(StandardCharsets.UTF_8)), Paths.get("/tmp","toesuspuu2.dot"), StandardCopyOption.REPLACE_EXISTING);
-        ProcessBuilder pb = new ProcessBuilder("dot", "-Tpng", "/tmp/toesuspuu2.dot");
-        Path pic = Paths.get("/tmp", "toesuspuu4.png");
+                ("graph graphname { " + tõesuspuu.dot() + "}").getBytes(StandardCharsets.UTF_8)), Paths.get("/tmp","toesuspuu3.dot"), StandardCopyOption.REPLACE_EXISTING);
+        ProcessBuilder pb = new ProcessBuilder("dot", "-Tpng", "/tmp/toesuspuu3.dot");
+        Path pic = Paths.get("/tmp", "toesuspuu10.png");
         pb.redirectOutput(ProcessBuilder.Redirect.to(pic.toFile()));
         Process process = pb.start();
 

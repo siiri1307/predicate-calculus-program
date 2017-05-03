@@ -15,6 +15,22 @@ public class TermiPaar {
         this.term = term;
     }
 
+    public TermiPaar(TermiPaar tp){
+        this.term = tp.term.koopia();
+        this.tahis = tp.tahis;
+    }
+
+    public void setTahis(Character tahis) {
+        this.tahis = tahis;
+    }
+
+    @Override
+    public String toString() {
+        return "TermiPaar{" +
+                "tahis=" + tahis +
+                '}';
+    }
+
     public Term getTerm() {
         return term;
     }
