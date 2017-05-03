@@ -7,10 +7,14 @@ import java.util.*;
  */
 public class NullTerm extends Term {
 
-    private final Character c;
+    private Character c;
 
     public NullTerm() {
         this.c = '0';
+    }
+
+    public NullTerm(NullTerm nullTerm){
+        this.c = nullTerm.c;
     }
 
     @Override
@@ -48,5 +52,13 @@ public class NullTerm extends Term {
     @Override
     public String dot() {
         return c.toString() ;
+    }
+
+    @Override
+    public void uusKonstantSumbol(Character sumbol) {}
+
+    @Override
+    public Term koopia() {
+        return new NullTerm(this);
     }
 }

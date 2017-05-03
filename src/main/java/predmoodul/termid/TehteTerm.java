@@ -1,9 +1,6 @@
 package predmoodul.termid;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by siiri on 25/03/17.
@@ -15,6 +12,8 @@ public abstract class TehteTerm extends Term {
     public TehteTerm(List<Term> termid) {
         this.alamTermid = termid;
     }
+
+    public TehteTerm(){}
 
     @Override
     public Set<IndiviidTerm> getIndiviidTermid() {
@@ -47,4 +46,11 @@ public abstract class TehteTerm extends Term {
         return Arrays.asList(alamTermid);
     }
 
+    @Override
+    public void uusKonstantSumbol(Character sumbol) {
+
+        for(Term alamterm : alamTermid){
+            alamterm.uusKonstantSumbol(sumbol);
+        }
+    }
 }

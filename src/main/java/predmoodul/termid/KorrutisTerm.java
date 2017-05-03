@@ -11,6 +11,17 @@ public class KorrutisTerm extends TehteTerm {
        super(termid);
     }
 
+    public KorrutisTerm(KorrutisTerm kt){
+
+        List<Term> termid = new ArrayList<>();
+
+        for(Term t : kt.alamTermid){
+            termid.add(t.koopia());
+        }
+
+        this.alamTermid = termid;
+    }
+
     @Override
     public double vaartusta(Map<Character, Double> vaartustus) {
 
@@ -35,6 +46,11 @@ public class KorrutisTerm extends TehteTerm {
         korrutisterm += alamTermid.get(alamTermid.size()-1) + ")";
 
         return korrutisterm;
+    }
+
+    @Override
+    public Term koopia() {
+        return new KorrutisTerm(this);
     }
 
 }

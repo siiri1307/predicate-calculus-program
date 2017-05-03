@@ -7,10 +7,14 @@ import java.util.*;
  */
 public class IndiviidTerm extends Term {
 
-    private final Character a;
+    private Character a;
 
     public IndiviidTerm(Character text) {
         this.a = text;
+    }
+
+    public IndiviidTerm(IndiviidTerm indiviidTerm){
+        this.a = indiviidTerm.a;
     }
 
     @Override
@@ -69,5 +73,16 @@ public class IndiviidTerm extends Term {
     public String dot() {
 
         return a.toString();
+    }
+
+    @Override
+    public void uusKonstantSumbol(Character sumbol) {
+
+        this.a = sumbol;
+    }
+
+    @Override
+    public Term koopia() {
+        return new IndiviidTerm(this);
     }
 }

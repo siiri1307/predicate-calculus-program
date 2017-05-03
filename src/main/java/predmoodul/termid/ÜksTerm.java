@@ -7,11 +7,15 @@ import java.util.*;
  */
 public class ÜksTerm extends Term {
 
-    private final Character c;
+    private Character c;
 
 
     public ÜksTerm() {
         this.c = '1';
+    }
+
+    public ÜksTerm(ÜksTerm t){
+        this.c = t.c;
     }
 
     @Override
@@ -48,5 +52,13 @@ public class ÜksTerm extends Term {
     @Override
     public String dot() {
         return c.toString();
+    }
+
+    @Override
+    public void uusKonstantSumbol(Character sumbol) {}
+
+    @Override
+    public Term koopia() {
+        return new ÜksTerm(this);
     }
 }

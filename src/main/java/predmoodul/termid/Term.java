@@ -26,4 +26,8 @@ public abstract class Term extends AstNode {
 
     public abstract String dot();
 
+    public abstract void uusKonstantSumbol(Character sumbol);
+
+    public abstract Term koopia();
+
 }

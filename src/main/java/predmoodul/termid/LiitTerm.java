@@ -11,6 +11,17 @@ public class LiitTerm extends TehteTerm {
         super(termid);
     }
 
+    public LiitTerm(LiitTerm lt){
+
+        List<Term> termid = new ArrayList<>();
+
+        for(Term t : lt.alamTermid){
+            termid.add(t.koopia());
+        }
+
+        this.alamTermid = termid;
+    }
+
     @Override
     public double vaartusta(Map<Character, Double> vaartustus) {
 
@@ -30,5 +41,10 @@ public class LiitTerm extends TehteTerm {
         liitterm += alamTermid.get(alamTermid.size()-1) + ")";
 
         return liitterm;
+    }
+
+    @Override
+    public Term koopia() {
+        return new LiitTerm(this);
     }
 }
