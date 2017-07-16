@@ -1,6 +1,7 @@
 package predmoodul.termid;
 
 import java.util.*;
+import java.util.function.Predicate;
 
 /**
  * Created by siiri on 18/03/17.
@@ -10,6 +11,7 @@ public class IndiviidTerm extends Term {
     private Character a;
 
     public IndiviidTerm(Character text) {
+
         this.a = text;
     }
 
@@ -35,7 +37,7 @@ public class IndiviidTerm extends Term {
     }
 
     @Override
-    public boolean equals(Term term) {
+    public boolean equals(Object term) {
 
         if(this == term){
             return true;
@@ -46,20 +48,9 @@ public class IndiviidTerm extends Term {
 
         IndiviidTerm indiviidTerm = (IndiviidTerm) term;
 
-        return this.a == indiviidTerm.a;
+        return this.a.equals(indiviidTerm.a);
     }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        IndiviidTerm that = (IndiviidTerm) o;
-
-        return this.a.equals(that.a);
-
-    }
-
+    
     @Override
     public int hashCode() {
         return a != null ? a.hashCode() : 0;
@@ -76,10 +67,15 @@ public class IndiviidTerm extends Term {
     }
 
     @Override
-    public void uusKonstantSumbol(Character sumbol) {
+    public void uusKonstantSumbol(Character uusSumbol, Character vanaSumbol) {
 
-        this.a = sumbol;
+        if(a == vanaSumbol){
+            this.a = uusSumbol;
+        }
     }
+
+    @Override
+    public void asendaTerm(Term uusTerm, Predicate<Term> tingimus) {}
 
     @Override
     public Term koopia() {
