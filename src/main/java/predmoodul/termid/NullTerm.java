@@ -39,7 +39,7 @@ public class NullTerm extends Term {
 
         return this.getClass() == term.getClass();
     }
-    
+
     @Override
     public String dot() {
         return c.toString() ;
@@ -54,9 +54,7 @@ public class NullTerm extends Term {
     public void uusKonstantSumbol(Character uusSumbol, Character vanaSumbol) {}
 
     @Override
-    public void asendaTerm(Term uus, Predicate<Term> tingimus) {
-
-    }
+    public void asendaTerm(Term uus, Predicate<Term> tingimus) {}
 
     @Override
     public Term koopia() {
