@@ -1,12 +1,13 @@
 package predmoodul.kvantorid;
 
 import predmoodul.termid.IndiviidTerm;
+import predmoodul.termid.Term;
 import predmoodul.valemid.Termikuulaja;
 import predmoodul.valemid.TõesuspuuTipp;
 import predmoodul.valemid.Valem;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.*;
+import java.util.function.Predicate;
 
 /**
  * Created by siiri on 13/04/17.
@@ -17,6 +18,10 @@ public class Eitus extends Valem implements Kvantor {
 
     public Eitus(Valem valem){
         this.valem = valem;
+    }
+
+    public Eitus(Eitus eitus){
+        this.valem = eitus.valem.koopia();
     }
 
     @Override
@@ -33,7 +38,7 @@ public class Eitus extends Valem implements Kvantor {
 
     @Override
     public Set<IndiviidTerm> getIndiviidTermid() {
-        return null;
+        return new HashSet<>();
     }
 
     @Override
@@ -47,7 +52,7 @@ public class Eitus extends Valem implements Kvantor {
         return Arrays.asList((Object) valem);
     }
 
-    public List<TõesuspuuTipp> reegel(boolean tõeväärtus, Set<Character> puusEsinenudTermid, Set<Termikuulaja> kuulajad) {
+    public List<TõesuspuuTipp> reegel(boolean tõeväärtus, Set<Character> puusEsinenudTermid, Set<Termikuulaja> kuulajad, Set<Character> harusEsinenudTermid) {
 
         if(tõeväärtus){
 
@@ -60,7 +65,7 @@ public class Eitus extends Valem implements Kvantor {
     }
 
     @Override
-    public boolean equals(Valem valem) {
+    public boolean equals(Object valem) {
 
         if(this == valem){
             return true;
@@ -80,12 +85,17 @@ public class Eitus extends Valem implements Kvantor {
     }
 
     @Override
-    public void uusKonstantSumbol(Character sumbol) {
-        valem.uusKonstantSumbol(sumbol);
+    public void uusKonstantSumbol(Character uusSumbol, Character vanaSumbol) {
+        valem.uusKonstantSumbol(uusSumbol, vanaSumbol);
+    }
+
+    @Override
+    public void asendaTerm(Term uus, Predicate<Term> tingimus) {
+        valem.asendaTerm(uus, tingimus);
     }
 
     @Override
     public Valem koopia() {
-        throw new NotImplementedException();
+        return new Eitus(this);
     }
 }
