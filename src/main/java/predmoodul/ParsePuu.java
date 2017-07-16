@@ -4,7 +4,9 @@ import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 import predmoodul.erindid.AbiValemEiOleDefineeritud;
+import predmoodul.erindid.LekseriVigadeKuulaja;
 import predmoodul.erindid.VaarVabadeMuutujateEsinemine;
+import predmoodul.erindid.ViganeSisend;
 import predmoodul.kvantorid.*;
 import predmoodul.termid.*;
 import predmoodul.valemid.*;
@@ -18,49 +20,65 @@ import java.util.Map;
  * Created by siiri on 02/02/17.
  */
 
-public class Vastus {
+public class ParsePuu {
 
-    String input;
+    String sisend;
 
-    public Vastus(String input) {
-        this.input = input;
+
+    public ParsePuu(String input) {
+        this.sisend = input;
     }
 
-    public boolean accepts(){
-
-//        try {
-//            System.err.close();
-//        }
-//        catch (Throwable t) {
-//        }
-
-        boolean parses = true;
-//        try {
-
-        createParseTree(input);
-//        } catch (Throwable e) {
-//            parses = false;
-//        }
-
-        return parses;
-    }
 
     public ParseTree createParseTree(String program){
 
+        ParseTree parseTree;
+
+        //lexer splits input into tokens
         ANTLRInputStream input = new ANTLRInputStream(program); //like a char[] buffer
         PredLexer lexer = new PredLexer(input);
-        //lexer.addErrorListener(listener);
+        LekseriVigadeKuulaja lvk = new LekseriVigadeKuulaja();
+        lexer.addErrorListener(lvk);
+
+
         CommonTokenStream tokens = new CommonTokenStream(lexer); //provides access to all tokens by index
+
         PredParser parser = new PredParser(tokens);
-        //parser.addErrorListener(listener);
-        ParseTree parseTree = parser.koguvalem();
+        ViganeSisend vigadeKuulaja = new ViganeSisend();
+        parser.addErrorListener(vigadeKuulaja);
+
+
+        parseTree = parser.koguvalem();
 
         System.out.println(parseTree.toStringTree(parser));
+
+        if(lvk.onLekseriVigu()){
+
+            List<String> vead = lvk.getVeaSonumid();
+
+            for(String s: vead){
+                System.out.println(s);
+            }
+
+            throw new RuntimeException("Leksimine ebaõnnestus");
+        }
+
+        if(vigadeKuulaja.sisendisOnVigu()){
+
+            List<String> veaSonumid = vigadeKuulaja.getVeaSonumid();
+
+            for(String s: veaSonumid){
+                System.out.println(s);
+            }
+
+            throw new RuntimeException("Parsimine ebaõnnestus");
+        }
 
         if (parseTree == null
                 || parseTree.getChildCount() == 0
                 || parser.getNumberOfSyntaxErrors() != 0
                 ) {
+            System.out.println(parser.getNumberOfSyntaxErrors());
             throw new RuntimeException("Problem with parsing");
         }
 
@@ -258,10 +276,10 @@ public class Vastus {
                     ParseTree termargumendid = valemContext.getChild(1);
                     List<TermiPaar> termTahised = new ArrayList<>();
 
-
                     for(int i = 1; i < termargumendid.getChildCount()-1; i+=2){
                         argumendid.add(createTerm(termargumendid.getChild(i)));
                     }
+                    System.out.println("Termargumendid on " + argumendid);
 
                     ValemiID id = new ValemiID(predSümbol, argumendid.size());
 
@@ -330,10 +348,10 @@ public class Vastus {
                     liidetavad.add(createTerm(termContext.getChild(i)));
                 }
                 if(termContext.getChild(1).getText().charAt(0) == '+'){
-                    return new LiitTerm(liidetavad);
+                    return LiitTerm.binaarneLiitmine(liidetavad);
                 }
                 else{
-                    return new LahutusTerm(liidetavad);
+                    return LahutusTerm.binaarneLahutamine(liidetavad);
                 }
             }
         }
@@ -347,10 +365,10 @@ public class Vastus {
                     korrutised.add(createTerm(termContext.getChild(i)));
                 }
                 if(termContext.getChild(1).getText().charAt(0) == '*'){
-                    return new KorrutisTerm(korrutised);
+                    return KorrutisTerm.binaarneKorrutis(korrutised);
                 }
                 else{
-                    return new JagamisTerm(korrutised);
+                    return JagamisTerm.binaarneJagatis(korrutised);
                 }
             }
         }
@@ -368,7 +386,7 @@ public class Vastus {
                 }
             }
             else{
-                return createTerm(termContext.getChild(0));
+                return createTerm(termContext.getChild(1));
             }
         }
 
