@@ -1,9 +1,11 @@
 package predmoodul.valemid;
 
 import predmoodul.termid.IndiviidTerm;
+import predmoodul.termid.Term;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.*;
+import java.util.function.Predicate;
 
 /**
  * Created by siiri on 05/03/17.
@@ -22,6 +24,14 @@ public class Ekvivalents extends Valem {
     @Override
     public List<Object> getChildren() {
         return Arrays.asList((Object) vasakLaps, paremLaps);
+    }
+
+    public Valem getVasakLaps() {
+        return vasakLaps;
+    }
+
+    public Valem getParemLaps() {
+        return paremLaps;
     }
 
     @Override
@@ -81,7 +91,7 @@ public class Ekvivalents extends Valem {
         return vasak;
     }
 
-    public List<TõesuspuuTipp> reegel(boolean tõeväärtus, Set<Character> puusEsinenudTermid, Set<Termikuulaja> kuulajad) {
+    public List<TõesuspuuTipp> reegel(boolean tõeväärtus, Set<Character> puusEsinenudTermid, Set<Termikuulaja> kuulajad, Set<Character> harusEsinenudTermid) {
 
         TõesuspuuTipp vasakLaps;
         TõesuspuuTipp lapseLapsVasakul;
@@ -119,7 +129,7 @@ public class Ekvivalents extends Valem {
     }
 
     @Override
-    public boolean equals(Valem valem) {
+    public boolean equals(Object valem) {
 
         if(this == valem){
             return true;
@@ -135,14 +145,21 @@ public class Ekvivalents extends Valem {
 
     @Override
     public String dot() {
-        return "Ekv(" + vasakLaps.dot() + " ~ " + paremLaps.dot() + ")";
+        return  vasakLaps.dot() + " ~ " + paremLaps.dot();
     }
 
     @Override
-    public void uusKonstantSumbol(Character sumbol) {
+    public void uusKonstantSumbol(Character uusSumbol, Character vanaSumbol) {
 
-        vasakLaps.uusKonstantSumbol(sumbol);
-        paremLaps.uusKonstantSumbol(sumbol);
+        vasakLaps.uusKonstantSumbol(uusSumbol, vanaSumbol);
+        paremLaps.uusKonstantSumbol(uusSumbol, vanaSumbol);
+    }
+
+    @Override
+    public void asendaTerm(Term uus, Predicate<Term> tingimus) {
+
+        vasakLaps.asendaTerm(uus, tingimus);
+        paremLaps.asendaTerm(uus, tingimus);
     }
 
     @Override

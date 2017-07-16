@@ -1,8 +1,10 @@
 package predmoodul.valemid;
 
 import predmoodul.termid.IndiviidTerm;
+import predmoodul.termid.Term;
 
 import java.util.*;
+import java.util.function.Predicate;
 
 /**
  * Created by siiri on 05/03/17.
@@ -57,13 +59,13 @@ public class KoguValem extends Valem {
     }
 
     @Override
-    public List<TõesuspuuTipp> reegel(boolean tõeväärtus, Set<Character> puusEsinenudTermid, Set<Termikuulaja> kuulajad) {
+    public List<TõesuspuuTipp> reegel(boolean tõeväärtus, Set<Character> puusEsinenudTermid, Set<Termikuulaja> kuulajad, Set<Character> harusEsinenudTermid) {
 
-        return children.get(children.size()-1).reegel(tõeväärtus, puusEsinenudTermid, kuulajad);
+        return children.get(children.size()-1).reegel(tõeväärtus, puusEsinenudTermid, kuulajad, harusEsinenudTermid);
     }
 
     @Override
-    public boolean equals(Valem valem) {
+    public boolean equals(Object valem) {
 
         if(this == valem){
             return true;
@@ -87,8 +89,14 @@ public class KoguValem extends Valem {
     }
 
     @Override
-    public void uusKonstantSumbol(Character sumbol) {
-        children.get(children.size()-1).uusKonstantSumbol(sumbol);
+    public void uusKonstantSumbol(Character uusSumbol, Character vanaSumbol) {
+        children.get(children.size()-1).uusKonstantSumbol(uusSumbol, vanaSumbol);
+    }
+
+    @Override
+    public void asendaTerm(Term uus, Predicate<Term> tingimus) {
+
+        children.get(children.size()-1).asendaTerm(uus, tingimus);
     }
 
     @Override
