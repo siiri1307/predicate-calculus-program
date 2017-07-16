@@ -9,9 +9,9 @@ public class Tõesuspuu {
 
     private final TõesuspuuTipp juurtipp;
 
+    private Set<TõesuspuuTipp> vaaraksMuutvadVaartustused = new HashSet<>();
     private Set<Character> puusEsinenudTermid = new HashSet<>();
-    private List<TõesuspuuTipp> lisamataTipud = new ArrayList<>();
-    private Set<Termikuulaja> kuulajad = new HashSet<>();
+    //private Set<Termikuulaja> kuulajad = new HashSet<>();
 
     private Tõesuspuu(TõesuspuuTipp juurtipp) {
         this.juurtipp = juurtipp;
@@ -26,18 +26,15 @@ public class Tõesuspuu {
 
         Queue<TõesuspuuTipp> jrk = new LinkedList<>();
 
+        //Set<TõesuspuuTipp> eemaldatudTipud = new HashSet<>();
+
         jrk.add(juurtipp);
 
         while(!jrk.isEmpty()){
 
-            /*if(lisamataTipud.size() != 0 && !puusEsinenudTermid.isEmpty()){
-                TõesuspuuTipp lisan = lisamataTipud.remove(0);
-                //System.out.println("seni lisamata: " + lisan);
-                jrk.add(lisan);
-            }*/
-
             TõesuspuuTipp tipp = jrk.remove();
-            System.out.println("Eemaldasin tipu: " + tipp);
+            //System.out.println("Eemaldasin tipu: " + tipp);
+            //eemaldatudTipud.add(tipp);
 
             if(tipp.sisaldabVastuolu()){ //kui tipp annab vastuolu, siis ei lisa teda töödeldavate tippude järjekorda
                 continue;
@@ -47,25 +44,67 @@ public class Tõesuspuu {
                 continue;
             }
 
-            Set vanadTermid = new HashSet<>(puusEsinenudTermid);
+            Set<Termikuulaja> kuulajad = tipp.getKuulajad(); //tagasta tipu ja tema vanemate Termikuulajad. Eesmärk leida: ∃xF(x) = 0, ∀xF(x) = 1.
+            Set<Character> harusEsinenudTermid = tipp.getTermid(); //vabad muutujad
+            Set<Character> uuedTermid = new HashSet<>(tipp.getTermid());
+            uuedTermid.removeAll(tipp.getVanem() == null ? tipp.getValem().getVabadMuutujad() : tipp.getVanem().getTermid()); //jäta välja vanema termid
+            for (Character c : uuedTermid) { //iga uue konstantssümboli kohta, mis tipuga tuli, lisa puusse analüüsisamm.
+                // uued termid saavad vanad faktid. Puus ei ole teadmisi uute termide kohta mis just lisati
+                for (TõesuspuuTipp leht : tipp.getLehed()) {
+                    if (leht.sisaldabVastuolu()) {
+                        continue;
+                    }
+                    for (Termikuulaja kuulaja1 : kuulajad) { //itereeri üle lisandunud termide ja asenda igas vajalikus valemis sümbol uue termi vastu
+                        TõesuspuuTipp uusLeht = kuulaja1.kuulaKonstantSumbolit(c);
+                        if (sisaldabLehte(leht, uusLeht)) {
+                            continue;
+                        }
+                        leht.setVasakLaps(uusLeht);
+                        lisaJärjekorda(jrk, uusLeht);
+                        leht = uusLeht;
+                    }
+                }
+            }
 
-            List<TõesuspuuTipp> alampuud = tipp.getValem().reegel(tipp.getTõeväärtus(), puusEsinenudTermid, kuulajad);
+            //System.out.println("Haru termid on: " + harusEsinenudTermid);
+            //System.out.println("Puu termid on: " + puusEsinenudTermid);
+            List<TõesuspuuTipp> alampuud = tipp.getValem().reegel(tipp.getTõeväärtus(), puusEsinenudTermid, kuulajad, harusEsinenudTermid);
 
-//            Set<Character> uuedTermid = new HashSet<>(puusEsinenudTermid);
-//            uuedTermid.removeAll(vanadTermid);
-//
-//            for (Character c : uuedTermid) {
-//                for (Termikuulaja kuulaja : kuulajad) {
-//                    List<TõesuspuuTipp> tipud = kuulaja.kuulaKonstantSumbolit(c);
+            Optional<Termikuulaja> kuulaja = tipp.getValem().getKuulaja(tipp.getTõeväärtus()); //vanad termid saavad uue fakti. Puus ei ole uut teadmist vanade termide kohta.
+            if (kuulaja.isPresent()) {
+                kuulajad.add(kuulaja.get());
+                for (Character c : tipp.getTermid()) { //kõik termid
+                    for (TõesuspuuTipp leht : tipp.getLehed()) {
+                        if (leht.sisaldabVastuolu()) {
+                            continue;
+                        }
+                        TõesuspuuTipp uusLeht = kuulaja.get().kuulaKonstantSumbolit(c);
+                        if (sisaldabLehte(leht, uusLeht)) {
+                            continue;
+                        }
+                        leht.setVasakLaps(uusLeht);
+                        lisaJärjekorda(jrk, uusLeht);
+                    }
+                }
+            }
+
+
+//            for(TõesuspuuTipp tippp : alampuud){
+//                for (TõesuspuuTipp t : tippp.getLehed()) {
+
+//  }
+//                    }
 //                }
 //            }
 
-
-            Optional<Termikuulaja> kuulaja = tipp.getValem().getKuulaja(tipp.getTõeväärtus());
-            if (kuulaja.isPresent()) {
-                kuulajad.add(kuulaja.get());
+            if(alampuud.size() == 0 && tipp.getLapsed().size() == 0 && !tipp.sisaldabVastuolu()){ //haru on lõpetatud, kuid mitte vastuoluline
+                //System.out.println("Lõpetatud haru leht " + tipp.toString());
+                vaaraksMuutvadVaartustused = tipp.lisaVaaraksMuutvadVaartustused();
+                //tipp.teavitaAtomaarsestValemist();
+                System.out.println("Lausemuutujad: " + vaaraksMuutvadVaartustused.size());
+                //return;
+                throw new RuntimeException("Lõpetatud, kuid mitte-vastuoluline haru");
             }
-
             if(alampuud.size() == 0){
                 continue;
             }
@@ -81,6 +120,7 @@ public class Tõesuspuu {
                 if(leht.sisaldabVastuolu()){
                     continue;
                 }
+
                 TõesuspuuTipp vasakLaps = new TõesuspuuTipp(alampuud.get(0));
                 lisaJärjekorda(jrk, vasakLaps);
                 leht.setVasakLaps(vasakLaps);
@@ -97,43 +137,37 @@ public class Tõesuspuu {
         }
     }
 
-    private void lisaJärjekorda(Queue<TõesuspuuTipp> jrk, TõesuspuuTipp tõesuspuuTipp) {
-        //System.out.println("Lisan järjekorda sellise tõesuspuutipu: " + tõesuspuuTipp.toString());
 
-        /*if((tõesuspuuTipp.getValem() instanceof Iga && tõesuspuuTipp.getTõeväärtus()) || (tõesuspuuTipp.getValem() instanceof Eks && !tõesuspuuTipp.getTõeväärtus())){
-            for (TõesuspuuTipp tipp : tõesuspuuTipp.getLapsed()) {
-                System.out.println("Ja tema sellise lapse: " + tipp);
-                lisaJärjekorda(jrk, tipp);
-            }
-            lisamataTipud.add(tõesuspuuTipp);
-            //jrk.add(tõesuspuuTipp);
-        }*/
+
+    private boolean sisaldabLehte(TõesuspuuTipp leht, TõesuspuuTipp uusLeht) {
+        if (leht == null) {
+            return false;
+        }
+        return leht.sama(uusLeht) || sisaldabLehte(leht.getVanem(), uusLeht);
+    }
+
+    private void lisaJärjekorda(Queue<TõesuspuuTipp> jrk, TõesuspuuTipp tõesuspuuTipp) {
 
         jrk.add(tõesuspuuTipp);
+
         for (TõesuspuuTipp tipp : tõesuspuuTipp.getLapsed()) {
-            //System.out.println("Ja tema sellise lapse: " + tipp);
             lisaJärjekorda(jrk, tipp);
         }
-        /*else{
-            jrk.add(tõesuspuuTipp);
-            for (TõesuspuuTipp tipp : tõesuspuuTipp.getLapsed()) {
-                System.out.println("Ja tema sellise lapse: " + tipp);
-                lisaJärjekorda(jrk, tipp);
-            }
-        }*/
-
-        //System.out.println("----------------");
     }
 
     public void looPuu() {
         lisaTipp(juurtipp);
     }
 
+    public TõesuspuuTipp getJuurtipp() {
+        return juurtipp;
+    }
+
     public Set<Map<String, Boolean>> vaartustusedVastavaltEeldusele(){
 
         Set<Map<String, Boolean>> vaartustused = new HashSet<>();
 
-        Set<TõesuspuuTipp> lehedPuus = juurtipp.getLehed();
+        Collection<TõesuspuuTipp> lehedPuus = juurtipp.getLehed();
 
         System.out.println("Selles puus on " + lehedPuus.size() + " lehte.");
 
@@ -149,6 +183,8 @@ public class Tõesuspuu {
 
         return vaartustused;
     }
+
+
 
     private String valmistaDotFormaat(TõesuspuuTipp tipp){
 
