@@ -4,6 +4,7 @@ import predmoodul.termid.IndiviidTerm;
 import predmoodul.termid.Term;
 
 import java.util.*;
+import java.util.function.Predicate;
 
 /**
  * Created by siiri on 05/03/17.
@@ -30,6 +31,7 @@ public class AtomaarneValem extends Valem {
 
     @Override
     public boolean vaartusta(Map<Character, Double> vaartustus) {
+
         return vasakTerm.vaartusta(vaartustus) == paremTerm.vaartusta(vaartustus);
     }
 
@@ -54,20 +56,22 @@ public class AtomaarneValem extends Valem {
     public Set<Character> getVabadMuutujad() {
         Set s = new HashSet<>();
         for (IndiviidTerm id : getIndiviidTermid()) {
+
             s.add(id.getTahis());
+
         }
         return s;
     }
 
     @Override
-    public List<TõesuspuuTipp> reegel(boolean tõeväärtus, Set<Character> puusEsinenudTermid, Set<Termikuulaja> kuulajad) {
+    public List<TõesuspuuTipp> reegel(boolean tõeväärtus, Set<Character> puusEsinenudTermid, Set<Termikuulaja> kuulajad, Set<Character> harusEsinenudTermid) {
 
         return new ArrayList<>();
-        //Arrays.asList(new TõesuspuuTipp(this, tõeväärtus));
+
     }
 
     @Override
-    public boolean equals(Valem valem) {
+    public boolean equals(Object valem) {
 
         if(this == valem){
             return true;
@@ -86,11 +90,32 @@ public class AtomaarneValem extends Valem {
         return   vasakTerm.dot() + " = " + paremTerm.dot();
     }
 
-    @Override
-    public void uusKonstantSumbol(Character sumbol) {
+    /*@Override
+    public String dot() {
+        return "";
+    }*/
 
-        vasakTerm.uusKonstantSumbol(sumbol);
-        paremTerm.uusKonstantSumbol(sumbol);
+    @Override
+    public void uusKonstantSumbol(Character uusSumbol, Character vanaSumbol) {
+
+        vasakTerm.uusKonstantSumbol(uusSumbol, vanaSumbol);
+        paremTerm.uusKonstantSumbol(uusSumbol, vanaSumbol);
+    }
+
+    @Override
+    public void asendaTerm(Term uusTerm, Predicate<Term> tingimus) {
+        if (tingimus.test(vasakTerm)) {
+            vasakTerm = uusTerm.koopia();
+
+        } else {
+            vasakTerm.asendaTerm(uusTerm, tingimus);
+        }
+        if (tingimus.test(paremTerm)) {
+            paremTerm = uusTerm.koopia();
+
+        } else {
+            paremTerm.asendaTerm(uusTerm, tingimus);
+        }
     }
 
     @Override
