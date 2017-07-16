@@ -1,9 +1,11 @@
 package predmoodul.valemid;
 
 import predmoodul.termid.IndiviidTerm;
+import predmoodul.termid.Term;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.*;
+import java.util.function.Predicate;
 
 /**
  * Created by siiri on 05/03/17.
@@ -73,13 +75,13 @@ public class AbiValem extends Valem {
     }
 
     @Override
-    public List<TõesuspuuTipp> reegel(boolean tõeväärtus, Set<Character> puusEsinenudTermid, Set<Termikuulaja> kuulajad) {
+    public List<TõesuspuuTipp> reegel(boolean tõeväärtus, Set<Character> puusEsinenudTermid, Set<Termikuulaja> kuulajad, Set<Character> harusEsinenudTermid) {
 
         throw new NotImplementedException();
     }
 
     @Override
-    public boolean equals(Valem valem) {
+    public boolean equals(Object valem) {
 
         if(this == valem){
             return true;
@@ -99,6 +101,7 @@ public class AbiValem extends Valem {
 
     public boolean vabadeMuutujateEsinemineKorrektne() {
         //return getVabadMuutujad().containsAll(argumendid);
+        //List<Character> argumendiTahised = argumendid.stream().map(Argument::getArgumendiTahis).collect(Collectors.toList());
         return new HashSet<Character>(argumendid).equals(valem.getVabadMuutujad());
     }
 
@@ -108,9 +111,15 @@ public class AbiValem extends Valem {
     }
 
     @Override
-    public void uusKonstantSumbol(Character sumbol) {
+    public void uusKonstantSumbol(Character uusSumbol, Character vanaSumbol) {
 
-        valem.uusKonstantSumbol(sumbol);
+        valem.uusKonstantSumbol(uusSumbol, vanaSumbol);
+    }
+
+    @Override
+    public void asendaTerm(Term uus, Predicate<Term> tingimus) {
+
+        valem.asendaTerm(uus, tingimus);
     }
 
     @Override
