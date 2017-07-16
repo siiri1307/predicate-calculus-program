@@ -1,6 +1,7 @@
 package predmoodul.termid;
 
 import java.util.*;
+import java.util.function.Predicate;
 
 /**
  * Created by siiri on 18/03/17.
@@ -9,11 +10,11 @@ public class ÜksTerm extends Term {
 
     private Character c;
 
-
     public ÜksTerm() {
         this.c = '1';
     }
 
+    //copy constructor
     public ÜksTerm(ÜksTerm t){
         this.c = t.c;
     }
@@ -35,18 +36,8 @@ public class ÜksTerm extends Term {
     }
 
     @Override
-    public boolean equals(Term term) {
-
-        if(this == term){
-            return true;
-        }
-        if(term == null || this.getClass() != term.getClass()){
-            return false;
-        }
-
-        ÜksTerm üksTerm = (ÜksTerm) term;
-
-        return this.c == üksTerm.c;
+    public boolean equals(Object obj) {
+        return this.getClass() == obj.getClass();
     }
 
     @Override
@@ -55,7 +46,15 @@ public class ÜksTerm extends Term {
     }
 
     @Override
-    public void uusKonstantSumbol(Character sumbol) {}
+    public Character getTahis() {
+        return c;
+    }
+
+    @Override
+    public void uusKonstantSumbol(Character uusSumbol, Character vanaSumbol) {}
+
+    @Override
+    public void asendaTerm(Term uus, Predicate<Term> tingimus) {}
 
     @Override
     public Term koopia() {
