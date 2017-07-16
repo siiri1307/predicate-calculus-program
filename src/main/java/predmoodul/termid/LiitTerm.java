@@ -7,26 +7,50 @@ import java.util.*;
  */
 public class LiitTerm extends TehteTerm {
 
-    public LiitTerm(List<Term> termid) {
+    /*public LiitTerm(List<Term> termid) {
         super(termid);
+    }*/
+
+    //private Term vasakTerm;
+    //private Term paremTerm;
+
+    public LiitTerm(Term vasakTerm, Term paremTerm){
+        this.vasakTerm = vasakTerm;
+        this.paremTerm = paremTerm;
     }
 
+    //copy constructor
     public LiitTerm(LiitTerm lt){
 
-        List<Term> termid = new ArrayList<>();
+        this.vasakTerm = lt.vasakTerm.koopia();
+        this.paremTerm = lt.paremTerm.koopia();
+
+        /*List<Term> termid = new ArrayList<>();
 
         for(Term t : lt.alamTermid){
             termid.add(t.koopia());
         }
 
-        this.alamTermid = termid;
+        this.alamTermid = termid;*/
     }
 
     @Override
     public double vaartusta(Map<Character, Double> vaartustus) {
 
-        return teeTehe(vaartustus, alamTermid, (summa,liidetav) -> summa + liidetav);
+        return vasakTerm.vaartusta(vaartustus) + paremTerm.vaartusta(vaartustus);
+        //return teeTehe(vaartustus, alamTermid, (summa,liidetav) -> summa + liidetav);
 
+    }
+
+    public static Term binaarneLiitmine(List<Term> termid) {
+
+        Term vasakTerm = termid.get(0);
+
+        for(int i = 1; i < termid.size(); i++){
+            vasakTerm = new LiitTerm(vasakTerm, termid.get(i));
+        }
+
+        return vasakTerm;
     }
 
     @Override
@@ -34,13 +58,24 @@ public class LiitTerm extends TehteTerm {
 
         String liitterm = "+Term(";
 
-        for(int i = 0; i < alamTermid.size()-1; i++){
+        liitterm += vasakTerm.dot() + ", ";
+
+        liitterm += paremTerm.dot();
+
+        liitterm += ")";
+
+        /*for(int i = 0; i < alamTermid.size()-1; i++){
             liitterm += alamTermid.get(i).dot() + ",";
         }
 
-        liitterm += alamTermid.get(alamTermid.size()-1) + ")";
+        liitterm += alamTermid.get(alamTermid.size()-1) + ")";*/
 
         return liitterm;
+    }
+
+    @Override
+    public Character getTahis() {
+        return null;
     }
 
     @Override

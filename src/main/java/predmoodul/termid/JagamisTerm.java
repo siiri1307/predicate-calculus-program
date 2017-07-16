@@ -1,6 +1,5 @@
 package predmoodul.termid;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -9,48 +8,82 @@ import java.util.Map;
  */
 public class JagamisTerm extends TehteTerm {
 
-    public JagamisTerm(List<Term> termid) {
+    /*public JagamisTerm(List<Term> termid) {
         super(termid);
+    }*/
+
+    //private Term vasakTerm;
+    //private Term paremTerm;
+
+    public JagamisTerm(Term vasakTerm, Term paremTerm){
+        this.vasakTerm = vasakTerm;
+        this.paremTerm = paremTerm;
     }
 
     public JagamisTerm(JagamisTerm jt){
 
-        List<Term> termid = new ArrayList<>();
+        this.vasakTerm = jt.vasakTerm.koopia();
+        this.paremTerm = jt.paremTerm.koopia();
+
+        /*List<Term> termid = new ArrayList<>();
 
         for(Term t : jt.alamTermid){
             termid.add(t.koopia());
         }
 
-        this.alamTermid = termid;
+        this.alamTermid = termid;*/
     }
 
     @Override
     public double vaartusta(Map<Character, Double> vaartustus) {
 
-        return teeTehe(vaartustus, alamTermid, (jagatav,jagaja) -> jagatav/jagaja );
+        return vasakTerm.vaartusta(vaartustus) / paremTerm.vaartusta(vaartustus);
+
+        //return teeTehe(vaartustus, alamTermid, (jagatav,jagaja) -> jagatav/jagaja );
 
     }
 
     //return  alamTermid.stream().flatMap(x -> x.getIndiviidTermid().stream()).collect(Collectors.toSet());
+
+    public static Term binaarneJagatis(List<Term> termid) {
+
+        Term vasakTerm = termid.get(0);
+
+        for(int i = 1; i < termid.size(); i++){
+            vasakTerm = new JagamisTerm(vasakTerm, termid.get(i));
+        }
+
+        return vasakTerm;
+    }
 
     @Override
     public String dot() {
 
         String jagamisterm = "/Term(";
 
-        for(int i = 0; i < alamTermid.size()-1; i++){
+        jagamisterm += vasakTerm.dot() + ", ";
+
+        jagamisterm += paremTerm.dot();
+
+        jagamisterm += ")";
+
+        /*for(int i = 0; i < alamTermid.size()-1; i++){
             jagamisterm += alamTermid.get(i).dot() + ",";
         }
 
-        jagamisterm += alamTermid.get(alamTermid.size()-1) + ")";
+        jagamisterm += alamTermid.get(alamTermid.size()-1) + ")";*/
 
         return jagamisterm;
     }
 
     @Override
-    public Term koopia() {
-        return new JagamisTerm(this);
+    public Character getTahis() {
+        return null;
     }
 
 
+    @Override
+    public Term koopia() {
+        return new JagamisTerm(this);
+    }
 }
