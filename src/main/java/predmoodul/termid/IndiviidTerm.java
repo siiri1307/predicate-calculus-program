@@ -50,7 +50,7 @@ public class IndiviidTerm extends Term {
 
         return this.a.equals(indiviidTerm.a);
     }
-    
+
     @Override
     public int hashCode() {
         return a != null ? a.hashCode() : 0;
