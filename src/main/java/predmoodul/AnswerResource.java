@@ -39,9 +39,9 @@ public class AnswerResource {
     @Produces(MediaType.TEXT_PLAIN)
     public boolean postAnswer(@FormParam("valem") String valem){
 
-        Vastus answer = new Vastus(valem);
+        ParsePuu answer = new ParsePuu(valem);
 
-        return answer.accepts();
+        return true;
 
         //return "OK " + valem;
     }
