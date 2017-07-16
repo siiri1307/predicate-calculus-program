@@ -18,6 +18,7 @@ public class TõesuspuuTipp {
     private TõesuspuuTipp paremLaps;
     private TõesuspuuTipp vanem;
 
+
     public TõesuspuuTipp(Valem valem, boolean väärtus) {
         this.valem = valem;
         this.tõeväärtus = väärtus;
@@ -35,9 +36,10 @@ public class TõesuspuuTipp {
         if(tipp.paremLaps != null){
             this.setParemLaps(new TõesuspuuTipp(tipp.paremLaps));
         }
+
     }
 
-    public TõesuspuuTipp(AtomaarneValem atomaarneValem, boolean tõeväärtus) {
+    public TõesuspuuTipp(AtomaarneValem atomaarneValem, boolean tõeväärtus, Set<Termikuulaja> kuulajad) {
         this.valem = atomaarneValem;
         this.tõeväärtus = tõeväärtus;
         this.annabVastuolu = Optional.empty();
@@ -98,19 +100,19 @@ public class TõesuspuuTipp {
         }
     }
 
-    public Set<TõesuspuuTipp> getLehed() {
+    public Collection<TõesuspuuTipp> getLehed() {
 
         if (vasakLaps == null && paremLaps == null) {
-            return new HashSet<>(Arrays.asList(this));
+            return Arrays.asList(this);
         }
 
-        Set<TõesuspuuTipp> lehed = new HashSet<>();
+        List<TõesuspuuTipp> lehed = new ArrayList<>();
 
-        if (paremLaps != null) {
-            lehed.addAll(paremLaps.getLehed());
-        }
         if (vasakLaps != null) {
             lehed.addAll(vasakLaps.getLehed());
+        }
+        if (paremLaps != null) {
+            lehed.addAll(paremLaps.getLehed());
         }
         return lehed;
     }
@@ -148,7 +150,7 @@ public class TõesuspuuTipp {
         else{
             return vanemTipp.sisaldabVastuolu() || leidubVastuolu(vanemTipp.vanem);
         }
-        //return annabVastuolu;
+
     }
 
     private boolean samadTõeväärtused(TõesuspuuTipp tõesuspuuTipp, TõesuspuuTipp vanemTipp) {
@@ -159,6 +161,8 @@ public class TõesuspuuTipp {
     public Map<String, Boolean> tagastaVaartustused(){
 
         Map<String, Boolean> vaartustused = new HashMap<>();
+
+        System.out.println("Leht mis tagastab tühja mapi: " + this.toString());
 
         /*if(this.vanem == null) {
             if (this.getValem() instanceof AtomaarneValemPredSümboliga) {
@@ -171,8 +175,11 @@ public class TõesuspuuTipp {
         if(!(this.vanem == null || this == null)){
             if (this.getValem() instanceof AtomaarneValemPredSümboliga) {
                 AtomaarneValemPredSümboliga valem = (AtomaarneValemPredSümboliga) this.getValem();
-                vaartustused.put(valem.getId().getPredSümbol(), tõeväärtus);
+                vaartustused.put(valem.getId().getPredSümbol() + "(" + valem.getVabadMuutujad() + ")", tõeväärtus);
             }
+            /*else{
+                vaartustused.put(this.getValem().dot(), tõeväärtus);
+            }*/
             vaartustused.putAll(this.vanem.tagastaVaartustused());
         }
 
@@ -181,45 +188,16 @@ public class TõesuspuuTipp {
         //}
 
 
-
-
         return vaartustused;
     }
 
-    /*public Map<String, Boolean> tagastaVaartustused(TõesuspuuTipp vanemTipp){
-
-        Map<String, Boolean> vaartustused = new HashMap<>();
-
-        if(vanemTipp == null){
-            if(this.getValem() instanceof AtomaarneValemPredSümboliga){
-                AtomaarneValemPredSümboliga valem = (AtomaarneValemPredSümboliga) this.getValem();
-                vaartustused.put(valem.getId().getPredSümbol(), tõeväärtus);
-            }
-            return vaartustused;
-        }
-        else{
-            if(this.getValem() instanceof AtomaarneValemPredSümboliga){
-                AtomaarneValemPredSümboliga valem = (AtomaarneValemPredSümboliga) this.getValem();
-                vaartustused.put(valem.getId().getPredSümbol(), tõeväärtus);
-                tagastaVaartustused(vanemTipp.vanem);
-            }
-            if(vanem.getValem() instanceof AtomaarneValemPredSümboliga){
-                AtomaarneValemPredSümboliga valem = (AtomaarneValemPredSümboliga) vanem.getValem();
-                vaartustused.put(valem.getId().getPredSümbol(), tõeväärtus);
-                tagastaVaartustused(vanemTipp.vanem);
-            }
-        }
-
-        return vaartustused;
-
-    }*/
-
     public String dotFormaat(){
 
-        String id = this.hashCode() + " [label=" + "\"" + this.getValem().dot() + " : " + Boolean.toString(this.tõeväärtus) + "\"" + "]; \n";
+        String id = System.identityHashCode(this) + " [label=" + "\"" + this.getValem().dot() + " : " + Boolean.toString(this.tõeväärtus) +
+                "\" color=\"" + (this.leidubVastuolu() ? "red" : "black") + "\""  + "]; \n";
 
         if(this.getVanem() != null){
-            return id + "\n" + this.getVanem().hashCode() + " -- " + this.hashCode() + "\n";
+            return id + "\n" + System.identityHashCode(this.getVanem()) + " -- " + System.identityHashCode(this) + "\n";
         }
 
         return id + "\n";
@@ -234,5 +212,76 @@ public class TõesuspuuTipp {
                 ", annabVastuolu=" + annabVastuolu +
                 '}';
     }
+
+    public Set<Termikuulaja> getKuulajad(){
+        if(vanem == null){
+            Set<Termikuulaja> set = new HashSet<>();
+            Optional<Termikuulaja> k = valem.getKuulaja(tõeväärtus); //igal valemil on see meetod, mis üldjuhul tagastab Optional.empty. See override'itakse Iga ja Eks puhul
+            if(k.isPresent()){
+                set.add(k.get());
+            }
+            return set;
+        }
+
+        Set<Termikuulaja> kuulajad = vanem.getKuulajad();
+
+        Optional<Termikuulaja> kuulaja = valem.getKuulaja(tõeväärtus);
+
+        if(kuulaja.isPresent()){
+            kuulajad.add(kuulaja.get());
+        }
+
+        return kuulajad;
+    }
+
+    public Set<Character> getTermid() {
+        if(vanem == null){
+            return valem.getVabadMuutujad();
+            //return valem.getIndiviidTermid().stream().map(x -> x.getTahis()).collect(Collectors.toSet());
+        }
+
+        Set<Character> termid = vanem.getTermid();
+        //termid.addAll(valem.getIndiviidTermid().stream().map(x -> x.getTahis()).collect(Collectors.toSet()));
+        termid.addAll(valem.getVabadMuutujad());
+
+        return termid;
+    }
+
+    public Set<TõesuspuuTipp> lisaVaaraksMuutvadVaartustused() {
+
+        if(vanem == null){
+            return new HashSet<>();
+        }
+
+        Set<TõesuspuuTipp> vaaraksMuutvadVaartustused = vanem.lisaVaaraksMuutvadVaartustused();
+
+
+        if(valem instanceof AtomaarneValemPredSümboliga){
+            vaaraksMuutvadVaartustused.add(this);
+        }
+
+        return vaaraksMuutvadVaartustused;
+
+    }
+
+    public boolean sama(TõesuspuuTipp uusLeht) {
+        return uusLeht.valem.equals(valem) && uusLeht.getTõeväärtus() == tõeväärtus;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj instanceof TõesuspuuTipp){
+            return sama((TõesuspuuTipp) obj);
+        }
+
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return valem.hashCode();
+    }
+
+
 
 }
