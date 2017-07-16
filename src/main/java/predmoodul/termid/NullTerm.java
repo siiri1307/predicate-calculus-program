@@ -1,6 +1,7 @@
 package predmoodul.termid;
 
 import java.util.*;
+import java.util.function.Predicate;
 
 /**
  * Created by siiri on 18/03/17.
@@ -34,28 +35,28 @@ public class NullTerm extends Term {
     }
 
     @Override
-    public boolean equals(Term term) {
+    public boolean equals(Object term) {
 
-        if(this == term){
-            return true;
-        }
-        if(term == null || this.getClass() != term.getClass()){
-            return false;
-        }
-
-        NullTerm nullTerm = (NullTerm) term;
-
-        return this.c == nullTerm.c;
-
+        return this.getClass() == term.getClass();
     }
-
+    
     @Override
     public String dot() {
         return c.toString() ;
     }
 
     @Override
-    public void uusKonstantSumbol(Character sumbol) {}
+    public Character getTahis() {
+        return c;
+    }
+
+    @Override
+    public void uusKonstantSumbol(Character uusSumbol, Character vanaSumbol) {}
+
+    @Override
+    public void asendaTerm(Term uus, Predicate<Term> tingimus) {
+
+    }
 
     @Override
     public Term koopia() {
