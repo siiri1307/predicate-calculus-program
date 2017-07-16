@@ -1,10 +1,9 @@
 package predmoodul.valemid;
 
-import predmoodul.termid.IndiviidTerm;
-import predmoodul.termid.NullTerm;
-import predmoodul.termid.ÜksTerm;
+import predmoodul.termid.*;
 
 import java.util.*;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 /**
@@ -56,15 +55,34 @@ public class AtomaarneValemPredSümboliga extends Valem {
     @Override
     public boolean vaartusta(Map<Character, Double> vaartustus) {
         if(termArgumendid != null){
+            //System.out.println("Predsümboliga valemi termargumendid on: ");
             for(TermiPaar paar : termArgumendid){
+                //System.out.println(paar.getTerm());
                 if(paar.getTerm() instanceof NullTerm){
                     vaartustus.put(paar.getTahis(), 0.0);
                 }
                 else if(paar.getTerm() instanceof ÜksTerm){
                     vaartustus.put(paar.getTahis(), 1.0);
                 }
+                else if(paar.getTerm() instanceof LiitTerm){
+                    LiitTerm lt = (LiitTerm) paar.getTerm();
+                    vaartustus.put(paar.getTahis(), lt.vaartusta(vaartustus));
+                }
+                else if(paar.getTerm() instanceof LahutusTerm){
+                    LahutusTerm laht = (LahutusTerm) paar.getTerm();
+                    vaartustus.put(paar.getTahis(), laht.vaartusta(vaartustus));
+                }
+                else if(paar.getTerm() instanceof KorrutisTerm){
+                    KorrutisTerm kt = (KorrutisTerm) paar.getTerm();
+                    vaartustus.put(paar.getTahis(), kt.vaartusta(vaartustus));
+                }
+                else if(paar.getTerm() instanceof JagamisTerm){
+                    JagamisTerm jt = (JagamisTerm) paar.getTerm();
+                    vaartustus.put(paar.getTahis(), jt.vaartusta(vaartustus));
+                }
             }
         }
+        //System.out.println("Atom valem predsümboliga valem on: " + valem.toString());
         return valem.vaartusta(vaartustus);
     }
 
@@ -83,12 +101,12 @@ public class AtomaarneValemPredSümboliga extends Valem {
     }
 
     @Override
-    public List<TõesuspuuTipp> reegel(boolean tõeväärtus, Set<Character> puusEsinenudTermid, Set<Termikuulaja> kuulajad) {
-        return valem.reegel(tõeväärtus, puusEsinenudTermid, kuulajad);
+    public List<TõesuspuuTipp> reegel(boolean tõeväärtus, Set<Character> puusEsinenudTermid, Set<Termikuulaja> kuulajad, Set<Character> harusEsinenudTermid) {
+        return valem.reegel(tõeväärtus, puusEsinenudTermid, kuulajad, harusEsinenudTermid);
     }
 
     @Override
-    public boolean equals(Valem valem) {
+    public boolean equals(Object valem) {
 
         if(this == valem){
             return true;
@@ -111,16 +129,27 @@ public class AtomaarneValemPredSümboliga extends Valem {
         return "[" + id.dot() + "(" + String.join(",", termArgumendid.stream().map(x -> x.getTahis().toString()).collect(Collectors.toList())) +  ") := " + valem.dot() + "]";
     }
 
+    /*@Override
+    public String dot() {
+        return id.dot();
+    }*/
+
     @Override
-    public void uusKonstantSumbol(Character sumbol) {
+    public void uusKonstantSumbol(Character uusSumbol, Character vanaSumbol) {
 
         for(TermiPaar tp : termArgumendid){
             if(tp.getTahis() == 'x'){
-                tp.setTahis(sumbol);;
+                tp.setTahis(uusSumbol);;
             }
         }
 
-        valem.uusKonstantSumbol(sumbol);
+        valem.uusKonstantSumbol(uusSumbol, vanaSumbol);
+    }
+
+    @Override
+    public void asendaTerm(Term uus, Predicate<Term> tingimus) {
+
+        valem.asendaTerm(uus, tingimus);
     }
 
     @Override
