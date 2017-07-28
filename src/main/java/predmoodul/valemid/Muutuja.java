@@ -6,16 +6,28 @@ import java.util.List;
 /**
  * Created by siiri on 10/03/17.
  */
-public class IndiviidMuutuja extends AstNode {
+public class Muutuja extends AstNode {
 
     private Character tahis;
+    private int jarjeNumber;
 
-    public IndiviidMuutuja(Character tahis){
+    public Muutuja(Character tahis){
         this.tahis = tahis;
     }
 
+    public Muutuja(Character tahis, int nr){
+        this.tahis = tahis;
+        this.jarjeNumber = nr;
+    }
+
     public Character getTahis() {
+
         return tahis;
+    }
+
+    public int getJarjeNumber() {
+
+        return jarjeNumber;
     }
 
     @Override

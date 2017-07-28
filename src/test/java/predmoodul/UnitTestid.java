@@ -10,6 +10,7 @@ import predmoodul.kvantorid.Eks;
 import predmoodul.termid.*;
 import predmoodul.valemid.AtomaarneValem;
 import predmoodul.valemid.Konjuktsioon;
+import predmoodul.valemid.Muutuja;
 import predmoodul.valemid.Valem;
 
 import java.util.HashSet;
@@ -42,55 +43,56 @@ public class UnitTestid {
     @Test
     public void IndiviidTermEiOleVordne() throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud {
 
-        IndiviidTerm term1 = new IndiviidTerm('a');
-        IndiviidTerm term2 = new IndiviidTerm('b');
+        IndiviidTerm term1 = new IndiviidTerm(new Muutuja('a'));
+        IndiviidTerm term2 = new IndiviidTerm(new Muutuja('b'));
         assertNotEquals(term1, term2);
     }
 
     @Test
     public void LahutusTermOnVordne() throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud {
 
-        LahutusTerm term1 = new LahutusTerm(new IndiviidTerm('a'), new ÜksTerm());
-        LahutusTerm term2 = new LahutusTerm(new IndiviidTerm('a'), new ÜksTerm());
+        LahutusTerm term1 = new LahutusTerm(new IndiviidTerm(new Muutuja('a')), new ÜksTerm());
+        LahutusTerm term2 = new LahutusTerm(new IndiviidTerm(new Muutuja('a')), new ÜksTerm());
         assertEquals(term1, term2);
     }
 
     @Test
     public void LahutusTermEiOleVordne1() throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud {
 
-        LahutusTerm term1 = new LahutusTerm(new IndiviidTerm('a'), new ÜksTerm());
-        LahutusTerm term2 = new LahutusTerm(new IndiviidTerm('b'), new ÜksTerm());
+        LahutusTerm term1 = new LahutusTerm(new IndiviidTerm(new Muutuja('a')), new ÜksTerm());
+        LahutusTerm term2 = new LahutusTerm(new IndiviidTerm(new Muutuja('b')), new ÜksTerm());
         assertNotEquals(term1, term2);
     }
 
     @Test
     public void LahutusTermEiOleVordne2() throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud {
 
-        LahutusTerm term1 = new LahutusTerm(new IndiviidTerm('a'), new ÜksTerm());
-        LahutusTerm term2 = new LahutusTerm(new IndiviidTerm('a'), new NullTerm());
+        LahutusTerm term1 = new LahutusTerm(new IndiviidTerm(new Muutuja('a')), new ÜksTerm());
+        LahutusTerm term2 = new LahutusTerm(new IndiviidTerm(new Muutuja('a')), new NullTerm());
         assertNotEquals(term1, term2);
     }
 
     @Test
     public void konstantsSymboliAsendamine() throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud {
 
-        Valem leidub = new Eks(vordub('z', 'x'), 'z');
+        Valem leidub = new Eks(vordub(new Muutuja('z'), new Muutuja('x')), new Muutuja('z')); //Ez(z=x)
         Valem koopia = leidub.koopia();
-        koopia.uusKonstantSumbol('a', 'x');
-        assertEquals(new Eks(vordub('z', 'a'),'z'), koopia);
+        koopia.uusKonstantSumbol(new Muutuja('a'), new Muutuja('x')); //Ez(z=a)
+        assertEquals(new Eks(vordub(new Muutuja('z',0), new Muutuja('a',0)), new Muutuja('z',0)), koopia);
 
     }
 
     @Test
     public void konstantSymboliAsendamineSamaMuutuja() {
-        Valem konjuktsioon = new Konjuktsioon(new Eks(vordub('z', 'z'), 'z'), vordub('z', 'z'));
+        //Ez(z=z)&z=z
+        Valem konjuktsioon = new Konjuktsioon(new Eks(vordub(new Muutuja('z'), new Muutuja('z')), new Muutuja('z')), vordub(new Muutuja('z'), new Muutuja('z')));
         Valem koopia = konjuktsioon.koopia();
-        koopia.uusKonstantSumbol('a','z');
-        assertEquals(new Konjuktsioon(new Eks(vordub('z','z'),'z'), vordub('a','a')), koopia);
+        koopia.uusKonstantSumbol(new Muutuja('a'), new Muutuja('z'));
+        assertEquals(new Konjuktsioon(new Eks(vordub(new Muutuja('z'), new Muutuja('z')), new Muutuja('z')), vordub(new Muutuja('a'), new Muutuja('a'))), koopia);
 
     }
 
-    private static AtomaarneValem vordub(char esimene, char teine) {
+    private static AtomaarneValem vordub(Muutuja esimene, Muutuja teine) {
         return new AtomaarneValem(new IndiviidTerm(esimene), new IndiviidTerm(teine));
     }
 
@@ -98,11 +100,11 @@ public class UnitTestid {
     public void testiVabadMuutujadOlemasoluValemis(){
 
         //Ey(x=(1+1+1)*y)
-        AtomaarneValem atomaarneValem = new AtomaarneValem(new IndiviidTerm('x'), new KorrutisTerm(new LiitTerm(new ÜksTerm(), new LiitTerm(new ÜksTerm(), new ÜksTerm())), new IndiviidTerm('y')));
-        Eks leidub = new Eks(atomaarneValem, 'y');
-        Set<Character> vabad = leidub.getVabadMuutujad();
-        Set<Character> oodatav = new HashSet<>();
-        oodatav.add('x');
+        AtomaarneValem atomaarneValem = new AtomaarneValem(new IndiviidTerm(new Muutuja('x')), new KorrutisTerm(new LiitTerm(new ÜksTerm(), new LiitTerm(new ÜksTerm(), new ÜksTerm())), new IndiviidTerm(new Muutuja('y'))));
+        Eks leidub = new Eks(atomaarneValem, new Muutuja('y'));
+        Set<Muutuja> vabad = leidub.getVabadMuutujad();
+        Set<Muutuja> oodatav = new HashSet<>();
+        oodatav.add(new Muutuja('x',0));
         assertEquals(oodatav, vabad);
     }
 
@@ -110,11 +112,11 @@ public class UnitTestid {
     public void testiVabadMuutujadEituseValemis(){
 
         // -(y=0)
-        AtomaarneValem atomValem = new AtomaarneValem(new IndiviidTerm('y'), new NullTerm());
+        AtomaarneValem atomValem = new AtomaarneValem(new IndiviidTerm(new Muutuja('y')), new NullTerm());
         Eitus eitus = new Eitus(atomValem);
-        Set<Character> vabad = eitus.getVabadMuutujad();
-        Set<Character> oodatav = new HashSet<>();
-        oodatav.add('y');
+        Set<Muutuja> vabad = eitus.getVabadMuutujad();
+        Set<Muutuja> oodatav = new HashSet<>();
+        oodatav.add(new Muutuja('y',0));
         assertEquals(oodatav, vabad);
     }
 
@@ -122,15 +124,15 @@ public class UnitTestid {
     public void testiVabadMuutujadEitusLeidubValemis(){
 
         //-Ez(x=(1+1+1)*(1+1+1)*z)
-        Term paremTermKorrutises = new KorrutisTerm(new LiitTerm(new ÜksTerm(), new LiitTerm(new ÜksTerm(), new ÜksTerm())), new IndiviidTerm('z'));
+        Term paremTermKorrutises = new KorrutisTerm(new LiitTerm(new ÜksTerm(), new LiitTerm(new ÜksTerm(), new ÜksTerm())), new IndiviidTerm(new Muutuja('z')));
         Term korrutisTerm = new KorrutisTerm(new LiitTerm(new ÜksTerm(), new LiitTerm(new ÜksTerm(), new ÜksTerm())), paremTermKorrutises);
-        AtomaarneValem atomValem = new AtomaarneValem(new IndiviidTerm('x'), korrutisTerm);
-        Eks leidubValem = new Eks(atomValem, 'z');
+        AtomaarneValem atomValem = new AtomaarneValem(new IndiviidTerm(new Muutuja('x')), korrutisTerm);
+        Eks leidubValem = new Eks(atomValem, new Muutuja('z'));
         Eitus eitus = new Eitus(leidubValem);
 
-        Set<Character> vabad = eitus.getVabadMuutujad();
-        Set<Character> oodatav = new HashSet<>();
-        oodatav.add('x');
+        Set<Muutuja> vabad = eitus.getVabadMuutujad();
+        Set<Muutuja> oodatav = new HashSet<>();
+        oodatav.add(new Muutuja('x',0));
         assertEquals(oodatav, vabad);
     }
 
@@ -140,26 +142,26 @@ public class UnitTestid {
         //Ey(x=(1+1+1)*y)&-(y=0)&-Ez(x=(1+1+1)*(1+1+1)*z)
 
         //Ey(x=(1+1+1)*y)
-        AtomaarneValem atomaarneValem = new AtomaarneValem(new IndiviidTerm('x'), new KorrutisTerm(new LiitTerm(new ÜksTerm(), new LiitTerm(new ÜksTerm(), new ÜksTerm())), new IndiviidTerm('y')));
-        Eks leidub = new Eks(atomaarneValem, 'y');
+        AtomaarneValem atomaarneValem = new AtomaarneValem(new IndiviidTerm(new Muutuja('x')), new KorrutisTerm(new LiitTerm(new ÜksTerm(), new LiitTerm(new ÜksTerm(), new ÜksTerm())), new IndiviidTerm(new Muutuja('y'))));
+        Eks leidub = new Eks(atomaarneValem, new Muutuja('y'));
 
-        AtomaarneValem atomValem = new AtomaarneValem(new IndiviidTerm('y'), new NullTerm());
+        AtomaarneValem atomValem = new AtomaarneValem(new IndiviidTerm(new Muutuja('y')), new NullTerm());
         Eitus eitus = new Eitus(atomValem);
 
-        Term paremTermKorrutises = new KorrutisTerm(new LiitTerm(new ÜksTerm(), new LiitTerm(new ÜksTerm(), new ÜksTerm())), new IndiviidTerm('z'));
+        Term paremTermKorrutises = new KorrutisTerm(new LiitTerm(new ÜksTerm(), new LiitTerm(new ÜksTerm(), new ÜksTerm())), new IndiviidTerm(new Muutuja('z')));
         Term korrutisTerm = new KorrutisTerm(new LiitTerm(new ÜksTerm(), new LiitTerm(new ÜksTerm(), new ÜksTerm())), paremTermKorrutises);
-        AtomaarneValem atomValem2 = new AtomaarneValem(new IndiviidTerm('x'), korrutisTerm);
-        Eks leidubValem = new Eks(atomValem2, 'z');
+        AtomaarneValem atomValem2 = new AtomaarneValem(new IndiviidTerm(new Muutuja('x')), korrutisTerm);
+        Eks leidubValem = new Eks(atomValem2, new Muutuja('z'));
         Eitus eitus2 = new Eitus(leidubValem);
 
         Konjuktsioon konjuParempool = new Konjuktsioon(eitus, eitus2);
 
         Konjuktsioon konj = new Konjuktsioon(leidub, konjuParempool);
 
-        Set<Character> vabad = konj.getVabadMuutujad();
-        Set<Character> oodatav = new HashSet<>();
-        oodatav.add('x');
-        oodatav.add('y');
+        Set<Muutuja> vabad = konj.getVabadMuutujad();
+        Set<Muutuja> oodatav = new HashSet<>();
+        oodatav.add(new Muutuja('x'));
+        oodatav.add(new Muutuja('y'));
         assertEquals(oodatav, vabad);
     }
 

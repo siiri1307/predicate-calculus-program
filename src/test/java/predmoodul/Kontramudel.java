@@ -2,6 +2,7 @@ package predmoodul;
 
 import org.junit.Test;
 import predmoodul.erindid.*;
+import predmoodul.valemid.Muutuja;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -15,10 +16,10 @@ public class Kontramudel {
 
     @Test
     public void testKontraMudel() throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud, LekseriErind, ParseriErind {
-        Map<Character, Double> algMudel = new HashMap<>();
-        Map<Character, Double> eeldatavLoppMudel = new HashMap<>();
-        eeldatavLoppMudel.put('x', 0.0);
-        eeldatavLoppMudel.put('y', 1.0);
+        Map<Muutuja, Double> algMudel = new HashMap<>();
+        Map<Muutuja, Double> eeldatavLoppMudel = new HashMap<>();
+        eeldatavLoppMudel.put(new Muutuja('x'), 0.0);
+        eeldatavLoppMudel.put(new Muutuja('y'), 1.0);
         LoppValem.tagastaValem("AxAy(x=y)").vaartusta(algMudel);
         assertEquals(eeldatavLoppMudel, algMudel);
     }

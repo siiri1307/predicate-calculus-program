@@ -9,14 +9,14 @@ import predmoodul.kvantorid.Eks;
 import predmoodul.termid.IndiviidTerm;
 import predmoodul.termid.LiitTerm;
 import predmoodul.termid.NullTerm;
-import predmoodul.valemid.AbiValem;
-import predmoodul.valemid.AtomaarneValem;
-import predmoodul.valemid.Konjuktsioon;
-import predmoodul.valemid.ValemiID;
+import predmoodul.valemid.*;
 
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
 /**
  * Created by siiri on 24/06/17.
@@ -146,17 +146,30 @@ public class SisendOnKorrektne {
     @Test
     public void testAsendaTermAbiDefiValjakutsel() throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud, ErinevIndiviidideArv, LekseriErind, ParseriErind {
 
-        Konjuktsioon konjuktsioon = new Konjuktsioon(new AtomaarneValem(new LiitTerm(new IndiviidTerm('y'), new IndiviidTerm('d')), new IndiviidTerm('x')), new Eitus(new AtomaarneValem(new IndiviidTerm('d'), new NullTerm())));
-        Eks eks = new Eks(konjuktsioon, 'd');
-        AbiValem abivalem = new AbiValem(new ValemiID("Suurem", 2), Arrays.asList('x', 'y'), eks);
+        //S(x,y) := Ed(y + d = x & -(d=0)) (abidefinitsioon)
+        //Väljakutsel S(y,z)
+        Konjuktsioon konjuktsioon = new Konjuktsioon(new AtomaarneValem(new LiitTerm(new IndiviidTerm(new Muutuja('y')), new IndiviidTerm(new Muutuja('d'))), new IndiviidTerm(new Muutuja('x'))), new Eitus(new AtomaarneValem(new IndiviidTerm(new Muutuja('d')), new NullTerm())));
+        Eks eks = new Eks(konjuktsioon, new Muutuja('d'));
+        AbiValem abivalem = new AbiValem(new ValemiID("Suurem", 2), Arrays.asList(new Muutuja('x'), new Muutuja('y')), eks);
 
-        Konjuktsioon konjuktsioonAsendatud = new Konjuktsioon(new AtomaarneValem(new LiitTerm(new IndiviidTerm('z'), new IndiviidTerm('d')), new IndiviidTerm('y')), new Eitus(new AtomaarneValem(new IndiviidTerm('d'), new NullTerm())));
-        Eks eksAsendatud = new Eks(konjuktsioonAsendatud, 'd');
-        AbiValem asendatudValem = new AbiValem(new ValemiID("Suurem", 2), Arrays.asList('y', 'z'), eksAsendatud);
+        Konjuktsioon konjuktsioonAsendatud = new Konjuktsioon(new AtomaarneValem(new LiitTerm(new IndiviidTerm(new Muutuja('z')), new IndiviidTerm(new Muutuja('d'))), new IndiviidTerm(new Muutuja('y'))), new Eitus(new AtomaarneValem(new IndiviidTerm(new Muutuja('d')), new NullTerm())));
+        Eks eksAsendatud = new Eks(konjuktsioonAsendatud, new Muutuja('d'));
+        AbiValem asendatudValem = new AbiValem(new ValemiID("Suurem", 2), Arrays.asList(new Muutuja('y'), new Muutuja('z')), eksAsendatud);
 
-        abivalem.asendaTerm(new IndiviidTerm('y'), x -> x instanceof IndiviidTerm && 'x' == x.getTahis());
-        abivalem.asendaTerm(new IndiviidTerm('z'), x -> x instanceof IndiviidTerm && 'y' == x.getTahis());
-        assertEquals(abivalem, asendatudValem);
+        abivalem.asendaTerm(new IndiviidTerm(new Muutuja('y')), a -> a instanceof IndiviidTerm && new Muutuja('x').equals(a.getTahis()));
+        abivalem.asendaTerm(new IndiviidTerm(new Muutuja('z')), a -> a instanceof IndiviidTerm && new Muutuja('y').equals(a.getTahis()));
+        assertEquals(asendatudValem, abivalem);
+    }
+
+    @Test
+    public void testiTransitiivsetAsendust() throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud, ErinevIndiviidideArv, LekseriErind, ParseriErind {
+
+        Valem valem = LoppValem.tagastaValem("S(x,y) := x = y S(y,z)");
+        Map<Muutuja, Double> m = new HashMap<>();
+        m.put(new Muutuja('y'), 1.0);
+        m.put(new Muutuja('z'), 2.0);
+        assertFalse(valem.vaartusta(m));
+
     }
 
 }

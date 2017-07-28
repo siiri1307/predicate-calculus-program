@@ -28,7 +28,7 @@ public class TaielikuLabivaatuseMeetod {
         String vastus = "y + 1 = y";
         Map vaartustused = new HashMap<>();
         Kontroll kontrollimine = new Kontroll(LoppValem.tagastaValem(pakkumine), LoppValem.tagastaValem(vastus));
-        assertFalse(kontrollimine.eiOleSamavaarne());
+        assertFalse(kontrollimine.eiOleSamavaarneIlmaErindita());
     }
 
     @Test
@@ -39,7 +39,7 @@ public class TaielikuLabivaatuseMeetod {
         String vastus = "y + 1 = y";
         Map vaartustused = new HashMap<>();
         Kontroll kontrollimine = new Kontroll(LoppValem.tagastaValem(pakkumine), LoppValem.tagastaValem(vastus));
-        assertFalse(kontrollimine.eiOleSamavaarne());
+        assertFalse(kontrollimine.eiOleSamavaarneIlmaErindita());
     }
 
     @Test
@@ -51,7 +51,7 @@ public class TaielikuLabivaatuseMeetod {
         String vastus = "y + 1 = y";
         Map vaartustused = new HashMap<>();
         Kontroll kontrollimine = new Kontroll(LoppValem.tagastaValem(pakkumine), LoppValem.tagastaValem(vastus));
-        assertFalse(kontrollimine.eiOleSamavaarne());
+        assertFalse(kontrollimine.eiOleSamavaarneIlmaErindita());
     }
 
 
@@ -64,6 +64,6 @@ public class TaielikuLabivaatuseMeetod {
         String vastus = "y + 1 = y";
         Map vaartustused = new HashMap<>();
         Kontroll kontrollimine = new Kontroll(LoppValem.tagastaValem(pakkumine), LoppValem.tagastaValem(vastus));
-        assertTrue(kontrollimine.eiOleSamavaarne());
+        assertTrue(kontrollimine.eiOleSamavaarneIlmaErindita());
     }
 }

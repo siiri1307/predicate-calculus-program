@@ -6,6 +6,7 @@ import predmoodul.erindid.AbiValemEiOleDefineeritud;
 import predmoodul.erindid.LekseriErind;
 import predmoodul.erindid.ParseriErind;
 import predmoodul.erindid.VaarVabadeMuutujateEsinemine;
+import predmoodul.valemid.Muutuja;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -19,7 +20,7 @@ public class Vaartustamine {
 
     @Test
     public void test2Iga() throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud, LekseriErind, ParseriErind {
-        Map<Character, Double> mudel = new HashMap<>();
+        Map<Muutuja, Double> mudel = new HashMap<>();
         assertFalse(LoppValem.tagastaValem("AxAy(x=y)").vaartusta(mudel));
     }
 
