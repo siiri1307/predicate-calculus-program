@@ -35,7 +35,7 @@ public class Ekvivalents extends Valem {
     }
 
     @Override
-    public boolean vaartusta(Map<Character, Double> vaartustus) {
+    public boolean vaartusta(Map<Muutuja, Double> vaartustus) {
 
         return ekvivalents(vasakLaps.vaartusta(vaartustus), paremLaps.vaartusta(vaartustus));
 
@@ -59,12 +59,12 @@ public class Ekvivalents extends Valem {
         return indiviidTermid;
     }
 
-    public Set<Character> getVabadMuutujad() {
+    public Set<Muutuja> getVabadMuutujad() {
 
-        Set<Character> vabad = new HashSet<>();
+        Set<Muutuja> vabad = new HashSet<>();
 
-        Set<Character> vabadMuutujadVasakul = vasakLaps.getVabadMuutujad();
-        Set<Character> vabadMuutujadParemal = paremLaps.getVabadMuutujad();
+        Set<Muutuja> vabadMuutujadVasakul = vasakLaps.getVabadMuutujad();
+        Set<Muutuja> vabadMuutujadParemal = paremLaps.getVabadMuutujad();
 
         if(vabadMuutujadVasakul != null){
             vabad.addAll(vabadMuutujadVasakul);
@@ -91,7 +91,8 @@ public class Ekvivalents extends Valem {
         return vasak;
     }
 
-    public List<TõesuspuuTipp> reegel(boolean tõeväärtus, Set<Character> puusEsinenudTermid, Set<Termikuulaja> kuulajad, Set<Character> harusEsinenudTermid) {
+    @Override
+    public List<TõesuspuuTipp> reegel(boolean tõeväärtus, Set<Muutuja> puusEsinenudTermid, Set<Termikuulaja> kuulajad, Set<Muutuja> harusEsinenudTermid) {
 
         TõesuspuuTipp vasakLaps;
         TõesuspuuTipp lapseLapsVasakul;
@@ -149,7 +150,7 @@ public class Ekvivalents extends Valem {
     }
 
     @Override
-    public void uusKonstantSumbol(Character uusSumbol, Character vanaSumbol) {
+    public void uusKonstantSumbol(Muutuja uusSumbol, Muutuja vanaSumbol) {
 
         vasakLaps.uusKonstantSumbol(uusSumbol, vanaSumbol);
         paremLaps.uusKonstantSumbol(uusSumbol, vanaSumbol);

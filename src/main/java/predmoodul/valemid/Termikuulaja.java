@@ -5,5 +5,5 @@ package predmoodul.valemid;
  */
 public interface Termikuulaja {
 
-    TõesuspuuTipp kuulaKonstantSumbolit(Character c);
+    TõesuspuuTipp kuulaKonstantSumbolit(Muutuja c);
 }

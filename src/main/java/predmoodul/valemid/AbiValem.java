@@ -14,7 +14,7 @@ public class AbiValem extends Valem {
 
     private ValemiID id;
     //private String ID;
-    private List<Character> argumendid;
+    private List<Muutuja> argumendid;
     private Valem valem;
 
     /*public AbiValem(String ID, List<Character> arguments, Valem valem) {
@@ -23,7 +23,7 @@ public class AbiValem extends Valem {
         this.valem = valem;
     }*/
 
-    public AbiValem(ValemiID id, List<Character> argumendid, Valem valem) {
+    public AbiValem(ValemiID id, List<Muutuja> argumendid, Valem valem) {
         this.id = id;
         this.argumendid = argumendid;
         this.valem = valem;
@@ -39,7 +39,7 @@ public class AbiValem extends Valem {
       //  return ID;
     //}
 
-    public List<Character> getArguments() {
+    public List<Muutuja> getArguments() {
         return argumendid;
     }
 
@@ -58,7 +58,7 @@ public class AbiValem extends Valem {
     }
 
     @Override
-    public boolean vaartusta(Map<Character, Double> vaartustus) {
+    public boolean vaartusta(Map<Muutuja, Double> vaartustus) {
         return valem.vaartusta(vaartustus);
     }
 
@@ -68,14 +68,14 @@ public class AbiValem extends Valem {
     }
 
     @Override
-    public Set<Character> getVabadMuutujad() {
-        Set<Character> vabad = valem.getVabadMuutujad();
+    public Set<Muutuja> getVabadMuutujad() {
+        Set<Muutuja> vabad = valem.getVabadMuutujad();
         //System.out.println("Abivalemi vabad muutujad on: " + vabad);
         return vabad;
     }
 
     @Override
-    public List<TõesuspuuTipp> reegel(boolean tõeväärtus, Set<Character> puusEsinenudTermid, Set<Termikuulaja> kuulajad, Set<Character> harusEsinenudTermid) {
+    public List<TõesuspuuTipp> reegel(boolean tõeväärtus, Set<Muutuja> puusEsinenudTermid, Set<Termikuulaja> kuulajad, Set<Muutuja> harusEsinenudTermid) {
 
         throw new NotImplementedException();
     }
@@ -102,7 +102,7 @@ public class AbiValem extends Valem {
     public boolean vabadeMuutujateEsinemineKorrektne() {
         //return getVabadMuutujad().containsAll(argumendid);
         //List<Character> argumendiTahised = argumendid.stream().map(Argument::getArgumendiTahis).collect(Collectors.toList());
-        return new HashSet<Character>(argumendid).equals(valem.getVabadMuutujad());
+        return new HashSet<Muutuja>(argumendid).equals(valem.getVabadMuutujad());
     }
 
     @Override
@@ -111,7 +111,7 @@ public class AbiValem extends Valem {
     }
 
     @Override
-    public void uusKonstantSumbol(Character uusSumbol, Character vanaSumbol) {
+    public void uusKonstantSumbol(Muutuja uusSumbol, Muutuja vanaSumbol) {
 
         valem.uusKonstantSumbol(uusSumbol, vanaSumbol);
     }

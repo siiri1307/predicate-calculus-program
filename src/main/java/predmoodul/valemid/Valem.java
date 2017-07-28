@@ -17,17 +17,17 @@ public abstract class Valem extends AstNode {
      * Created by siiri on 18/03/17.
      */
 
-    public abstract boolean vaartusta(Map<Character, Double> vaartustus);
+    public abstract boolean vaartusta(Map<Muutuja, Double> vaartustus);
 
     public abstract Set<IndiviidTerm> getIndiviidTermid();
 
-    public abstract Set<Character> getVabadMuutujad();
+    public abstract Set<Muutuja> getVabadMuutujad();
 
-    public abstract List<TõesuspuuTipp> reegel(boolean tõeväärtus, Set<Character> puusEsinenudTermid, Set<Termikuulaja> kuulajad, Set<Character> harusEsinenudTermid);
+    public abstract List<TõesuspuuTipp> reegel(boolean tõeväärtus, Set<Muutuja> puusEsinenudTermid, Set<Termikuulaja> kuulajad, Set<Muutuja> harusEsinenudTermid);
 
     public abstract String dot();
 
-    public abstract void uusKonstantSumbol(Character uusSumbol, Character vanaSumbol);
+    public abstract void uusKonstantSumbol(Muutuja uusSumbol, Muutuja vanaSumbol);
 
     public abstract void asendaTerm(Term uus, Predicate<Term> tingimus);
 

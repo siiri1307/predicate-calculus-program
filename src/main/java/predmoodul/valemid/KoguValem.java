@@ -33,7 +33,7 @@ public class KoguValem extends Valem {
     }
 
     @Override
-    public boolean vaartusta(Map<Character, Double> vaartustus) {
+    public boolean vaartusta(Map<Muutuja, Double> vaartustus) {
         return children.get(children.size()-1).vaartusta(vaartustus);
     }
 
@@ -50,8 +50,8 @@ public class KoguValem extends Valem {
     }
 
     @Override
-    public Set<Character> getVabadMuutujad() {
-        Set<Character> vabad = new HashSet<>();
+    public Set<Muutuja> getVabadMuutujad() {
+        Set<Muutuja> vabad = new HashSet<>();
         for(Valem valem : children){
             vabad.addAll(valem.getVabadMuutujad());
         }
@@ -59,7 +59,7 @@ public class KoguValem extends Valem {
     }
 
     @Override
-    public List<TõesuspuuTipp> reegel(boolean tõeväärtus, Set<Character> puusEsinenudTermid, Set<Termikuulaja> kuulajad, Set<Character> harusEsinenudTermid) {
+    public List<TõesuspuuTipp> reegel(boolean tõeväärtus, Set<Muutuja> puusEsinenudTermid, Set<Termikuulaja> kuulajad, Set<Muutuja> harusEsinenudTermid) {
 
         return children.get(children.size()-1).reegel(tõeväärtus, puusEsinenudTermid, kuulajad, harusEsinenudTermid);
     }
@@ -89,7 +89,7 @@ public class KoguValem extends Valem {
     }
 
     @Override
-    public void uusKonstantSumbol(Character uusSumbol, Character vanaSumbol) {
+    public void uusKonstantSumbol(Muutuja uusSumbol, Muutuja vanaSumbol) {
         children.get(children.size()-1).uusKonstantSumbol(uusSumbol, vanaSumbol);
     }
 

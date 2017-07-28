@@ -53,7 +53,7 @@ public class AtomaarneValemPredSümboliga extends Valem {
     }
 
     @Override
-    public boolean vaartusta(Map<Character, Double> vaartustus) {
+    public boolean vaartusta(Map<Muutuja, Double> vaartustus) {
         if(termArgumendid != null){
             //System.out.println("Predsümboliga valemi termargumendid on: ");
             for(TermiPaar paar : termArgumendid){
@@ -92,7 +92,7 @@ public class AtomaarneValemPredSümboliga extends Valem {
     }
 
     @Override
-    public Set<Character> getVabadMuutujad() {
+    public Set<Muutuja> getVabadMuutujad() {
         return valem.getVabadMuutujad();
     }
 
@@ -101,7 +101,7 @@ public class AtomaarneValemPredSümboliga extends Valem {
     }
 
     @Override
-    public List<TõesuspuuTipp> reegel(boolean tõeväärtus, Set<Character> puusEsinenudTermid, Set<Termikuulaja> kuulajad, Set<Character> harusEsinenudTermid) {
+    public List<TõesuspuuTipp> reegel(boolean tõeväärtus, Set<Muutuja> puusEsinenudTermid, Set<Termikuulaja> kuulajad, Set<Muutuja> harusEsinenudTermid) {
         return valem.reegel(tõeväärtus, puusEsinenudTermid, kuulajad, harusEsinenudTermid);
     }
 
@@ -135,12 +135,12 @@ public class AtomaarneValemPredSümboliga extends Valem {
     }*/
 
     @Override
-    public void uusKonstantSumbol(Character uusSumbol, Character vanaSumbol) {
+    public void uusKonstantSumbol(Muutuja uusSumbol, Muutuja vanaSumbol) {
 
         for(TermiPaar tp : termArgumendid){
-            if(tp.getTahis() == 'x'){
-                tp.setTahis(uusSumbol);;
-            }
+            //if(tp.getTahis().getTahis() == 'x'){
+              //  tp.getTahis().setTahis(uusSumbol);;
+            //}
         }
 
         valem.uusKonstantSumbol(uusSumbol, vanaSumbol);

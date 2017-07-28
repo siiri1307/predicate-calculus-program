@@ -8,9 +8,9 @@ import predmoodul.termid.Term;
 public class TermiPaar {
 
     private Term term;
-    private Character tahis;
+    private Muutuja tahis;
 
-    public TermiPaar(Character tahis, Term term) {
+    public TermiPaar(Muutuja tahis, Term term) {
         this.tahis = tahis;
         this.term = term;
     }
@@ -20,7 +20,7 @@ public class TermiPaar {
         this.tahis = tp.tahis;
     }
 
-    public void setTahis(Character tahis) {
+    public void setTahis(Muutuja tahis) {
         this.tahis = tahis;
     }
 
@@ -35,7 +35,7 @@ public class TermiPaar {
         return term;
     }
 
-    public Character getTahis() {
+    public Muutuja getTahis() {
         return tahis;
     }
 }

@@ -234,13 +234,13 @@ public class TõesuspuuTipp {
         return kuulajad;
     }
 
-    public Set<Character> getTermid() {
+    public Set<Muutuja> getTermid() {
         if(vanem == null){
             return valem.getVabadMuutujad();
             //return valem.getIndiviidTermid().stream().map(x -> x.getTahis()).collect(Collectors.toSet());
         }
 
-        Set<Character> termid = vanem.getTermid();
+        Set<Muutuja> termid = vanem.getTermid();
         //termid.addAll(valem.getIndiviidTermid().stream().map(x -> x.getTahis()).collect(Collectors.toSet()));
         termid.addAll(valem.getVabadMuutujad());
 

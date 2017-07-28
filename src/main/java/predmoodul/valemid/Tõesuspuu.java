@@ -10,7 +10,7 @@ public class Tõesuspuu {
     private final TõesuspuuTipp juurtipp;
 
     private Set<TõesuspuuTipp> vaaraksMuutvadVaartustused = new HashSet<>();
-    private Set<Character> puusEsinenudTermid = new HashSet<>();
+    private Set<Muutuja> puusEsinenudTermid = new HashSet<>();
     //private Set<Termikuulaja> kuulajad = new HashSet<>();
 
     private Tõesuspuu(TõesuspuuTipp juurtipp) {
@@ -21,8 +21,16 @@ public class Tõesuspuu {
         return new Tõesuspuu(new TõesuspuuTipp(valem, vaartus));
     }
 
+    public void looPuu() {
+
+        lisaTipp(juurtipp);
+
+    }
 
     public void lisaTipp(TõesuspuuTipp juurtipp){
+
+        long algus = System.currentTimeMillis();
+        long lopp = algus + 5*1000;
 
         Queue<TõesuspuuTipp> jrk = new LinkedList<>();
 
@@ -30,7 +38,7 @@ public class Tõesuspuu {
 
         jrk.add(juurtipp);
 
-        while(!jrk.isEmpty()){
+        while(!jrk.isEmpty() ){ // && System.currentTimeMillis() < lopp){
 
             TõesuspuuTipp tipp = jrk.remove();
             //System.out.println("Eemaldasin tipu: " + tipp);
@@ -45,10 +53,10 @@ public class Tõesuspuu {
             }
 
             Set<Termikuulaja> kuulajad = tipp.getKuulajad(); //tagasta tipu ja tema vanemate Termikuulajad. Eesmärk leida: ∃xF(x) = 0, ∀xF(x) = 1.
-            Set<Character> harusEsinenudTermid = tipp.getTermid(); //vabad muutujad
-            Set<Character> uuedTermid = new HashSet<>(tipp.getTermid());
+            Set<Muutuja> harusEsinenudTermid = tipp.getTermid(); //vabad muutujad
+            Set<Muutuja> uuedTermid = new HashSet<>(tipp.getTermid());
             uuedTermid.removeAll(tipp.getVanem() == null ? tipp.getValem().getVabadMuutujad() : tipp.getVanem().getTermid()); //jäta välja vanema termid
-            for (Character c : uuedTermid) { //iga uue konstantssümboli kohta, mis tipuga tuli, lisa puusse analüüsisamm.
+            for (Muutuja c : uuedTermid) { //iga uue konstantssümboli kohta, mis tipuga tuli, lisa puusse analüüsisamm.
                 // uued termid saavad vanad faktid. Puus ei ole teadmisi uute termide kohta mis just lisati
                 for (TõesuspuuTipp leht : tipp.getLehed()) {
                     if (leht.sisaldabVastuolu()) {
@@ -73,7 +81,7 @@ public class Tõesuspuu {
             Optional<Termikuulaja> kuulaja = tipp.getValem().getKuulaja(tipp.getTõeväärtus()); //vanad termid saavad uue fakti. Puus ei ole uut teadmist vanade termide kohta.
             if (kuulaja.isPresent()) {
                 kuulajad.add(kuulaja.get());
-                for (Character c : tipp.getTermid()) { //kõik termid
+                for (Muutuja c : tipp.getTermid()) { //kõik termid
                     for (TõesuspuuTipp leht : tipp.getLehed()) {
                         if (leht.sisaldabVastuolu()) {
                             continue;
@@ -97,14 +105,14 @@ public class Tõesuspuu {
 //                }
 //            }
 
-            if(alampuud.size() == 0 && tipp.getLapsed().size() == 0 && !tipp.sisaldabVastuolu()){ //haru on lõpetatud, kuid mitte vastuoluline
+            /*if(alampuud.size() == 0 && tipp.getLapsed().size() == 0 && !tipp.sisaldabVastuolu()){ //haru on lõpetatud, kuid mitte vastuoluline
                 //System.out.println("Lõpetatud haru leht " + tipp.toString());
                 vaaraksMuutvadVaartustused = tipp.lisaVaaraksMuutvadVaartustused();
                 //tipp.teavitaAtomaarsestValemist();
                 System.out.println("Lausemuutujad: " + vaaraksMuutvadVaartustused.size());
                 //return;
                 throw new RuntimeException("Lõpetatud, kuid mitte-vastuoluline haru");
-            }
+            }*/
             if(alampuud.size() == 0){
                 continue;
             }
@@ -155,10 +163,6 @@ public class Tõesuspuu {
         }
     }
 
-    public void looPuu() {
-        lisaTipp(juurtipp);
-    }
-
     public TõesuspuuTipp getJuurtipp() {
         return juurtipp;
     }
@@ -183,7 +187,6 @@ public class Tõesuspuu {
 
         return vaartustused;
     }
-
 
 
     private String valmistaDotFormaat(TõesuspuuTipp tipp){

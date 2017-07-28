@@ -1,13 +1,7 @@
 package predmoodul.valemid;
 
-import predmoodul.termid.IndiviidTerm;
-
-import java.util.*;
-
-/**
- * Created by siiri on 05/03/17.
- */
-public class PredValem extends Valem {
+/*
+/public class PredValem extends Valem {
 
     private List<Valem> ekvivalentsiValemid;
 
@@ -54,3 +48,4 @@ public class PredValem extends Valem {
         return vabad;
     }
 }
+*/

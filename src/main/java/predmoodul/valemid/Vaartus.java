@@ -8,9 +8,9 @@ import java.util.List;
 public class Vaartus {
 
     private Valem valem;
-    private List<Character> argumendid;
+    private List<Muutuja> argumendid;
 
-    public Vaartus(Valem valem, List<Character> argumendid) {
+    public Vaartus(Valem valem, List<Muutuja> argumendid) {
         this.valem = valem;
         this.argumendid = argumendid;
     }
@@ -19,7 +19,7 @@ public class Vaartus {
         return valem;
     }
 
-    public List<Character> getArgumendid() {
+    public List<Muutuja> getArgumendid() {
         return argumendid;
     }
 }

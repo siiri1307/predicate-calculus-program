@@ -40,7 +40,7 @@ public class Implikatsioon extends Valem {
     }
 
     @Override
-    public boolean vaartusta(Map<Character, Double> vaartustus) {
+    public boolean vaartusta(Map<Muutuja, Double> vaartustus) {
 
         return implikatsioon(vasakLaps.vaartusta(vaartustus), paremLaps.vaartusta(vaartustus));
 
@@ -69,9 +69,9 @@ public class Implikatsioon extends Valem {
         return indiviidTermid;
     }
 
-    public Set<Character> getVabadMuutujad() {
+    public Set<Muutuja> getVabadMuutujad() {
 
-        Set<Character> vabad = new HashSet<>();
+        Set<Muutuja> vabad = new HashSet<>();
 
         vabad.addAll(paremLaps.getVabadMuutujad());
         vabad.addAll(vasakLaps.getVabadMuutujad());
@@ -96,7 +96,8 @@ public class Implikatsioon extends Valem {
         return vasak;
     }
 
-    public List<TõesuspuuTipp> reegel(boolean tõeväärtus, Set<Character> puusEsinenudTermid, Set<Termikuulaja> kuulajad, Set<Character> harusEsinenudTermid){
+    @Override
+    public List<TõesuspuuTipp> reegel(boolean tõeväärtus, Set<Muutuja> puusEsinenudTermid, Set<Termikuulaja> kuulajad, Set<Muutuja> harusEsinenudTermid){
 
         if(tõeväärtus){
 
@@ -134,7 +135,7 @@ public class Implikatsioon extends Valem {
     }
 
     @Override
-    public void uusKonstantSumbol(Character uusSumbol, Character vanaSumbol) {
+    public void uusKonstantSumbol(Muutuja uusSumbol, Muutuja vanaSumbol) {
 
         vasakLaps.uusKonstantSumbol(uusSumbol, vanaSumbol);
         paremLaps.uusKonstantSumbol(uusSumbol, vanaSumbol);

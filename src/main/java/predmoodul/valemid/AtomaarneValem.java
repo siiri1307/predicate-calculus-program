@@ -30,7 +30,7 @@ public class AtomaarneValem extends Valem {
     }
 
     @Override
-    public boolean vaartusta(Map<Character, Double> vaartustus) {
+    public boolean vaartusta(Map<Muutuja, Double> vaartustus) {
 
         return vasakTerm.vaartusta(vaartustus) == paremTerm.vaartusta(vaartustus);
     }
@@ -53,8 +53,8 @@ public class AtomaarneValem extends Valem {
 
 
     @Override
-    public Set<Character> getVabadMuutujad() {
-        Set s = new HashSet<>();
+    public Set<Muutuja> getVabadMuutujad() {
+        Set<Muutuja> s = new HashSet<>();
         for (IndiviidTerm id : getIndiviidTermid()) {
 
             s.add(id.getTahis());
@@ -64,7 +64,7 @@ public class AtomaarneValem extends Valem {
     }
 
     @Override
-    public List<TõesuspuuTipp> reegel(boolean tõeväärtus, Set<Character> puusEsinenudTermid, Set<Termikuulaja> kuulajad, Set<Character> harusEsinenudTermid) {
+    public List<TõesuspuuTipp> reegel(boolean tõeväärtus, Set<Muutuja> puusEsinenudTermid, Set<Termikuulaja> kuulajad, Set<Muutuja> harusEsinenudTermid) {
 
         return new ArrayList<>();
 
@@ -96,7 +96,7 @@ public class AtomaarneValem extends Valem {
     }*/
 
     @Override
-    public void uusKonstantSumbol(Character uusSumbol, Character vanaSumbol) {
+    public void uusKonstantSumbol(Muutuja uusSumbol, Muutuja vanaSumbol) {
 
         vasakTerm.uusKonstantSumbol(uusSumbol, vanaSumbol);
         paremTerm.uusKonstantSumbol(uusSumbol, vanaSumbol);
