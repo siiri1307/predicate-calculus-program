@@ -1,13 +1,15 @@
 package predmoodul.kvantorid;
 
+import predmoodul.valemid.Muutuja;
+
 /**
  * Created by siiri on 14/04/17.
  */
 public class ModifierEks implements Modifier {
 
-    public Character indiviidmuutuja;
+    public Muutuja indiviidmuutuja;
 
-    public ModifierEks(Character indiviidmuutuja) {
+    public ModifierEks(Muutuja indiviidmuutuja) {
         this.indiviidmuutuja = indiviidmuutuja;
     }
 }

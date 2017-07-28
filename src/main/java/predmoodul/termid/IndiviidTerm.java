@@ -1,5 +1,7 @@
 package predmoodul.termid;
 
+import predmoodul.valemid.Muutuja;
+
 import java.util.*;
 import java.util.function.Predicate;
 
@@ -8,9 +10,9 @@ import java.util.function.Predicate;
  */
 public class IndiviidTerm extends Term {
 
-    private Character a;
+    private Muutuja a;
 
-    public IndiviidTerm(Character text) {
+    public IndiviidTerm(Muutuja text) {
 
         this.a = text;
     }
@@ -25,7 +27,7 @@ public class IndiviidTerm extends Term {
     }
 
     @Override
-    public double vaartusta(Map<Character, Double> vaartustus) {
+    public double vaartusta(Map<Muutuja, Double> vaartustus) {
         return vaartustus.get(a);
     }
 
@@ -56,7 +58,7 @@ public class IndiviidTerm extends Term {
         return a != null ? a.hashCode() : 0;
     }
 
-    public Character getTahis() {
+    public Muutuja getTahis() {
         return a;
     }
 
@@ -67,9 +69,9 @@ public class IndiviidTerm extends Term {
     }
 
     @Override
-    public void uusKonstantSumbol(Character uusSumbol, Character vanaSumbol) {
+    public void uusKonstantSumbol(Muutuja uusSumbol, Muutuja vanaSumbol) {
 
-        if(a == vanaSumbol){
+        if(a.equals(vanaSumbol)){
             this.a = uusSumbol;
         }
     }

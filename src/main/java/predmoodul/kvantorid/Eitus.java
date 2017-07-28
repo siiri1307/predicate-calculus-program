@@ -2,6 +2,7 @@ package predmoodul.kvantorid;
 
 import predmoodul.termid.IndiviidTerm;
 import predmoodul.termid.Term;
+import predmoodul.valemid.Muutuja;
 import predmoodul.valemid.Termikuulaja;
 import predmoodul.valemid.TõesuspuuTipp;
 import predmoodul.valemid.Valem;
@@ -25,13 +26,13 @@ public class Eitus extends Valem implements Kvantor {
     }
 
     @Override
-    public Character getIndiviidMuutuja() {
+    public Muutuja getIndiviidMuutuja() {
         return null;
     }
 
 
     @Override
-    public boolean vaartusta(Map<Character, Double> vaartustus) {
+    public boolean vaartusta(Map<Muutuja, Double> vaartustus) {
 
         return !valem.vaartusta(vaartustus);
     }
@@ -42,7 +43,7 @@ public class Eitus extends Valem implements Kvantor {
     }
 
     @Override
-    public Set<Character> getVabadMuutujad() {
+    public Set<Muutuja> getVabadMuutujad() {
 
         return valem.getVabadMuutujad();
     }
@@ -52,7 +53,8 @@ public class Eitus extends Valem implements Kvantor {
         return Arrays.asList((Object) valem);
     }
 
-    public List<TõesuspuuTipp> reegel(boolean tõeväärtus, Set<Character> puusEsinenudTermid, Set<Termikuulaja> kuulajad, Set<Character> harusEsinenudTermid) {
+    @Override
+    public List<TõesuspuuTipp> reegel(boolean tõeväärtus, Set<Muutuja> puusEsinenudTermid, Set<Termikuulaja> kuulajad, Set<Muutuja> harusEsinenudTermid) {
 
         if(tõeväärtus){
 
@@ -85,7 +87,7 @@ public class Eitus extends Valem implements Kvantor {
     }
 
     @Override
-    public void uusKonstantSumbol(Character uusSumbol, Character vanaSumbol) {
+    public void uusKonstantSumbol(Muutuja uusSumbol, Muutuja vanaSumbol) {
         valem.uusKonstantSumbol(uusSumbol, vanaSumbol);
     }
 

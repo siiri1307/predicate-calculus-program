@@ -1,5 +1,7 @@
 package predmoodul.termid;
 
+import predmoodul.valemid.Muutuja;
+
 import java.util.*;
 
 /**
@@ -35,7 +37,7 @@ public class LiitTerm extends TehteTerm {
     }
 
     @Override
-    public double vaartusta(Map<Character, Double> vaartustus) {
+    public double vaartusta(Map<Muutuja, Double> vaartustus) {
 
         return vasakTerm.vaartusta(vaartustus) + paremTerm.vaartusta(vaartustus);
         //return teeTehe(vaartustus, alamTermid, (summa,liidetav) -> summa + liidetav);
@@ -74,7 +76,7 @@ public class LiitTerm extends TehteTerm {
     }
 
     @Override
-    public Character getTahis() {
+    public Muutuja getTahis() {
         return null;
     }
 

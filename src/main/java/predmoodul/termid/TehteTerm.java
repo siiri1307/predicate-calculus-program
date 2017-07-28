@@ -1,5 +1,7 @@
 package predmoodul.termid;
 
+import predmoodul.valemid.Muutuja;
+
 import java.util.*;
 import java.util.function.Predicate;
 
@@ -72,7 +74,7 @@ public abstract class TehteTerm extends Term {
     }
 
     @Override
-    public void uusKonstantSumbol(Character uusSumbol, Character vanaSumbol) {
+    public void uusKonstantSumbol(Muutuja uusSumbol, Muutuja vanaSumbol) {
 
         vasakTerm.uusKonstantSumbol(uusSumbol, vanaSumbol);
         paremTerm.uusKonstantSumbol(uusSumbol, vanaSumbol);

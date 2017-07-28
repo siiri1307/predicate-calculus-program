@@ -1,6 +1,7 @@
 package predmoodul.termid;
 
 import predmoodul.valemid.AstNode;
+import predmoodul.valemid.Muutuja;
 
 import java.util.List;
 import java.util.Map;
@@ -13,11 +14,11 @@ import java.util.function.Predicate;
  */
 public abstract class Term extends AstNode {
 
-    public abstract double vaartusta(Map<Character, Double> vaartustus);
+    public abstract double vaartusta(Map<Muutuja, Double> vaartustus);
 
     public abstract Set<IndiviidTerm> getIndiviidTermid();
 
-    public double teeTehe(Map<Character, Double> vaartustus, List<Term> termid, BinaryOperator<Double> tehe) {
+    public double teeTehe(Map<Muutuja, Double> vaartustus, List<Term> termid, BinaryOperator<Double> tehe) {
         return  termid.stream()
                 .map(x -> x.vaartusta(vaartustus))
                 .reduce(tehe).get();
@@ -25,9 +26,9 @@ public abstract class Term extends AstNode {
 
     public abstract String dot();
 
-    public abstract Character getTahis();
+    public abstract Muutuja getTahis();
 
-    public abstract void uusKonstantSumbol(Character uusSumbol, Character vanaSumbol);
+    public abstract void uusKonstantSumbol(Muutuja uusSumbol, Muutuja vanaSumbol);
 
     public abstract void asendaTerm(Term uus, Predicate<Term> tingimus);
 

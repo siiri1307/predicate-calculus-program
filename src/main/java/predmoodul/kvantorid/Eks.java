@@ -2,6 +2,7 @@ package predmoodul.kvantorid;
 
 import predmoodul.termid.IndiviidTerm;
 import predmoodul.termid.Term;
+import predmoodul.valemid.Muutuja;
 import predmoodul.valemid.Termikuulaja;
 import predmoodul.valemid.TõesuspuuTipp;
 import predmoodul.valemid.Valem;
@@ -15,9 +16,9 @@ import java.util.function.Predicate;
 public class Eks extends Valem implements Kvantor {
 
     private Valem valem;
-    private Character indiviidmuutuja;
+    private Muutuja indiviidmuutuja;
 
-    public Eks(Valem valem, Character indiviidmuutuja){
+    public Eks(Valem valem, Muutuja indiviidmuutuja){
         this.valem = valem;
         this.indiviidmuutuja = indiviidmuutuja;
     }
@@ -35,18 +36,18 @@ public class Eks extends Valem implements Kvantor {
     @Override
     public String toString() {
         return "Eks{" +
-                "indiviidmuutuja=" + indiviidmuutuja + ", valem=" + valem +
+                "indiviidmuutuja=" + indiviidmuutuja.toString() + ", valem=" + valem +
                 '}';
     }
 
     @Override
-    public Character getIndiviidMuutuja() {
+    public Muutuja getIndiviidMuutuja() {
         return this.indiviidmuutuja;
     }
 
 
     @Override
-    public boolean vaartusta(Map<Character, Double> vaartustus) {
+    public boolean vaartusta(Map<Muutuja, Double> vaartustus) {
 
         for(double i = 0; i < 100; i++){
             vaartustus.put(indiviidmuutuja, i);
@@ -68,16 +69,16 @@ public class Eks extends Valem implements Kvantor {
     }
 
     @Override
-    public Set<Character> getVabadMuutujad() {
+    public Set<Muutuja> getVabadMuutujad() {
 
-        Set<Character> valemiVabadMuutujad = valem.getVabadMuutujad();
+        Set<Muutuja> valemiVabadMuutujad = valem.getVabadMuutujad();
         valemiVabadMuutujad.remove(indiviidmuutuja);
 
         return valemiVabadMuutujad;
     }
 
     @Override
-    public List<TõesuspuuTipp> reegel(boolean tõeväärtus, Set<Character> puusEsinenudTermid, Set<Termikuulaja> kuulajad, Set<Character> harusEsinenudTermid) {
+    public List<TõesuspuuTipp> reegel(boolean tõeväärtus, Set<Muutuja> puusEsinenudTermid, Set<Termikuulaja> kuulajad, Set<Muutuja> harusEsinenudTermid) {
 
         //return reegelKvantorile(tõeväärtus, puusEsinenudTermid, kuulajad);
 
@@ -90,7 +91,8 @@ public class Eks extends Valem implements Kvantor {
         if(tõeväärtus){
 
             //too sisse uus konstantsümbol, mida harus ei esine
-            Character suvalineSumbol = tagastaSuvalineKasutamataSumbol(puusEsinenudTermid);
+            Muutuja suvalineSumbol = tagastaSuvalineKasutamataSumbol(puusEsinenudTermid, harusEsinenudTermid);
+            //Muutuja suvalineSumbol = tagastaSuvalineKasutamataSumbol(harusEsinenudTermid);
             puusEsinenudTermid.add(suvalineSumbol);
 
             Valem valemiKoopia = this.valem.koopia();
@@ -112,7 +114,7 @@ public class Eks extends Valem implements Kvantor {
 
             //kasuta olemasolevat termi (indiviidmuutuja)
             if(harusEsinenudTermid.isEmpty()){ //ühtegi termi harus ei esine; eeldame, et mingi element on alati olemas, sest põhihulk ei saa olla tühi
-                Character term = 'a';
+                Muutuja term = new Muutuja('m', 0);
                 Valem valemiKoopia = this.valem.koopia();
                 valemiKoopia.uusKonstantSumbol(term, indiviidmuutuja);
                 TõesuspuuTipp laps = new TõesuspuuTipp(valemiKoopia, false);
@@ -145,7 +147,17 @@ public class Eks extends Valem implements Kvantor {
 
     }
 
-    private Character tagastaSuvalineKasutamataSumbol(Set<Character> puusEsinenudTermid) {
+    private Muutuja tagastaSuvalineKasutamataSumbol(Set<Muutuja> puusEsinenudTermid, Set<Muutuja> harusEsinenudTermid) {
+
+        int seniSuurim = 0;
+
+        for(Muutuja m : harusEsinenudTermid){
+            if(m.getTahis().equals('m') && m.getJarjeNumber() > seniSuurim){
+                seniSuurim = m.getJarjeNumber();
+            }
+        }
+
+        return new Muutuja('m', seniSuurim + 1);
 
         /*Set<Character> voimalikudTermid = new HashSet<>();
 
@@ -153,11 +165,13 @@ public class Eks extends Valem implements Kvantor {
             voimalikudTermid.add((char)i);
         }*/
 
-        Set<Character> voimalikudTermid = new HashSet<>(Arrays.asList('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 't'));
+        //Set<Character> voimalikudTermid = new HashSet<>(Arrays.asList('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 't'));
 
-        voimalikudTermid.removeAll(puusEsinenudTermid); //kahe set'i vahe, et saada teada sümbolid, mida pole veel harus kasutatud
+        //voimalikudTermid.removeAll(puusEsinenudTermid); //kahe set'i vahe, et saada teada sümbolid, mida pole veel harus kasutatud
 
-        return voimalikudTermid.iterator().next();
+        //return voimalikudTermid.iterator().next();
+
+        //throw new NotImplementedException();
     }
 
 
@@ -184,7 +198,7 @@ public class Eks extends Valem implements Kvantor {
             return Optional.of(new Termikuulaja() {
 
                 @Override
-                public TõesuspuuTipp kuulaKonstantSumbolit(Character c) {
+                public TõesuspuuTipp kuulaKonstantSumbolit(Muutuja c) {
                     Valem koopia = valem.koopia();
                     koopia.uusKonstantSumbol(c, indiviidmuutuja);
                     return new TõesuspuuTipp(koopia, false);
@@ -200,7 +214,7 @@ public class Eks extends Valem implements Kvantor {
     }
 
     @Override
-    public void uusKonstantSumbol(Character uusSumbol, Character vanaSumbol) {
+    public void uusKonstantSumbol(Muutuja uusSumbol, Muutuja vanaSumbol) {
         if (vanaSumbol.equals(getIndiviidMuutuja())) {
             return;
         }

@@ -1,5 +1,7 @@
 package predmoodul.termid;
 
+import predmoodul.valemid.Muutuja;
+
 import java.util.*;
 import java.util.function.Predicate;
 
@@ -25,7 +27,7 @@ public class ÜksTerm extends Term {
     }
 
     @Override
-    public double vaartusta(Map<Character, Double> vaartustus) {
+    public double vaartusta(Map<Muutuja, Double> vaartustus) {
         return 1.0;
     }
 
@@ -46,12 +48,12 @@ public class ÜksTerm extends Term {
     }
 
     @Override
-    public Character getTahis() {
-        return c;
+    public Muutuja getTahis() {
+        return null;
     }
 
     @Override
-    public void uusKonstantSumbol(Character uusSumbol, Character vanaSumbol) {}
+    public void uusKonstantSumbol(Muutuja uusSumbol, Muutuja vanaSumbol) {}
 
     @Override
     public void asendaTerm(Term uus, Predicate<Term> tingimus) {}
