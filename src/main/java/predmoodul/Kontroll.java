@@ -3,6 +3,7 @@ package predmoodul;
 import predmoodul.erindid.ErinevIndiviidideArv;
 import predmoodul.kvantorid.Iga;
 import predmoodul.valemid.Ekvivalents;
+import predmoodul.valemid.Muutuja;
 import predmoodul.valemid.Valem;
 
 import java.util.HashMap;
@@ -17,7 +18,7 @@ public class Kontroll {
     private Valem pakkumine;
     private Valem vastus;
     private Valem valem;
-    private Map<Character, Double> vaartustused;
+    private Map<Muutuja, Double> vaartustused;
 
     public Kontroll(Valem pakkumine, Valem vastus) {
         this.pakkumine = pakkumine;
@@ -45,6 +46,14 @@ public class Kontroll {
         return !valemVabadeMuutujateta.vaartusta(vaartustused);
     }
 
+    public boolean eiOleSamavaarneIlmaErindita() throws ErinevIndiviidideArv { //see meetod on mõeldud väärtuste väljarvutamise testimiseks - see ei võta arvesse oodatavat predikaatide arvu
+
+        Valem ekvivalentsiValem = moodustaEkvivalentsiValem(pakkumine, vastus);
+        Valem valemVabadeMuutujateta = seoVabadMuutujad(ekvivalentsiValem);
+
+        return !valemVabadeMuutujateta.vaartusta(vaartustused);
+    }
+
     public boolean eiOleSamavaarne2(){
         Valem valemVabadeMuutujateta = seoVabadMuutujad(valem);
         return !valemVabadeMuutujateta.vaartusta(vaartustused);
@@ -54,14 +63,14 @@ public class Kontroll {
 
         Map<Character, Integer> kontramudel = new HashMap<>();
 
-        Set<Character> vabadMuutujad = pakkumine.getVabadMuutujad();
+        Set<Muutuja> vabadMuutujad = pakkumine.getVabadMuutujad();
 
         //System.out.println("Vabu muutujaid on: " + vabadMuutujad.size());
 
-        for(Character ch : vabadMuutujad){
+        for(Muutuja ch : vabadMuutujad){
 
             if(vaartustused.containsKey(ch)){
-                kontramudel.put(ch, vaartustused.get(ch).intValue());
+                kontramudel.put(ch.getTahis(), vaartustused.get(ch).intValue()); //isegi kui seesmiselt muudetakse nt x x0ks, siis väljastatakse ikkagi algse vaba muutujaga
             }
         }
 
@@ -83,18 +92,18 @@ public class Kontroll {
 
     private Valem seoVabadMuutujad(Valem ekvivalentsiValem) {
 
-        Set<Character> vabadMuutujad = ekvivalentsiValem.getVabadMuutujad();
+        Set<Muutuja> vabadMuutujad = ekvivalentsiValem.getVabadMuutujad();
 
         return helper(vabadMuutujad, ekvivalentsiValem);
     }
 
-    private Valem helper(Set<Character> vabadMuutujad, Valem ekvivalentsiValem) {
+    private Valem helper(Set<Muutuja> vabadMuutujad, Valem ekvivalentsiValem) {
 
         if(vabadMuutujad.isEmpty()){
             return ekvivalentsiValem;
         }
         else{
-            Character vabaMuutuja = vabadMuutujad.iterator().next();
+            Muutuja vabaMuutuja = vabadMuutujad.iterator().next();
             vabadMuutujad.remove(vabaMuutuja);
             return new Iga(helper(vabadMuutujad, ekvivalentsiValem), vabaMuutuja);
         }

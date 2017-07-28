@@ -2,15 +2,14 @@ package predmoodul;
 
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTree;
 import predmoodul.erindid.*;
 import predmoodul.kvantorid.*;
 import predmoodul.termid.*;
 import predmoodul.valemid.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 /**
@@ -49,6 +48,8 @@ public class ParsePuu {
         lexer.addErrorListener(lekseriVead);
 
         CommonTokenStream tokens = new CommonTokenStream(lexer); //provides access to all tokens by index
+        tokens.fill(); //initiate lexing manually
+        List<Token> tokeniteList = tokens.getTokens();
 
         PredParser parser = new PredParser(tokens);
         //ParseriVigadeKuulaja vigadeKuulaja = new ParseriVigadeKuulaja();
@@ -87,7 +88,7 @@ public class ParsePuu {
             System.out.println(s);
         }
     }
-
+    
     public AstNode createAST(ParseTree parseTreeNode, Map<ValemiID, Vaartus> abivalemid) throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud {
 
         if (parseTreeNode instanceof PredParser.KoguvalemContext) {
@@ -118,13 +119,18 @@ public class ParsePuu {
 
             String abiPredikaadiNimi = parsiAbiPredikaadiNimi(valemContext.getChild(0));
 
-            List<Character> argumendid = new ArrayList<>();
+            List<Muutuja> argumendid = new ArrayList<>(); //enne Character
 
             if(valemContext.getChild(0).getChildCount() > 1){ //kui predtähisele järgnevad argumendid
                 ParseTree argumentsNode = valemContext.getChild(0).getChild(1);
                 for (int i = 1; i < argumentsNode.getChildCount() - 1; i += 2) {
-                    argumendid.add(argumentsNode.getChild(i).getChild(0).getText().charAt(0));
+                    argumendid.add(new Muutuja(argumentsNode.getChild(i).getChild(0).getText().charAt(0)));
                 }
+            }
+
+            for(Muutuja muutuja : argumendid){
+                valem.uusKonstantSumbol(new Muutuja(muutuja.getTahis(), abiPredikaadiNimi), muutuja);
+                muutuja.setPredTahis(abiPredikaadiNimi);
             }
 
             //ValemiID id = new ValemiID(valemContext.getChild(0).getChild(0).getChild(0).getText(), argumendid.size());
@@ -225,10 +231,10 @@ public class ParsePuu {
             for(int i = 0; i < valemContext.getChildCount()-1; i++){
                 ParseTree vaadeldavLaps = valemContext.getChild(i);
                 if(vaadeldavLaps instanceof PredParser.IgaContext){
-                    kvantorid.add(new ModifierIga(vaadeldavLaps.getChild(1).getChild(0).getText().charAt(0)));
+                    kvantorid.add(new ModifierIga(new Muutuja(vaadeldavLaps.getChild(1).getChild(0).getText().charAt(0))));
                 }
                 else if(vaadeldavLaps instanceof PredParser.EksContext){
-                    kvantorid.add(new ModifierEks(vaadeldavLaps.getChild(1).getChild(0).getText().charAt(0)));
+                    kvantorid.add(new ModifierEks(new Muutuja(vaadeldavLaps.getChild(1).getChild(0).getText().charAt(0))));
                 }
                 else if(vaadeldavLaps.getText().charAt(0) == '-'){
                     kvantorid.add(new ModifierEitus());
@@ -261,7 +267,6 @@ public class ParsePuu {
                 String predSümbol = parsiAbiPredikaadiNimi(valemContext);
                 //valemContext.getChild(0).getChild(0).getChild(0).getText();
 
-
                 if(valemContext.getChildCount() == 1){ //ilma vabade muutujateta predsümbol, nt P
 
                     ValemiID id = new ValemiID(predSümbol.toString(), 0);
@@ -290,11 +295,11 @@ public class ParsePuu {
                     if (abivalemid.containsKey(id)) { //kontrolli kas sama predikaatsümboliga ja argumentide arvuga abivalem on eelnevalt defineeritud
                         Vaartus valemJaArgumendid = abivalemid.get(id); //Tüüpi Valem ja List<Character>
                         Valem valemiKoopia = valemJaArgumendid.getValem().koopia();
-                        List<Character> argumentideTahised = valemJaArgumendid.getArgumendid(); //abivalemisse salvestatud argumentide tähised
-                        for(int i = 0; i < argumentideTahised.size(); i++){
+                        List<Muutuja> abiValemiArgumendid = valemJaArgumendid.getArgumendid(); //abivalemisse salvestatud argumentide tähised
+                        for(int i = 0; i < abiValemiArgumendid.size(); i++){
                             //termTahised.add(new TermiPaar(argumentideTahised.get(i), argumendid.get(i)));
                             //nt ('x', ÜksTerm), millega tuleb vaba muutuja väljakutsel väärtustada
-                            Character argumendiTahis = argumentideTahised.get(i);
+                            Muutuja argumendiTahis = abiValemiArgumendid.get(i);
                             valemiKoopia.asendaTerm(argumendid.get(i),
                                     x -> x instanceof IndiviidTerm && argumendiTahis.equals(x.getTahis()));
 
@@ -410,7 +415,7 @@ public class ParsePuu {
                     return new ÜksTerm();
                 }
                 else if(termContext.getChild(0) instanceof PredParser.IndiviidmuutujaContext){
-                    return new IndiviidTerm(termContext.getChild(0).getChild(0).getText().charAt(0));
+                    return new IndiviidTerm(new Muutuja(termContext.getChild(0).getChild(0).getText().charAt(0)));
                 }
             }
             else{
