@@ -81,9 +81,14 @@ public class Konjuktsioon extends Valem {
     }
 
     @Override
-    public boolean vaartusta(Map<Muutuja, Double> vaartustus) {
+    public int getKvantoriteArv() {
+        return vasakLaps.getKvantoriteArv() + paremLaps.getKvantoriteArv();
+    }
 
-        return vasakLaps.vaartusta(vaartustus) && paremLaps.vaartusta(vaartustus);
+    @Override
+    public boolean vaartusta(Map<Muutuja, Double> vaartustus, double maxVaartus) {
+
+        return vasakLaps.vaartusta(vaartustus, maxVaartus) && paremLaps.vaartusta(vaartustus, maxVaartus);
 
         /*if(eitus){
             return !vaartustaAbi(vaartustus, new ArrayList<>(kvantorid));

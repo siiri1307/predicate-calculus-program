@@ -53,7 +53,7 @@ public class AtomaarneValemPredSümboliga extends Valem {
     }
 
     @Override
-    public boolean vaartusta(Map<Muutuja, Double> vaartustus) {
+    public boolean vaartusta(Map<Muutuja, Double> vaartustus, double maxVaartus) {
         if(termArgumendid != null){
             //System.out.println("Predsümboliga valemi termargumendid on: ");
             for(TermiPaar paar : termArgumendid){
@@ -83,7 +83,7 @@ public class AtomaarneValemPredSümboliga extends Valem {
             }
         }
         //System.out.println("Atom valem predsümboliga valem on: " + valem.toString());
-        return valem.vaartusta(vaartustus);
+        return valem.vaartusta(vaartustus, maxVaartus);
     }
 
     @Override
@@ -94,6 +94,11 @@ public class AtomaarneValemPredSümboliga extends Valem {
     @Override
     public Set<Muutuja> getVabadMuutujad() {
         return valem.getVabadMuutujad();
+    }
+
+    @Override
+    public int getKvantoriteArv() {
+        return valem.getKvantoriteArv();
     }
 
     public ValemiID getId() {

@@ -14,6 +14,8 @@ public class Ekvivalents extends Valem {
 
     private Valem vasakLaps;
     private Valem paremLaps;
+    private boolean vasakuToevaartus;
+    private boolean paremaToevaartus;
 
     public Ekvivalents(Valem valem1, Valem valem2){
 
@@ -34,10 +36,22 @@ public class Ekvivalents extends Valem {
         return paremLaps;
     }
 
-    @Override
-    public boolean vaartusta(Map<Muutuja, Double> vaartustus) {
+    public boolean getVasakuToevaartus() {
+        return vasakuToevaartus;
+    }
 
-        return ekvivalents(vasakLaps.vaartusta(vaartustus), paremLaps.vaartusta(vaartustus));
+    public boolean getParemaToevaartus() {
+        return paremaToevaartus;
+    }
+
+    @Override
+    public boolean vaartusta(Map<Muutuja, Double> vaartustus, double maxVaartus) {
+
+        vasakuToevaartus = vasakLaps.vaartusta(vaartustus, maxVaartus);
+
+        paremaToevaartus = paremLaps.vaartusta(vaartustus, maxVaartus);
+
+        return ekvivalents(vasakuToevaartus, paremaToevaartus);
 
     }
 
@@ -74,6 +88,11 @@ public class Ekvivalents extends Valem {
         }
 
         return vabad;
+    }
+
+    @Override
+    public int getKvantoriteArv() {
+        return vasakLaps.getKvantoriteArv() + paremLaps.getKvantoriteArv();
     }
 
     public static Valem looEkvivalentsid(List<Valem> alamValemid) {
@@ -114,7 +133,6 @@ public class Ekvivalents extends Valem {
             return Arrays.asList(vasakLaps, paremLaps);
         }
         else{
-
             vasakLaps = new TõesuspuuTipp(this.vasakLaps, true);
             lapseLapsVasakul = new TõesuspuuTipp(this.paremLaps, false);
 

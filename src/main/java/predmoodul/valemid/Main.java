@@ -97,6 +97,7 @@ public class Main {
 
         //Valemid ei ole samaväärsed
         //x jagub 3-ga, aga mitte 9-ga
+
         /*
         kontroll = new Kontroll(tagastaValem("EmEn(((1+1+1)*m=x)&-((1+1+1)*(1+1+1)*n=x))"), tagastaValem("Ey(x = y + y + y) & -Ez(x = z + z + z + z + z + z + z + z + z)"));
         boolean toevaartus = kontroll.eiOleSamavaarne();
@@ -112,28 +113,48 @@ public class Main {
 
 
         //Valemid on samaväärsed
+
         /*
         kontroll = new Kontroll(tagastaValem("Ey(x=(1+1+1)*y) & -Ez(x=(1+1+1)*(1+1+1)*z)"), tagastaValem("Ez(x = (1+1+1)*z) & Az-(x=(1+1+1+1+1+1+1+1+1)*z)"));
+
         boolean toevaartus = kontroll.eiOleSamavaarne();
         System.out.println("Valemid ei ole samaväärsed: " + toevaartus);
         if(toevaartus){
             System.out.println(kontroll.kontraNaideStringina());
-        }
-        */
+        }*/
 
 
-
-
-        //Tõesuspuu meetod: põhisamaväärsus
-
-        ParsePuu pak = new ParsePuu("F(x) := x=1 G(x) := x=0 Ax(F(x)&G(x)) ~ AxF(x)&AxG(x)");
+        /*
+        ParsePuu pak = new ParsePuu("M(x) := x=1 B(x) := x=0 C(x) := x=1 Ax(M(x)->B(x))~AxC(x)");
         ParseTree pp = pak.looParsePuu();
         AstNode asp = pak.createAST(pp, new HashMap<>());
         System.out.println(asp.toString());
         Tõesuspuu tõesuspuu = Tõesuspuu.looTõesuspuu((Valem)asp.getChildren().get(asp.getChildren().size()-1), false);
         tõesuspuu.looPuu();
         prindiPuu(tõesuspuu);
+        */
 
+        /*
+        ParsePuu pak = new ParsePuu("J(x,y) := Ek(x = k * y) EyEz((x = y*z) -> Ew(y = w* w))~Ez(J(x, z) & Ey(z = y * y))");
+        ParseTree pp = pak.looParsePuu();
+        AstNode asp = pak.createAST(pp, new HashMap<>());
+        System.out.println(asp.toString());
+        Tõesuspuu tõesuspuu = Tõesuspuu.looTõesuspuu((Valem)asp.getChildren().get(asp.getChildren().size()-1), false);
+        tõesuspuu.looPuu();
+        prindiPuu(tõesuspuu);
+        */
+
+
+        //Tõesuspuu meetod: põhisamaväärsus
+        /*
+        ParsePuu pak = new ParsePuu("M := 0=1 B := 0=0 C:= 1=1 (M->(B->C))->((M->B)->(M->C))");
+        ParseTree pp = pak.looParsePuu();
+        AstNode asp = pak.createAST(pp, new HashMap<>());
+        System.out.println(asp.toString());
+        Tõesuspuu tõesuspuu = Tõesuspuu.looTõesuspuu((Valem)asp.getChildren().get(asp.getChildren().size()-1), false);
+        tõesuspuu.looPuu();
+        prindiPuu(tõesuspuu);
+        */
 
 
         //Tõesuspuu meetod: samaväärsed, kuid ei tuvasta vastuolu
@@ -149,15 +170,16 @@ public class Main {
         tõesuspuu.looPuu();
         //System.out.println("Väärtustused: " + tõesuspuu.vaartustusedVastavaltEeldusele());
         prindiPuu(tõesuspuu);
-
         */
+
+
 
 
         //Tõesuspuu meetod: samaväärsed, kui tippude arv järjekorras on väga suur
         //x on kahe y-st suurema arvu korrutis
-        /*
-        String sisendB = "EuEz(x=z*u) & Ew(y+w+1=z) & Et(y+t+1=u)";
+
         String sisendA = "Q(x,y) := Ed(y+d=x & -(d=0)) EzEw(Q(w,y) & Q(z,y) & x= z*w)" ;
+        String sisendB = "EuEz((x=z*u) & Ew(y+w+1=z) & Et(y+t+1=u))";
         ParsePuu pak = new ParsePuu(sisendA + "~" + sisendB);
         ParseTree pp = pak.looParsePuu();
         AstNode asp = pak.createAST(pp, new HashMap<>());
@@ -167,7 +189,8 @@ public class Main {
         tõesuspuu.looPuu();
         //System.out.println("Väärtustused: " + tõesuspuu.vaartustusedVastavaltEeldusele());
         prindiPuu(tõesuspuu);
-        */
+
+
         //analüüsi esimesena valemit, mis toob sisse uue sümboli
 
 

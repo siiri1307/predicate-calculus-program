@@ -31,9 +31,9 @@ public class Disjunktsioon extends Valem {
     }
 
     @Override
-    public boolean vaartusta(Map<Muutuja, Double> vaartustus) {
+    public boolean vaartusta(Map<Muutuja, Double> vaartustus, double maxVaartus) {
 
-        return vasakLaps.vaartusta(vaartustus) || paremLaps.vaartusta(vaartustus);
+        return vasakLaps.vaartusta(vaartustus, maxVaartus) || paremLaps.vaartusta(vaartustus, maxVaartus);
 
     }
 
@@ -57,6 +57,11 @@ public class Disjunktsioon extends Valem {
         vabad.addAll(paremLaps.getVabadMuutujad());
 
         return vabad;
+    }
+
+    @Override
+    public int getKvantoriteArv() {
+        return vasakLaps.getKvantoriteArv() + paremLaps.getKvantoriteArv();
     }
 
     public static Valem looDisjunktsioonid(List<Valem> alamValemid) {

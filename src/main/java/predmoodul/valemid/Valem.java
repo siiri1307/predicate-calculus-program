@@ -17,11 +17,13 @@ public abstract class Valem extends AstNode {
      * Created by siiri on 18/03/17.
      */
 
-    public abstract boolean vaartusta(Map<Muutuja, Double> vaartustus);
+    public abstract boolean vaartusta(Map<Muutuja, Double> vaartustus, double maxVaartus);
 
     public abstract Set<IndiviidTerm> getIndiviidTermid();
 
     public abstract Set<Muutuja> getVabadMuutujad();
+
+    public abstract int getKvantoriteArv();
 
     public abstract List<TõesuspuuTipp> reegel(boolean tõeväärtus, Set<Muutuja> puusEsinenudTermid, Set<Termikuulaja> kuulajad, Set<Muutuja> harusEsinenudTermid);
 

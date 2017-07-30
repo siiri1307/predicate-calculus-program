@@ -40,9 +40,9 @@ public class Implikatsioon extends Valem {
     }
 
     @Override
-    public boolean vaartusta(Map<Muutuja, Double> vaartustus) {
+    public boolean vaartusta(Map<Muutuja, Double> vaartustus, double maxVaartus) {
 
-        return implikatsioon(vasakLaps.vaartusta(vaartustus), paremLaps.vaartusta(vaartustus));
+        return implikatsioon(vasakLaps.vaartusta(vaartustus, maxVaartus), paremLaps.vaartusta(vaartustus, maxVaartus));
 
         /*return  disjunktsiooniValemid.stream()
                 .map(valem -> valem.vaartusta(vaartustus))
@@ -81,6 +81,11 @@ public class Implikatsioon extends Valem {
         }*/
 
         return vabad;
+    }
+
+    @Override
+    public int getKvantoriteArv() {
+        return vasakLaps.getKvantoriteArv() + paremLaps.getKvantoriteArv();
     }
 
 

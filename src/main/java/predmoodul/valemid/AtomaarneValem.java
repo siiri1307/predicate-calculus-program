@@ -30,7 +30,7 @@ public class AtomaarneValem extends Valem {
     }
 
     @Override
-    public boolean vaartusta(Map<Muutuja, Double> vaartustus) {
+    public boolean vaartusta(Map<Muutuja, Double> vaartustus, double maxVaartus) {
 
         return vasakTerm.vaartusta(vaartustus) == paremTerm.vaartusta(vaartustus);
     }
@@ -61,6 +61,11 @@ public class AtomaarneValem extends Valem {
 
         }
         return s;
+    }
+
+    @Override
+    public int getKvantoriteArv() {
+        return 0;
     }
 
     @Override

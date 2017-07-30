@@ -32,9 +32,9 @@ public class Eitus extends Valem implements Kvantor {
 
 
     @Override
-    public boolean vaartusta(Map<Muutuja, Double> vaartustus) {
+    public boolean vaartusta(Map<Muutuja, Double> vaartustus, double maxVaartus) {
 
-        return !valem.vaartusta(vaartustus);
+        return !valem.vaartusta(vaartustus, maxVaartus);
     }
 
     @Override
@@ -46,6 +46,11 @@ public class Eitus extends Valem implements Kvantor {
     public Set<Muutuja> getVabadMuutujad() {
 
         return valem.getVabadMuutujad();
+    }
+
+    @Override
+    public int getKvantoriteArv() {
+        return valem.getKvantoriteArv();
     }
 
     @Override

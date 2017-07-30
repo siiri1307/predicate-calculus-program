@@ -47,11 +47,11 @@ public class Iga extends Valem implements Kvantor {
 
 
     @Override
-    public boolean vaartusta(Map<Muutuja, Double> vaartustus) {
+    public boolean vaartusta(Map<Muutuja, Double> vaartustus, double maxVaartus) {
 
-        for(double i = 0; i < 100; i++){
+        for(double i = 0; i < maxVaartus; i++){
             vaartustus.put(indiviidmuutuja, i);
-            boolean valemiVaartus = valem.vaartusta(vaartustus);
+            boolean valemiVaartus = valem.vaartusta(vaartustus, maxVaartus);
             if(!valemiVaartus){
                 return false;
             }
@@ -77,6 +77,12 @@ public class Iga extends Valem implements Kvantor {
     }
 
     @Override
+    public int getKvantoriteArv() {
+
+        return 1 + valem.getKvantoriteArv();
+    }
+
+    @Override
     public List<TõesuspuuTipp> reegel(boolean tõeväärtus, Set<Muutuja> puusEsinenudTermid, Set<Termikuulaja> kuulajad,  Set<Muutuja> harusEsinenudTermid) {
 
         //Set<Character> harusEsinenudTermid = new HashSet<>();
@@ -95,7 +101,7 @@ public class Iga extends Valem implements Kvantor {
             //kasuta olemasolevat termi (indiviidmuutuja)
 
             if(harusEsinenudTermid.isEmpty()){ //ühtegi termi harus ei esine; eeldame, et mingi element on alati olemas, sest põhihulk ei saa olla tühi
-                Muutuja term = new Muutuja('m', 0);
+                Muutuja term = new Muutuja('m', Muutuja.uusMNumber());
                 Valem valemiKoopia = this.valem.koopia();
                 valemiKoopia.uusKonstantSumbol(term, indiviidmuutuja); //see tuleb vist ikka Muutujaks muuta
                 TõesuspuuTipp laps = new TõesuspuuTipp(valemiKoopia, true);
@@ -154,27 +160,29 @@ public class Iga extends Valem implements Kvantor {
 
     private Muutuja tagastaSuvalineKasutamataSumbol(Set<Muutuja> puusEsinenudTermid, Set<Muutuja> harusEsinenudTermid)  {
 
-        int seniSuurim = 0;
+//        int seniSuurim = 0;
+//
+//        for(Muutuja m : harusEsinenudTermid){
+//            if(m.getTahis().equals('m') && m.getJarjeNumber() > seniSuurim){
+//                seniSuurim = m.getJarjeNumber();
+//            }
+//        }
 
-        for(Muutuja m : harusEsinenudTermid){
-            if(m.getTahis().equals('m') && m.getJarjeNumber() > seniSuurim){
-                seniSuurim = m.getJarjeNumber();
-            }
-        }
+        Muutuja uusMuutuja = new Muutuja('m', Muutuja.uusMNumber());
+        //harusEsinenudTermid.add(uusMuutuja);
+        return uusMuutuja;
 
-        return new Muutuja('m', seniSuurim + 1);
+        //Set<Character> voimalikudTermid = new HashSet<>();
 
-        /*Set<Character> voimalikudTermid = new HashSet<>();
-
-        for(int i = 0; i < 256; i++){
+        /*for(int i = 0; i < 256; i++){
             voimalikudTermid.add((char) i);
         }*/
 
-        //Set<Character> voimalikudTermid = new HashSet<>(Arrays.asList('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 't'));
+        //Set<Character> voimalikudTermid = new HashSet<>(Arrays.asList('b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 't'));
 
         //voimalikudTermid.removeAll(puusEsinenudTermid); //kahe set'i vahe, et saada teada sümbolid, mida pole veel harus kasutatud
 
-        //return voimalikudTermid.iterator().next();
+        //return new Muutuja(voimalikudTermid.iterator().next(),0);
         //throw new NotImplementedException();
     }
 

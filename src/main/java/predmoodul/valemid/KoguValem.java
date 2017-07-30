@@ -33,8 +33,8 @@ public class KoguValem extends Valem {
     }
 
     @Override
-    public boolean vaartusta(Map<Muutuja, Double> vaartustus) {
-        return children.get(children.size()-1).vaartusta(vaartustus);
+    public boolean vaartusta(Map<Muutuja, Double> vaartustus, double maxVaartus) {
+        return children.get(children.size()-1).vaartusta(vaartustus, maxVaartus);
     }
 
     @Override
@@ -56,6 +56,11 @@ public class KoguValem extends Valem {
             vabad.addAll(valem.getVabadMuutujad());
         }
         return vabad;
+    }
+
+    @Override
+    public int getKvantoriteArv() {
+        return children.get(children.size()-1).getKvantoriteArv();
     }
 
     @Override
