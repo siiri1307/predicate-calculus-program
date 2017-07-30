@@ -20,7 +20,7 @@ public class Kontramudel {
         Map<Muutuja, Double> eeldatavLoppMudel = new HashMap<>();
         eeldatavLoppMudel.put(new Muutuja('x'), 0.0);
         eeldatavLoppMudel.put(new Muutuja('y'), 1.0);
-        LoppValem.tagastaValem("AxAy(x=y)").vaartusta(algMudel);
+        LoppValem.tagastaValem("AxAy(x=y)").vaartusta(algMudel, 100.0);
         assertEquals(eeldatavLoppMudel, algMudel);
     }
 

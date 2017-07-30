@@ -22,7 +22,7 @@ public class AbiValemOnDefineeritud {
 
     @Test
     public void testAbiValemDefineeritud() throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud, LekseriErind, ParseriErind {
-        assertTrue(LoppValem.tagastaValem("T(x,y) := Ea(x * a = y)\n T(1,0)").vaartusta(new HashMap<>()));
+        assertTrue(LoppValem.tagastaValem("T(x,y) := Ea(x * a = y)\n T(1,0)").vaartusta(new HashMap<>(), 100.0));
     }
 
 }

@@ -168,7 +168,7 @@ public class SisendOnKorrektne {
         Map<Muutuja, Double> m = new HashMap<>();
         m.put(new Muutuja('y'), 1.0);
         m.put(new Muutuja('z'), 2.0);
-        assertFalse(valem.vaartusta(m));
+        assertFalse(valem.vaartusta(m, 100.0));
 
     }
 

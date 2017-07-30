@@ -36,6 +36,7 @@ public class Yl1A {
 
         String sisendA = "Ey(x=(1+1+1)*y) & -(y=0) & -Ez(x=(1+1+1)*(1+1+1)*z)";
         String sisendB = "P(x,y) := Ez(x = y * z) & -(y=0) P(x, 1+1+1) & -P(x, 1+1+1+1+1+1+1+1+1)";
+        //6 kv
         Kontroll kontrollimine = new Kontroll(LoppValem.tagastaValem(sisendA), LoppValem.tagastaValem(sisendB));
         assertFalse(kontrollimine.eiOleSamavaarneIlmaErindita());
     }
@@ -45,6 +46,7 @@ public class Yl1A {
 
         String sisendA = "Ey(x=(1+1+1)*y) & -Ez(x=(1+1+1)*(1+1+1)*z)";
         String sisendB = "Ez(x = (1+1+1)*z) & Az-(x=(1+1+1+1+1+1+1+1+1)*z)";
+        //5 kvantorit - 407 ms
         Kontroll kontrollimine = new Kontroll(LoppValem.tagastaValem(sisendA), LoppValem.tagastaValem(sisendB));
         assertFalse(kontrollimine.eiOleSamavaarneIlmaErindita());
     }
@@ -54,6 +56,7 @@ public class Yl1A {
 
         String sisendA = "Ey(x=(1+1+1)*y) & -Ez(x=(1+1+1)*(1+1+1)*z)";
         String sisendB = "Ey(x = y + y + y) & -Ez(x = z + z + z + z + z + z + z + z + z)";
+        //5 kvantorit - 551 ms
         Kontroll kontrollimine = new Kontroll(LoppValem.tagastaValem(sisendA), LoppValem.tagastaValem(sisendB));
         assertFalse(kontrollimine.eiOleSamavaarneIlmaErindita());
     }
@@ -63,6 +66,7 @@ public class Yl1A {
 
         String sisendA = "EmEn(((1+1+1)*m=x)&-((1+1+1)*(1+1+1)*n=x))";
         String sisendB = "Ey(x = y + y + y) & -Ez(x = z + z + z + z + z + z + z + z + z)";
+        //5 kvantorit 531 ms
         Kontroll kontrollimine = new Kontroll(LoppValem.tagastaValem(sisendA), LoppValem.tagastaValem(sisendB));
         assertTrue(kontrollimine.eiOleSamavaarneIlmaErindita());
         //Sinu vastus on väärtustusel {x=0} true, aga peaks olema false

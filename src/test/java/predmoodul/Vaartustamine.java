@@ -21,17 +21,18 @@ public class Vaartustamine {
     @Test
     public void test2Iga() throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud, LekseriErind, ParseriErind {
         Map<Muutuja, Double> mudel = new HashMap<>();
-        assertFalse(LoppValem.tagastaValem("AxAy(x=y)").vaartusta(mudel));
+        assertFalse(LoppValem.tagastaValem("AxAy(x=y)").vaartusta(mudel, 100.0));
     }
 
     @Test
     public void testLeidubIga() throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud, LekseriErind, ParseriErind {
-        TestCase.assertTrue(LoppValem.tagastaValem("AxEy(x=y)").vaartusta(new HashMap<>()));
+        TestCase.assertTrue(LoppValem.tagastaValem("AxEy(x=y)").vaartusta(new HashMap<>(), 100.0));
+
     }
 
     @Test
     public void testVaartustamine() throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud, LekseriErind, ParseriErind {
-        TestCase.assertTrue(LoppValem.tagastaValem( "Ax((1 = 0 -> x = x + 1) ~ (x = x))").vaartusta(new HashMap<>()));
+        TestCase.assertTrue(LoppValem.tagastaValem( "Ax((1 = 0 -> x = x + 1) ~ (x = x))").vaartusta(new HashMap<>(), 100.0));
     }
 
     @Test
@@ -39,40 +40,40 @@ public class Vaartustamine {
         assertFalse(LoppValem.tagastaValem("" +
                 "M := AxEy(x + 1 = y) " +
                 "M" +
-                "").vaartusta(new HashMap<>()));
+                "").vaartusta(new HashMap<>(), 100.0));
     }
 
     @Test
     public void testNullJaUksTerm() throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud, LekseriErind, ParseriErind {
         TestCase.assertTrue(LoppValem.tagastaValem("T(x,y) := Ea(x * a = y)\n" +
-                "T(1,0)").vaartusta(new HashMap<>()));
+                "T(1,0)").vaartusta(new HashMap<>(), 100.0));
     }
 
     @Test
     public void testTeheValemiArgumendina1() throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud, LekseriErind, ParseriErind {
         TestCase.assertTrue(LoppValem.tagastaValem("T(x,y,z) := Ea(x + y + z = a)\n" +
-                "T(1,(1+1+1)*(1+1),1)").vaartusta(new HashMap<>()));
+                "T(1,(1+1+1)*(1+1),1)").vaartusta(new HashMap<>(), 100.0));
     }
 
     @Test
     public void testTeheValemiArgumendina2() throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud, LekseriErind, ParseriErind {
         TestCase.assertTrue(LoppValem.tagastaValem("T(x,y,z) := Ea(x + y + z = a)\n" +
-                "T(1,1+1+1+1+1,1)").vaartusta(new HashMap<>()));
+                "T(1,1+1+1+1+1,1)").vaartusta(new HashMap<>(), 100.0));
     }
 
     @Test
     public void testYksTermLiitmine() throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud, LekseriErind, ParseriErind {
-        assertFalse(LoppValem.tagastaValem("S(y) := Ex(x+x=y)\n" + "S(1)").vaartusta(new HashMap<>()));
+        assertFalse(LoppValem.tagastaValem("S(y) := Ex(x+x=y)\n" + "S(1)").vaartusta(new HashMap<>(), 100.0));
     }
 
     @Test
     public void testYksTermJagamine() throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud, LekseriErind, ParseriErind {
-        TestCase.assertTrue(LoppValem.tagastaValem("S(y) := Ex(x/x=y)\n" + "S(1)").vaartusta(new HashMap<>()));
+        TestCase.assertTrue(LoppValem.tagastaValem("S(y) := Ex(x/x=y)\n" + "S(1)").vaartusta(new HashMap<>(), 100.0));
     }
 
     @Test
     public void testVaartustamine2() throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud, LekseriErind, ParseriErind {
-        TestCase.assertTrue(LoppValem.tagastaValem("L(m) := -(m=1)\n" + "L(0)").vaartusta(new HashMap<>()));
+        TestCase.assertTrue(LoppValem.tagastaValem("L(m) := -(m=1)\n" + "L(0)").vaartusta(new HashMap<>(), 100.0));
     }
 
 }

@@ -34,7 +34,7 @@ public class Yl1C {
 
     //x ei jagu ühegi y-st väiksema algarvuga
 
-    @Test(timeout=60000)
+    @Test()
     public void onSamavaarneToesuspuuMeetod() throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud, LekseriErind, ParseriErind {
 
         String sisendA = "B(x) := AyAz(x = y * z -> y = 1 v z = 1) & -(x = 1)" +
@@ -53,8 +53,9 @@ public class Yl1C {
         String sisendA = "B(x) := AyAz(x = y * z -> y = 1 v z = 1) & -(x = 1) " +
                 "J(x,y) := Ez(x=y*z) & -(y=0)" +
                 "P(x,y) := Ez(x + z = y & -(z = 0))" +
-                "Az(B(z) & P(z,y) -> -J(x,z))";
-        String sisendB = "Aw(AoAp(w = o * p -> o = 1 v p= 1) & -(w = 1) & Eq(w+q+1=y) -> -Ez(x=w*z) & -(w=0))";
+                "Az(B(z) & P(z,y) -> -J(x,z))"; //5 kv
+        String sisendB = "Aw(AoAp(w = o * p -> o = 1 v p= 1) & -(w = 1) & Eq(w+q+1=y) -> -Ez(x=w*z) & -(w=0))";//5kv
+        //12 kv
         Kontroll kontrollimine = new Kontroll(LoppValem.tagastaValem(sisendA), LoppValem.tagastaValem(sisendB));
         assertFalse(kontrollimine.eiOleSamavaarneIlmaErindita());
     }
@@ -62,8 +63,9 @@ public class Yl1C {
     @Test
     public void onSamavaarneBruteForce2() throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud, LekseriErind, ParseriErind, ErinevIndiviidideArv {
 
-        String sisendA = "-EzEw((x = z * w) & Ek((z + k = y) & -(k = 0)) & AaAb(z = a * b -> a = 1 v b = 1) & -(z = 1))";
-        String sisendB = "Aw(AoAp(w = o * p -> o = 1 v p= 1) & -(w = 1) & Eq(w+q+1=y) -> -Ez(x=w*z) & -(w=0))";
+        String sisendA = "-EzEw((x = z * w) & Ek((z + k = y) & -(k = 0)) & AaAb(z = a * b -> a = 1 v b = 1) & -(z = 1))"; //5kv
+        String sisendB = "Aw(AoAp(w = o * p -> o = 1 v p= 1) & -(w = 1) & Eq(w+q+1=y) -> -Ez(x=w*z) & -(w=0))"; //5kv
+        //12 kv
         Kontroll kontrollimine = new Kontroll(LoppValem.tagastaValem(sisendA), LoppValem.tagastaValem(sisendB));
         assertFalse(kontrollimine.eiOleSamavaarneIlmaErindita());
     }
@@ -81,7 +83,9 @@ public class Yl1C {
     @Test
     public void eiOleSamavaarneBruteForce2() throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud, LekseriErind, ParseriErind, ErinevIndiviidideArv {
 
-        String sisendA = "R(x) := AyAz(x = y*z -> y=1 v z=1) & -(x=1) V(x,y) := Ez(x+z=y & -(z=0)) ArAz(-(x=r*z) -> ((R(z)&V(z,y)v(R(r)&V(r,y)))))";
+        String sisendA = "R(x) := AyAz(x = y*z -> y=1 v z=1) & -(x=1) "+
+                "V(x,y) := Ez(x+z=y & -(z=0)) " +
+                "ArAz(-(x=r*z) -> ((R(z)&V(z,y)v(R(r)&V(r,y)))))";
         String sisendB = "Aw(AoAp(w = o * p -> o = 1 v p= 1) & -(w = 1) & Eq(w+q+1=y) -> -Ez(x=w*z) & -(w=0))";
         Kontroll kontrollimine = new Kontroll(LoppValem.tagastaValem(sisendA), LoppValem.tagastaValem(sisendB));
         assertTrue(kontrollimine.eiOleSamavaarneIlmaErindita());

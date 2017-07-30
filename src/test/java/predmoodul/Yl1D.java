@@ -36,12 +36,13 @@ public class Yl1D {
     @Test
     public void onSamavaarneBruteForce() throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud, LekseriErind, ParseriErind, ErinevIndiviidideArv {
 
-        String sisendA = "P(x,y) := Ez(x + z = y & -(z = 0))" +
-                "B(x) := AyAz(x = y * z -> y = 1 v z = 1) & -(x = 1)" +
-                "Ez(B(z) & P(x,y) & Aa(-(a = z) -> -B(z)))";
-        String sisendB = "B(x) := AyAz(x=y*z -> y=1 v z=1) & -(x=1)" +
-                "V(x,y) := Ez(x+z+1 = y)" +
-                "Ea(V(x,a) & V(a,y) & B(a) & Ab(V(x,b) & V(b,y) & B(b) -> b=a))";
+        String sisendA = "P(x,y) := Ez(x + z = y & -(z = 0))" + //1
+                "B(x) := AyAz(x = y * z -> y = 1 v z = 1) & -(x = 1)" + //2
+                "Ez(B(z) & P(x,y) & Aa(-(a = z) -> -B(z)))"; //2
+        String sisendB = "M(x) := AyAz(x = y * z -> y = 1 v z = 1) & -(x = 1)" + //2
+                "V(x,y) := Ez(x+z+1 = y)" + //1
+                "Ea(V(x,a) & V(a,y) & M(a) & Ab(V(x,b) & V(b,y) & M(b) -> b=a))"; //2
+        //12 vs 19
         Kontroll kontrollimine = new Kontroll(LoppValem.tagastaValem(sisendA), LoppValem.tagastaValem(sisendB));
         assertFalse(kontrollimine.eiOleSamavaarneIlmaErindita());
     }
