@@ -61,7 +61,6 @@ public class Kontroll {
 
     private double maxVaartusVastavaltKvantoritele(int kvantoriteArv) {
 
-
         if(kvantoriteArv < 6){
             return 5000.0;
         }
@@ -72,7 +71,7 @@ public class Kontroll {
             return 20.0;
         }
         else{
-            return 100.0;
+            return 2.0;
         }
     }
 

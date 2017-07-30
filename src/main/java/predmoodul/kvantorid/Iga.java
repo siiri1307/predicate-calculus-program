@@ -203,7 +203,7 @@ public class Iga extends Valem implements Kvantor {
 
     @Override
     public String dot() {
-        return "A" + indiviidmuutuja +"(" + valem.dot() + ")";
+        return "∀" + indiviidmuutuja +"(" + valem.dot() + ")";
     }
 
     @Override

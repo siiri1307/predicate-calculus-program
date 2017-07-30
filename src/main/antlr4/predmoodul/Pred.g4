@@ -36,7 +36,7 @@ ekvvalem
     ;
 
 implvalem
-    : disjvalem ('v' disjvalem)*
+    : disjvalem ('∨' disjvalem)*
     ;
 
 disjvalem
@@ -44,15 +44,15 @@ disjvalem
     ;
 
 konjvalem
-    : ('-' | iga | eks)* korgvalem
+    : ('¬' | iga | eks)* korgvalem
     ;
 
 iga
-    : 'A' indiviidmuutuja
+    : '∀' indiviidmuutuja
     ;
 
 eks
-    : 'E' indiviidmuutuja
+    : '∃' indiviidmuutuja
     ;
 
 korgvalem

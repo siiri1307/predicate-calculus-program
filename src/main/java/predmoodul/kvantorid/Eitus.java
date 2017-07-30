@@ -88,7 +88,7 @@ public class Eitus extends Valem implements Kvantor {
 
     @Override
     public String dot() {
-        return "!(" + valem.dot() + ")";
+        return "¬(" + valem.dot() + ")";
     }
 
     @Override

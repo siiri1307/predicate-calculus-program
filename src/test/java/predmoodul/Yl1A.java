@@ -34,8 +34,8 @@ public class Yl1A {
     @Test(timeout=60000)
     public void onSamavaarneValjaArvutamine1() throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud, LekseriErind, ParseriErind, ErinevIndiviidideArv {
 
-        String sisendA = "Ey(x=(1+1+1)*y) & -(y=0) & -Ez(x=(1+1+1)*(1+1+1)*z)";
-        String sisendB = "P(x,y) := Ez(x = y * z) & -(y=0) P(x, 1+1+1) & -P(x, 1+1+1+1+1+1+1+1+1)";
+        String sisendA = "∃y(x=(1+1+1)*y) & ¬(y=0) & ¬∃z(x=(1+1+1)*(1+1+1)*z)";
+        String sisendB = "P(x,y) := ∃z(x = y * z) & ¬(y=0) P(x, 1+1+1) & ¬P(x, 1+1+1+1+1+1+1+1+1)";
         //6 kv
         Kontroll kontrollimine = new Kontroll(LoppValem.tagastaValem(sisendA), LoppValem.tagastaValem(sisendB));
         assertFalse(kontrollimine.eiOleSamavaarneIlmaErindita());
@@ -44,8 +44,8 @@ public class Yl1A {
     @Test(timeout=60000)
     public void onSamavaarneValjaArvutamine2() throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud, LekseriErind, ParseriErind, ErinevIndiviidideArv {
 
-        String sisendA = "Ey(x=(1+1+1)*y) & -Ez(x=(1+1+1)*(1+1+1)*z)";
-        String sisendB = "Ez(x = (1+1+1)*z) & Az-(x=(1+1+1+1+1+1+1+1+1)*z)";
+        String sisendA = "∃y(x=(1+1+1)*y) & ¬∃z(x=(1+1+1)*(1+1+1)*z)";
+        String sisendB = "∃z(x = (1+1+1)*z) & ∀z¬(x=(1+1+1+1+1+1+1+1+1)*z)";
         //5 kvantorit - 407 ms
         Kontroll kontrollimine = new Kontroll(LoppValem.tagastaValem(sisendA), LoppValem.tagastaValem(sisendB));
         assertFalse(kontrollimine.eiOleSamavaarneIlmaErindita());
@@ -54,8 +54,8 @@ public class Yl1A {
     @Test(timeout=60000)
     public void onSamavaarneValjaArvutamine3() throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud, LekseriErind, ParseriErind, ErinevIndiviidideArv {
 
-        String sisendA = "Ey(x=(1+1+1)*y) & -Ez(x=(1+1+1)*(1+1+1)*z)";
-        String sisendB = "Ey(x = y + y + y) & -Ez(x = z + z + z + z + z + z + z + z + z)";
+        String sisendA = "∃y(x=(1+1+1)*y) & ¬∃z(x=(1+1+1)*(1+1+1)*z)";
+        String sisendB = "∃y(x = y + y + y) & ¬∃z(x = z + z + z + z + z + z + z + z + z)";
         //5 kvantorit - 551 ms
         Kontroll kontrollimine = new Kontroll(LoppValem.tagastaValem(sisendA), LoppValem.tagastaValem(sisendB));
         assertFalse(kontrollimine.eiOleSamavaarneIlmaErindita());
@@ -64,8 +64,8 @@ public class Yl1A {
     @Test(timeout=60000)
     public void eiOleSamavaarneValjaArvutamine1() throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud, LekseriErind, ParseriErind, ErinevIndiviidideArv {
 
-        String sisendA = "EmEn(((1+1+1)*m=x)&-((1+1+1)*(1+1+1)*n=x))";
-        String sisendB = "Ey(x = y + y + y) & -Ez(x = z + z + z + z + z + z + z + z + z)";
+        String sisendA = "∃m∃n(((1+1+1)*m=x)&¬((1+1+1)*(1+1+1)*n=x))";
+        String sisendB = "∃y(x = y + y + y) & ¬∃z(x = z + z + z + z + z + z + z + z + z)";
         //5 kvantorit 531 ms
         Kontroll kontrollimine = new Kontroll(LoppValem.tagastaValem(sisendA), LoppValem.tagastaValem(sisendB));
         assertTrue(kontrollimine.eiOleSamavaarneIlmaErindita());
@@ -76,8 +76,8 @@ public class Yl1A {
     @Test(expected = ErinevIndiviidideArv.class)
     public void eiOleSamavaarneValjaArvutamine2() throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud, LekseriErind, ParseriErind, ErinevIndiviidideArv {
 
-        String sisendA = "AxEz(x = z * (1+1+1) & -(x = z * (1+1+1)*(1+1+1)))";
-        String sisendB = "Ey(x = y + y + y) & -Ez(x = z + z + z + z + z + z + z + z + z)";
+        String sisendA = "∀x∃z(x = z * (1+1+1) & ¬(x = z * (1+1+1)*(1+1+1)))";
+        String sisendB = "∃y(x = y + y + y) & ¬∃z(x = z + z + z + z + z + z + z + z + z)";
         Kontroll kontrollimine = new Kontroll(LoppValem.tagastaValem(sisendA), LoppValem.tagastaValem(sisendB));
         assertTrue(kontrollimine.eiOleSamavaarne());
 

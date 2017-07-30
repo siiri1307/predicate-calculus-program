@@ -17,12 +17,12 @@ public class AbiValemOnDefineeritud {
 
     @Test(expected=AbiValemEiOleDefineeritud.class)
     public void testPuuduvAbivalemiDefinitsioon() throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud, LekseriErind, ParseriErind {
-        LoppValem.tagastaValem("T(x,y) := Ea(x * a = y)\n M(x,y)");
+        LoppValem.tagastaValem("T(x,y) := ∃a(x * a = y)\n M(x,y)");
     }
 
     @Test
     public void testAbiValemDefineeritud() throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud, LekseriErind, ParseriErind {
-        assertTrue(LoppValem.tagastaValem("T(x,y) := Ea(x * a = y)\n T(1,0)").vaartusta(new HashMap<>(), 100.0));
+        assertTrue(LoppValem.tagastaValem("T(x,y) := ∃a(x * a = y)\n T(1,0)").vaartusta(new HashMap<>(), 100.0));
     }
 
 }

@@ -20,15 +20,15 @@ public class Kontramudel {
         Map<Muutuja, Double> eeldatavLoppMudel = new HashMap<>();
         eeldatavLoppMudel.put(new Muutuja('x'), 0.0);
         eeldatavLoppMudel.put(new Muutuja('y'), 1.0);
-        LoppValem.tagastaValem("AxAy(x=y)").vaartusta(algMudel, 100.0);
+        LoppValem.tagastaValem("∀x∀y(x=y)").vaartusta(algMudel, 100.0);
         assertEquals(eeldatavLoppMudel, algMudel);
     }
 
     @Test
     public void testKontraMudelYl2() throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud, ErinevIndiviidideArv, LekseriErind, ParseriErind {
 
-        String vastus = "EuEz((x=z*u) & Ew(y+w+1=z) & Et(y+t+1=u))";
-        String pakkumine = "EaEb(x=a*b & EkEl(a=y+k & b=y+l))";
+        String vastus = "∃u∃z((x=z*u) & ∃w(y+w+1=z) & ∃t(y+t+1=u))";
+        String pakkumine = "∃a∃b(x=a*b & ∃k∃l(a=y+k & b=y+l))";
         Kontroll kontroll = new Kontroll(LoppValem.tagastaValem(pakkumine), LoppValem.tagastaValem(vastus));
         kontroll.eiOleSamavaarne();
         Map<Character, Integer> eeldatav = new HashMap<>();

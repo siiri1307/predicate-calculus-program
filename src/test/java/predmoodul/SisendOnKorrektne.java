@@ -25,7 +25,7 @@ public class SisendOnKorrektne {
 
     @Test
     public void testSignatuuriMittekuuluvSymbol1() {
-        ParsePuu sisend = new ParsePuu("ExEk(x=3*k & -Eb(x=3*k))");
+        ParsePuu sisend = new ParsePuu("∃x∃k(x=3*k & ¬∃b(x=3*k))");
         try{
             sisend.looParsePuu();
         }
@@ -40,7 +40,7 @@ public class SisendOnKorrektne {
     @Test
     public void testSignatuuriMittekuuluvSymbol2() {
 
-        ParsePuu sisend = new ParsePuu("ExEk(x=3?k & -Eb(x=3%k))");
+        ParsePuu sisend = new ParsePuu("∃x∃k(x=3?k & ¬∃b(x=3%k))");
         try{
             sisend.looParsePuu();
         }
@@ -54,7 +54,7 @@ public class SisendOnKorrektne {
 
     @Test
     public void testYleliigneSulg(){
-        ParsePuu sisend = new ParsePuu("EqEp(Ez(y+z+1=q))&Ew(y+w+1=p))&(x=q*p))"); //Alo
+        ParsePuu sisend = new ParsePuu("∃q∃p(∃z(y+z+1=q))&∃w(y+w+1=p))&(x=q*p))"); //Alo
         try{
             sisend.looParsePuu();
         }
@@ -68,7 +68,7 @@ public class SisendOnKorrektne {
 
     @Test
     public void testPuuduvKorrutisMark(){
-        ParsePuu sisend = new ParsePuu("EqEp(Ez(y+z+1=q)&Ew(y+w+1=p)&(x=qp))");
+        ParsePuu sisend = new ParsePuu("∃q∃p(∃z(y+z+1=q)&∃w(y+w+1=p)&(x=qp))");
         try{
             sisend.looParsePuu();
         }
@@ -82,7 +82,7 @@ public class SisendOnKorrektne {
 
     @Test
     public void testPuuduvSulg(){
-        ParsePuu sisend = new ParsePuu(("EaEb(Ec(y+c=a)&Ec(y+c=b)&x=a*b"));
+        ParsePuu sisend = new ParsePuu(("∃a∃b(∃c(y+c=a)&∃c(y+c=b)&x=a*b"));
         try{
             sisend.looParsePuu();
         }
@@ -102,7 +102,7 @@ public class SisendOnKorrektne {
     @Test
     public void testPuuduvSulg2() throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud, LekseriErind, ParseriErind {
         try{
-            new Kontroll(LoppValem.tagastaValem("EaEb(Ec(y + c = a) & Ec(y + c = b) & x = a*b"), LoppValem.tagastaValem("EuEz((x=z*u) & Ew(y+w+1=z) & Et(y+t+1=u))"));
+            new Kontroll(LoppValem.tagastaValem("∃a∃b(∃c(y + c = a) & ∃c(y + c = b) & x = a*b"), LoppValem.tagastaValem("∃u∃z((x=z*u) & ∃w(y+w+1=z) & ∃t(y+t+1=u))"));
         }
         catch(ParseriErind parseriErind) {
             assertEquals("Valemi lõpust puudub sulg.", parseriErind.getParseriVigadeKuulaja().getVeaSonumid().get(0));
@@ -116,8 +116,8 @@ public class SisendOnKorrektne {
     public void testErinevIndiviidideArvPredikaatides1() throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud, ErinevIndiviidideArv, LekseriErind, ParseriErind {
         erind.expect(ErinevIndiviidideArv.class);
         erind.expectMessage("Esitasid 0-kohalise predikaadi, ootasin aga 2-kohalist predikaati.");
-        String vastus = "EuEz((x=z*u) & Ew(y+w+1=z) & Et(y+t+1=u))";
-        String pakkumine = "Suurem(a,b) := Ec(a=b+c & -(c=0)) AxAyEmEn(Suurem(m,y) & Suurem(n,y) -> x=m*n)";
+        String vastus = "∃u∃z((x=z*u) & ∃w(y+w+1=z) & ∃t(y+t+1=u))";
+        String pakkumine = "Suurem(a,b) := ∃c(a=b+c & ¬(c=0)) ∀x∀y∃m∃n(Suurem(m,y) & Suurem(n,y) -> x=m*n)";
         Kontroll kontroll = new Kontroll(LoppValem.tagastaValem(pakkumine), LoppValem.tagastaValem(vastus));
         kontroll.eiOleSamavaarne();
     }
@@ -126,8 +126,8 @@ public class SisendOnKorrektne {
     public void testErinevIndiviidideArvPredikaatides2() throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud, ErinevIndiviidideArv, LekseriErind, ParseriErind {
         erind.expect(ErinevIndiviidideArv.class);
         erind.expectMessage("Esitasid 0-kohalise predikaadi, ootasin aga 1-kohalist predikaati.");
-        String vastus = "Ey(x=(1+1+1)*y)&-Ez(x=(1+1+1)*(1+1+1)*z)";
-        String pakkumine = "J(a,b) := Ez(a=b*z & -(b=0)) Ax(J(x, 1+1+1) & -J(x, (1+1+1)*(1+1+1)))";
+        String vastus = "∃y(x=(1+1+1)*y)&¬∃z(x=(1+1+1)*(1+1+1)*z)";
+        String pakkumine = "J(a,b) := ∃z(a=b*z & ¬(b=0)) ∀x(J(x, 1+1+1) & ¬J(x, (1+1+1)*(1+1+1)))";
         Kontroll kontroll = new Kontroll(LoppValem.tagastaValem(pakkumine), LoppValem.tagastaValem(vastus));
         kontroll.eiOleSamavaarne();
     }
@@ -137,8 +137,8 @@ public class SisendOnKorrektne {
 
         erind.expect(ErinevIndiviidideArv.class);
         erind.expectMessage("Esitasid 4-kohalise predikaadi, ootasin aga 2-kohalist predikaati.");
-        String vastus = "EuEz((x=z*u) & Ew(y+w+1=z) & Et(y+t+1=u))";
-        String pakkumine = "EzEw(y + w = z & -(w=0)) & EaEb(y + b = a & -(a=0)) & x = z * a";
+        String vastus = "∃u∃z((x=z*u) & ∃w(y+w+1=z) & ∃t(y+t+1=u))";
+        String pakkumine = "∃z∃w(y + w = z & ¬(w=0)) & ∃a∃b(y + b = a & ¬(a=0)) & x = z * a";
         Kontroll kontroll = new Kontroll(LoppValem.tagastaValem(pakkumine), LoppValem.tagastaValem(vastus));
         kontroll.eiOleSamavaarne();
     }

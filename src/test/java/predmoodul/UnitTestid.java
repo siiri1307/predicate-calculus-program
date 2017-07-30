@@ -168,20 +168,20 @@ public class UnitTestid {
     @Test
     public void testVabuMuutujaid2() throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud, LekseriErind, ParseriErind {
 
-        assertEquals(2, LoppValem.tagastaValem("EuEz((x=z*u) & Ew(y+w+1=z) & Et(y+t+1=u))").getVabadMuutujad().size());
+        assertEquals(2, LoppValem.tagastaValem("∃u∃z((x=z*u) & ∃w(y+w+1=z) & ∃t(y+t+1=u))").getVabadMuutujad().size());
     }
 
     @Test
     public void testVabuMuutujaid0() throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud, LekseriErind, ParseriErind {
 
-        assertEquals(0, LoppValem.tagastaValem("S(a,b) := Ec(a=b+c & -(c=0)) AxAyEmEn(S(m,y) & S(n,y) -> x=m*n)").getVabadMuutujad().size());
-        assertEquals(0, LoppValem.tagastaValem("J(a,b) := Ez(a=b*z & -(b=0)) Ax(J(x, 1+1+1) & -J(x, (1+1+1)*(1+1+1)))").getVabadMuutujad().size());
+        assertEquals(0, LoppValem.tagastaValem("S(a,b) := ∃c(a=b+c & ¬(c=0)) ∀x∀y∃m∃n(S(m,y) & S(n,y) -> x=m*n)").getVabadMuutujad().size());
+        assertEquals(0, LoppValem.tagastaValem("J(a,b) := ∃z(a=b*z & ¬(b=0)) ∀x(J(x, 1+1+1) & ¬J(x, (1+1+1)*(1+1+1)))").getVabadMuutujad().size());
     }
 
     @Test
     public void testVabuMuutujaid1() throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud, LekseriErind, ParseriErind {
 
-        assertEquals(1, LoppValem.tagastaValem("Ey(x=(1+1+1)*y)&-Ez(x=(1+1+1)*(1+1+1)*z)").getVabadMuutujad().size());
+        assertEquals(1, LoppValem.tagastaValem("∃y(x=(1+1+1)*y)&¬∃z(x=(1+1+1)*(1+1+1)*z)").getVabadMuutujad().size());
     }
 
 

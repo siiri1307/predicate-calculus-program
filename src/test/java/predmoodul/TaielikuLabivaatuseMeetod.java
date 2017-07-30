@@ -58,9 +58,9 @@ public class TaielikuLabivaatuseMeetod {
     @Test
     public void testVaartustamineAbiPredikaadidKvantoritega() throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud, ErinevIndiviidideArv, LekseriErind, ParseriErind {
         String pakkumine = "" +
-                "P := Ex(x=1)" +
+                "P := ∃x(x=1)" +
                 "Q(x) := x = 0" +
-                "Q(0) v P";
+                "Q(0) ∨ P";
         String vastus = "y + 1 = y";
         Map vaartustused = new HashMap<>();
         Kontroll kontrollimine = new Kontroll(LoppValem.tagastaValem(pakkumine), LoppValem.tagastaValem(vastus));

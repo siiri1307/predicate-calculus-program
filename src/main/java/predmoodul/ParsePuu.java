@@ -236,7 +236,7 @@ public class ParsePuu {
                 else if(vaadeldavLaps instanceof PredParser.EksContext){
                     kvantorid.add(new ModifierEks(new Muutuja(vaadeldavLaps.getChild(1).getChild(0).getText().charAt(0))));
                 }
-                else if(vaadeldavLaps.getText().charAt(0) == '-'){
+                else if(vaadeldavLaps.getText().charAt(0) == '¬'){
                     kvantorid.add(new ModifierEitus());
                 }
             }

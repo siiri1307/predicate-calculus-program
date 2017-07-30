@@ -35,10 +35,10 @@ public class Yl2A {
     @Test(timeout=60000)
     public void onSamavaarneValjaArvutamine1() throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud, LekseriErind, ParseriErind, ErinevIndiviidideArv {
 
-        String sisendA = "T(x) := En(x = n * n)" + //x on täisruut
-                "EzEy((x = z * y) & (T(z) v T(y)))"; //4 kvantorit
-        String sisendB = "J(x,y) := Ek(x = k * y)" + //x jagub y'ga ehk y on x'i tegur
-                "Ez(J(x, z) & Ey(z = y * y))"; //3 kvantorit
+        String sisendA = "T(x) := ∃n(x = n * n)" + //x on täisruut
+                "∃z∃y((x = z * y) & (T(z) ∨ T(y)))"; //4 kvantorit
+        String sisendB = "J(x,y) := ∃k(x = k * y)" + //x jagub y'ga ehk y on x'i tegur
+                "∃z(J(x, z) & ∃y(z = y * y))"; //3 kvantorit
         //8 kvantorit
         Kontroll kontrollimine = new Kontroll(LoppValem.tagastaValem(sisendA), LoppValem.tagastaValem(sisendB));
         assertFalse(kontrollimine.eiOleSamavaarneIlmaErindita());
@@ -47,11 +47,11 @@ public class Yl2A {
     @Test(timeout=60000)
     public void onSamavaarneToesuspuu() throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud, LekseriErind, ParseriErind, ErinevIndiviidideArv {
 
-        String sisendA =  "T(x) := En(x = n * n)" + //x on täisruut
-                "J(x,y) := Ek(x = k * y)" +
-                "EzEy((x = z * y) & (T(z) v T(y)))";
+        String sisendA =  "T(x) := ∃n(x = n * n)" + //x on täisruut
+                "J(x,y) := ∃k(x = k * y)" +
+                "∃z∃y((x = z * y) & (T(z) ∨ T(y)))";
         String sisendB =
-                "Ez(J(x, z) & Ey(z = y * y))";
+                "∃z(J(x, z) & ∃y(z = y * y))";
         Tõesuspuu tp = konstrueeriPuu(sisendA + "~" + sisendB, false);
         assertEquals(true, tp.vaartustusedVastavaltEeldusele().isEmpty()); //hulk, mis sisaldab väärtustust, mil valem on väär.
         // Kontrollime, et see hulk on tühi, ehk ei leidu väärtustus, mil valem on väär
@@ -61,10 +61,10 @@ public class Yl2A {
     //hea näide - ei ole samaväärsed aga viga ei tule välja
     public void eiOleSamavaarneValjaArvutamine1() throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud, LekseriErind, ParseriErind, ErinevIndiviidideArv {
 
-        String sisendA = "T(x) := En(x = n * n)" + //x on täisruut
-                "EaEb(x = a * b) -> T(a) v T(b)"; //6 kvantorit
-        String sisendB = "J(x,y) := Ek(x = k * y)" + //x jagub y'ga ehk y on x'i tegur
-                "Ez(J(x, z) & Ey(z = y * y))"; //3 kvantorit
+        String sisendA = "T(x) := ∃n(x = n * n)" + //x on täisruut
+                "∃a∃b(x = a * b) -> T(a) ∨ T(b)"; //6 kvantorit
+        String sisendB = "J(x,y) := ∃k(x = k * y)" + //x jagub y'ga ehk y on x'i tegur
+                "∃z(J(x, z) & ∃y(z = y * y))"; //3 kvantorit
         //10 kvantorit
         Kontroll kontrollimine = new Kontroll(LoppValem.tagastaValem(sisendA), LoppValem.tagastaValem(sisendB));
         assertTrue(kontrollimine.eiOleSamavaarneIlmaErindita());
@@ -73,9 +73,9 @@ public class Yl2A {
     @Test(timeout=60000)
     public void eiOleSamavaarneToesuspuu1() throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud, LekseriErind, ParseriErind, ErinevIndiviidideArv {
 
-        String sisendA = "J(x,y) := Ek(x = k * y) T(x) := En(x = n * n) Ez(J(x, z) & Ey(z = y * y))"; //tõene
+        String sisendA = "J(x,y) := ∃k(x = k * y) T(x) := ∃n(x = n * n) ∃z(J(x, z) & ∃y(z = y * y))"; //tõene
         String sisendB =
-                "EaEb(x = a * b) -> T(a) v T(b)"; //väär
+                "∃a∃b(x = a * b) -> T(a) ∨ T(b)"; //väär
         Tõesuspuu tp = konstrueeriPuu(sisendA + "~" + sisendB, false);
         assertEquals(false, tp.vaartustusedVastavaltEeldusele().isEmpty()); //hulk, mis sisaldab väärtustust, mil valem on väär.
         // Kontrollime, et see hulk ei ole tühi, ehk leidub väärtustus, mil valem on väär
@@ -85,9 +85,9 @@ public class Yl2A {
     @Test()
     public void eiOleSamavaarneValjaArvutamine2() throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud, LekseriErind, ParseriErind, ErinevIndiviidideArv {
 
-        String sisendA = "EyEz((x = y*z) -> Ew(y = w* w))"; //3
-        String sisendB = "J(x,y) := Ek(x = k * y)" + //x jagub y'ga ehk y on x'i tegur
-                "Ez(J(x, z) & Ey(z = y * y))"; //3 kvantorit
+        String sisendA = "∃y∃z((x = y*z) -> ∃w(y = w* w))"; //3
+        String sisendB = "J(x,y) := ∃k(x = k * y)" + //x jagub y'ga ehk y on x'i tegur
+                "∃z(J(x, z) & ∃y(z = y * y))"; //3 kvantorit
         //7 kvantorit
         Kontroll kontrollimine = new Kontroll(LoppValem.tagastaValem(sisendA), LoppValem.tagastaValem(sisendB));
         assertTrue(kontrollimine.eiOleSamavaarne());
@@ -96,8 +96,8 @@ public class Yl2A {
     @Test(timeout=60000)
     public void eiOleSamavaarneToesuspuu2() throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud, LekseriErind, ParseriErind, ErinevIndiviidideArv {
 
-        String sisendA = "J(x,y) := Ek(x = k * y) Ez(J(x, z) & Ey(z = y * y))";
-        String sisendB = "EyEz((x = y*z) -> Ew(y = w* w))";
+        String sisendA = "J(x,y) := ∃k(x = k * y) ∃z(J(x, z) & ∃y(z = y * y))";
+        String sisendB = "∃y∃z((x = y*z) -> ∃w(y = w* w))";
         Tõesuspuu tp = konstrueeriPuu(sisendA + "~" + sisendB, false);
         assertEquals(false, tp.vaartustusedVastavaltEeldusele().isEmpty()); //hulk, mis sisaldab väärtustust, mil valem on väär.
         // Kontrollime, et see hulk ei ole tühi, ehk leidub väärtustus, mil valem on väär

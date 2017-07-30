@@ -217,7 +217,7 @@ public class Eks extends Valem implements Kvantor {
 
     @Override
     public String dot() {
-        return "E" + indiviidmuutuja + "(" + valem.dot() + ")";
+        return "∃" + indiviidmuutuja + "(" + valem.dot() + ")";
     }
 
     @Override
