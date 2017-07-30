@@ -191,9 +191,11 @@ public class TõesuspuuTipp {
         return vaartustused;
     }
 
-    public String dotFormaat(){
+    public String dotFormaat(String number){
 
-        String id = System.identityHashCode(this) + " [label=" + "\"" + this.getValem().dot() + " : " + Boolean.toString(this.tõeväärtus) +
+        String id = System.identityHashCode(this) + " [label=" + "\"" + this.getValem().dot() + " : " +
+                Boolean.toString(this.tõeväärtus) +
+                " NR: " + number + "" +
                 "\" color=\"" + (this.leidubVastuolu() ? "red" : "black") + "\""  + "]; \n";
 
         if(this.getVanem() != null){
