@@ -1,11 +1,17 @@
 package predmoodul.valemid;
 
+import predmoodul.kvantorid.Eks;
+import predmoodul.kvantorid.Iga;
+
 import java.util.*;
 
 /**
  * Created by siiri on 13/04/17.
  */
 public class Tõesuspuu {
+
+    private final static Map<TõesuspuuTipp, Integer> numbrid = new HashMap<>();
+    private int tootlemiseNo = 1; //mitmenda jarjekorrast välja võeti
 
     private final TõesuspuuTipp juurtipp;
 
@@ -32,17 +38,25 @@ public class Tõesuspuu {
         long algus = System.currentTimeMillis();
         long lopp = algus + 5*1000;
 
-        Queue<TõesuspuuTipp> jrk = new LinkedList<>();
+        Queue<NummerdatudTõesuspuuTipp> jrk = new PriorityQueue<>(new TippudeVordleja());
 
         //Set<TõesuspuuTipp> eemaldatudTipud = new HashSet<>();
 
-        jrk.add(juurtipp);
+        jrk.add(new NummerdatudTõesuspuuTipp(juurtipp));
 
         while(!jrk.isEmpty() ){ // && System.currentTimeMillis() < lopp){
-
-            TõesuspuuTipp tipp = jrk.remove();
+            if (jrk.size() % 100 == 0) {
+                System.out.printf("Järjekord on %d \n", jrk.size());
+            }
+            TõesuspuuTipp tipp = jrk.remove().getTipp();
+            numbrid.put(tipp, tootlemiseNo++);
             //System.out.println("Eemaldasin tipu: " + tipp);
             //eemaldatudTipud.add(tipp);
+
+//            if((tipp.getValem() instanceof Iga && tipp.getTõeväärtus()) || (tipp.getValem() instanceof Eks && !tipp.getTõeväärtus())){
+//                lisaJärjekorda(jrk, tipp);
+//                continue;
+//            }
 
             if(tipp.sisaldabVastuolu()){ //kui tipp annab vastuolu, siis ei lisa teda töödeldavate tippude järjekorda
                 continue;
@@ -52,7 +66,15 @@ public class Tõesuspuu {
                 continue;
             }
 
+
             Set<Termikuulaja> kuulajad = tipp.getKuulajad(); //tagasta tipu ja tema vanemate Termikuulajad. Eesmärk leida: ∃xF(x) = 0, ∀xF(x) = 1.
+
+            /*Collection<TõesuspuuTipp> lehed = tipp.getLehed();
+            Set<Muutuja> tipuAllpuudeMuutujad = new HashSet<Muutuja>();
+            for(TõesuspuuTipp leht : lehed){
+                tipuAllpuudeMuutujad.addAll(leht.getTermid());
+            }*/
+
             Set<Muutuja> harusEsinenudTermid = tipp.getTermid(); //vabad muutujad
             Set<Muutuja> uuedTermid = new HashSet<>(tipp.getTermid());
             uuedTermid.removeAll(tipp.getVanem() == null ? tipp.getValem().getVabadMuutujad() : tipp.getVanem().getTermid()); //jäta välja vanema termid
@@ -117,13 +139,6 @@ public class Tõesuspuu {
                 continue;
             }
 
-//            for(TõesuspuuTipp tõesuspuuTipp : alampuud){
-//                System.out.println("Tipp on: " + tõesuspuuTipp);
-//                System.out.println("Tipu vanem on: " + tipp);
-//                System.out.println("-------------------");
-//                lisaJärjekorda(jrk, tõesuspuuTipp); //rekursiivne meetod, kuna alampuu võib sisaldada tippu, millele on omakorda meetodis 'reegel' seatud laps
-//            }
-
             for (TõesuspuuTipp leht : tipp.getLehed()) {
                 if(leht.sisaldabVastuolu()){
                     continue;
@@ -154,9 +169,9 @@ public class Tõesuspuu {
         return leht.sama(uusLeht) || sisaldabLehte(leht.getVanem(), uusLeht);
     }
 
-    private void lisaJärjekorda(Queue<TõesuspuuTipp> jrk, TõesuspuuTipp tõesuspuuTipp) {
+    private void lisaJärjekorda(Queue<NummerdatudTõesuspuuTipp> jrk, TõesuspuuTipp tõesuspuuTipp) {
 
-        jrk.add(tõesuspuuTipp);
+        jrk.add(new NummerdatudTõesuspuuTipp(tõesuspuuTipp));
 
         for (TõesuspuuTipp tipp : tõesuspuuTipp.getLapsed()) {
             lisaJärjekorda(jrk, tipp);
@@ -199,7 +214,7 @@ public class Tõesuspuu {
 
         while(!järjekord.isEmpty()){
             TõesuspuuTipp puuTipp = järjekord.remove();
-            sisend.append(puuTipp.dotFormaat());
+            sisend.append(puuTipp.dotFormaat(numbrid.getOrDefault(puuTipp, -1).toString()));
             if(puuTipp.getVasakLaps() != null){
                 järjekord.add(puuTipp.getVasakLaps());
             }
@@ -222,5 +237,100 @@ public class Tõesuspuu {
     public String toString() {
 
         return "Tõesuspuu{}";
+    }
+
+    private static class TippudeVordleja implements Comparator<NummerdatudTõesuspuuTipp> {
+        @Override
+        public int compare(NummerdatudTõesuspuuTipp o1, NummerdatudTõesuspuuTipp o2) {
+            TõesuspuuTipp t1 = o1.getTipp();
+            TõesuspuuTipp tother = o2.getTipp();
+            if (peabHiljemTootlema(t1) && (peabHiljemTootlema(tother))) {
+                return o1.getNumber() < o2.getNumber() ? -1 : 1;
+            }
+            if (peabHiljemTootlema(t1)) {
+                return 1; //o1 > o2
+            }
+            //kõrgem prioriteet = väiksem
+            if (peabHiljemTootlema(tother)) {
+                return -1; //o1 < o2
+            }
+
+            return jarjestusHargemisePohjal(o1, o2);
+
+        }
+
+        private int jarjestusHargemisePohjal(NummerdatudTõesuspuuTipp nt1, NummerdatudTõesuspuuTipp nt2){
+            TõesuspuuTipp t1 = nt1.getTipp();
+            TõesuspuuTipp t2 = nt2.getTipp();
+            if(peabHiljemTootlemaHargnemiseTottu(t1) && peabHiljemTootlemaHargnemiseTottu(t2)){
+                return nt1.getNumber() < nt2.getNumber() ? -1 : 1;
+            }
+            if(peabHiljemTootlemaHargnemiseTottu(t1)){
+                return 1;
+            }
+            if(peabHiljemTootlemaHargnemiseTottu(t2)){
+                return -1;
+            }
+            return nt1.getNumber() < nt2.getNumber() ? -1 : 1;
+        }
+
+        private boolean peabHiljemTootlemaHargnemiseTottu(TõesuspuuTipp t1) {
+
+
+            return vaarKonj(t1) || toeneDisj(t1) || toeneImpl(t1) || toeneEkv(t1) || vaarEkv(t1);
+        }
+
+        private boolean vaarEkv(TõesuspuuTipp t1) {
+            return t1.getValem() instanceof Ekvivalents && !t1.getTõeväärtus();
+        }
+
+        private boolean toeneEkv(TõesuspuuTipp t1) {
+            return t1.getValem() instanceof Ekvivalents && t1.getTõeväärtus();
+        }
+
+        private boolean toeneImpl(TõesuspuuTipp t1) {
+            return t1.getValem() instanceof Implikatsioon && t1.getTõeväärtus();
+        }
+
+        private boolean toeneDisj(TõesuspuuTipp t1) {
+            return t1.getValem() instanceof Disjunktsioon && t1.getTõeväärtus();
+        }
+
+        private boolean vaarKonj(TõesuspuuTipp t1) {
+            return t1.getValem() instanceof Konjuktsioon && !t1.getTõeväärtus();
+        }
+
+
+        private boolean peabHiljemTootlema(TõesuspuuTipp o2) {
+            return leidubVäär(o2) || igaToene(o2);
+        }
+
+        private boolean igaToene(TõesuspuuTipp o1) {
+            return o1.getValem() instanceof Iga && o1.getTõeväärtus();
+        }
+
+        private boolean leidubVäär(TõesuspuuTipp o2) {
+            return o2.getValem() instanceof Eks && !o2.getTõeväärtus();
+        }
+    }
+
+    private static class NummerdatudTõesuspuuTipp {
+
+        private static long globaalneNumber = 0;
+
+        private final TõesuspuuTipp tipp;
+        private final long number = globaalneNumber++;
+
+        public NummerdatudTõesuspuuTipp(TõesuspuuTipp tipp) {
+            this.tipp = tipp;
+        }
+
+        public TõesuspuuTipp getTipp() {
+            return tipp;
+        }
+
+        public long getNumber() {
+            return number;
+        }
     }
 }
