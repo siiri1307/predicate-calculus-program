@@ -8,6 +8,8 @@ import java.util.List;
  */
 public class Muutuja extends AstNode {
 
+    private static int mNumber = 0;
+
     private Character tahis;
     private int jarjeNumber;
     private String predTahis;
@@ -90,5 +92,9 @@ public class Muutuja extends AstNode {
     @Override
     public String toString() {
         return tahis + Integer.toString(jarjeNumber);
+    }
+
+    public static int uusMNumber() {
+        return mNumber++;
     }
 }
