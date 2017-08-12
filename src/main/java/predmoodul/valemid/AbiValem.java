@@ -75,6 +75,13 @@ public class AbiValem extends Valem {
     }
 
     @Override
+    public Set<Muutuja> getSeotudMuutujad() {
+
+        return valem.getSeotudMuutujad();
+    }
+
+
+    @Override
     public int getKvantoriteArv() {
         return valem.getKvantoriteArv();
     }
@@ -110,15 +117,34 @@ public class AbiValem extends Valem {
         return new HashSet<Muutuja>(argumendid).equals(valem.getVabadMuutujad());
     }
 
+    public Set<Muutuja> getValemistPuuduvadTahiseMuutujad() {
+
+        Set<Muutuja> muutujadTahises = new HashSet<>(argumendid);
+        Set<Muutuja> muutujadValemis = new HashSet<>(valem.getVabadMuutujad());
+        muutujadTahises.removeAll(muutujadValemis);
+
+        return muutujadTahises;
+    }
+
+    public Set<Muutuja> getTahisestPuuduvadValemiVabadMuutujad() {
+
+        Set<Muutuja> muutujadTahises = new HashSet<>(argumendid);
+        Set<Muutuja> muutujadValemis = new HashSet<>(valem.getVabadMuutujad());
+
+        muutujadValemis.removeAll(muutujadTahises);
+
+        return muutujadValemis;
+    }
+
     @Override
     public String dot() {
         return "Abi(" + valem.dot() + ")";
     }
 
     @Override
-    public void uusKonstantSumbol(Muutuja uusSumbol, Muutuja vanaSumbol) {
+    public void uusKonstantSumbol(Muutuja uusSumbol, Muutuja vanaSumbol) { //, boolean vahetaKvantoriSees
 
-        valem.uusKonstantSumbol(uusSumbol, vanaSumbol);
+        valem.uusKonstantSumbol(uusSumbol, vanaSumbol);//, vahetaKvantoriSees
     }
 
     @Override

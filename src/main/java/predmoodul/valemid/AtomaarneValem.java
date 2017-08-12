@@ -56,12 +56,17 @@ public class AtomaarneValem extends Valem {
     public Set<Muutuja> getVabadMuutujad() {
         Set<Muutuja> s = new HashSet<>();
         for (IndiviidTerm id : getIndiviidTermid()) {
-
             s.add(id.getTahis());
-
         }
         return s;
     }
+
+    @Override
+    public Set<Muutuja> getSeotudMuutujad() {
+
+        return new HashSet<>();
+    }
+
 
     @Override
     public int getKvantoriteArv() {
@@ -101,7 +106,7 @@ public class AtomaarneValem extends Valem {
     }*/
 
     @Override
-    public void uusKonstantSumbol(Muutuja uusSumbol, Muutuja vanaSumbol) {
+    public void uusKonstantSumbol(Muutuja uusSumbol, Muutuja vanaSumbol) { //, boolean vahetaKvantoriSees
 
         vasakTerm.uusKonstantSumbol(uusSumbol, vanaSumbol);
         paremTerm.uusKonstantSumbol(uusSumbol, vanaSumbol);

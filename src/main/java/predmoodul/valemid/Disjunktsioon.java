@@ -60,6 +60,18 @@ public class Disjunktsioon extends Valem {
     }
 
     @Override
+    public Set<Muutuja> getSeotudMuutujad() {
+
+        Set<Muutuja> seotud = new HashSet<>();
+
+        seotud.addAll(vasakLaps.getSeotudMuutujad());
+        seotud.addAll(paremLaps.getSeotudMuutujad());
+
+        return seotud;
+    }
+
+
+    @Override
     public int getKvantoriteArv() {
         return vasakLaps.getKvantoriteArv() + paremLaps.getKvantoriteArv();
     }
@@ -114,10 +126,10 @@ public class Disjunktsioon extends Valem {
     }
 
     @Override
-    public void uusKonstantSumbol(Muutuja uusSumbol, Muutuja vanaSumbol) {
+    public void uusKonstantSumbol(Muutuja uusSumbol, Muutuja vanaSumbol) {//, boolean vahetaKvantoriSees
 
-        vasakLaps.uusKonstantSumbol(uusSumbol, vanaSumbol);
-        paremLaps.uusKonstantSumbol(uusSumbol, vanaSumbol);
+        vasakLaps.uusKonstantSumbol(uusSumbol, vanaSumbol); //, vahetaKvantoriSees
+        paremLaps.uusKonstantSumbol(uusSumbol, vanaSumbol); //, vahetaKvantoriSees
     }
 
     @Override

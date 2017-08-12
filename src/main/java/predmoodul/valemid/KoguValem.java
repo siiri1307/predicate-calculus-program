@@ -59,6 +59,19 @@ public class KoguValem extends Valem {
     }
 
     @Override
+    public Set<Muutuja> getSeotudMuutujad() {
+
+        Set<Muutuja> seotud = new HashSet<>();
+
+        for(Valem valem : children){
+            seotud.addAll(valem.getSeotudMuutujad());
+        }
+
+        return seotud;
+    }
+
+
+    @Override
     public int getKvantoriteArv() {
         return children.get(children.size()-1).getKvantoriteArv();
     }
@@ -94,8 +107,8 @@ public class KoguValem extends Valem {
     }
 
     @Override
-    public void uusKonstantSumbol(Muutuja uusSumbol, Muutuja vanaSumbol) {
-        children.get(children.size()-1).uusKonstantSumbol(uusSumbol, vanaSumbol);
+    public void uusKonstantSumbol(Muutuja uusSumbol, Muutuja vanaSumbol) { //, boolean vahetaKvantoriSees
+        children.get(children.size()-1).uusKonstantSumbol(uusSumbol, vanaSumbol); //, vahetaKvantoriSees
     }
 
     @Override

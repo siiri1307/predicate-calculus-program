@@ -97,6 +97,13 @@ public class AtomaarneValemPredSümboliga extends Valem {
     }
 
     @Override
+    public Set<Muutuja> getSeotudMuutujad() {
+
+        return valem.getSeotudMuutujad();
+    }
+
+
+    @Override
     public int getKvantoriteArv() {
         return valem.getKvantoriteArv();
     }
@@ -140,7 +147,7 @@ public class AtomaarneValemPredSümboliga extends Valem {
     }*/
 
     @Override
-    public void uusKonstantSumbol(Muutuja uusSumbol, Muutuja vanaSumbol) {
+    public void uusKonstantSumbol(Muutuja uusSumbol, Muutuja vanaSumbol) { //, boolean vahetaKvantoriSees
 
         for(TermiPaar tp : termArgumendid){
             //if(tp.getTahis().getTahis() == 'x'){
@@ -148,7 +155,7 @@ public class AtomaarneValemPredSümboliga extends Valem {
             //}
         }
 
-        valem.uusKonstantSumbol(uusSumbol, vanaSumbol);
+        valem.uusKonstantSumbol(uusSumbol, vanaSumbol); //, vahetaKvantoriSees
     }
 
     @Override
