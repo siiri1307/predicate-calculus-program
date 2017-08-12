@@ -5,15 +5,15 @@ package predmoodul.erindid;
  */
 public class AbiValemEiOleDefineeritud extends Throwable {
 
-    private String predSymbol;
+    private String sonum;
 
-    public AbiValemEiOleDefineeritud(String symbol) {
-        this.predSymbol = symbol;
+
+    public AbiValemEiOleDefineeritud(String symbol, int argumentideArv) {
+       this.sonum = argumentideArv + "-kohaline abipredikaat predikaatsümboliga " + symbol + " ei ole defineeritud.";
     }
-
 
     @Override
     public String getMessage(){
-        return "Abivalem predikaatsümboliga " + predSymbol + " ei ole defineeritud.";
+        return sonum;
     }
 }

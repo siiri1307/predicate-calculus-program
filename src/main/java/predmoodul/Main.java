@@ -1,9 +1,12 @@
-package predmoodul.valemid;
+package predmoodul;
 
 import org.antlr.v4.runtime.tree.ParseTree;
+import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.webapp.WebAppContext;
 import predmoodul.Kontroll;
 import predmoodul.ParsePuu;
 import predmoodul.erindid.*;
+import predmoodul.valemid.*;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -23,6 +26,27 @@ import java.util.Map;
 public class Main {
 
     public static void main(String[] args) throws Exception, VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud, ErinevIndiviidideArv, LekseriErind, ParseriErind {
+
+        String webPort = System.getenv("PORT");
+        if (webPort == null || webPort.isEmpty()) {
+                webPort = "8080";
+            }
+
+        final Server server = new Server(Integer.valueOf(webPort));
+        final WebAppContext root = new WebAppContext();
+
+        root.setContextPath("/");
+
+        root.setParentLoaderPriority(true);
+
+        final String webappDirLocation = "src/main/webapp/";
+        root.setDescriptor(webappDirLocation + "/WEB-INF/web.xml");
+        root.setResourceBase(webappDirLocation);
+
+        server.setHandler(root);
+
+        server.start();
+        server.join();
 
         Kontroll kontroll;
 
@@ -62,10 +86,11 @@ public class Main {
 
 
         //Predikaatsümbol ei ole defineeritud
-
-        /*kontroll = new Kontroll(tagastaValem("P(x,y) := Ez(x = y * z) & -(y=0) J(x, 1+1+1) & -J(x, 1+1+1+1+1+1+1+1+1)"), tagastaValem("Ey(x=(1+1+1)*y) & -Ez(x=(1+1+1)*(1+1+1)*z)"));
+        /*
+        kontroll = new Kontroll(tagastaValem("J(x,y) := ∃z(x = y * z) & ¬(y=0) P(x, 1+1+1) & ¬J(x, 1+1+1+1+1+1+1+1+1)"), tagastaValem("∃y(x=(1+1+1)*y) &  ¬∃z(x=(1+1+1)*(1+1+1)*z)"));
         boolean toevaartus = kontroll.eiOleSamavaarne();
-        System.out.println("Valemid ei ole samaväärsed: " + toevaartus);*/
+        System.out.println("Valemid ei ole samaväärsed: " + toevaartus);
+        */
 
         //kasuta eristavaid sümboleid, nt kuupäev või mud karakterid, stringi töötlus
 
@@ -77,7 +102,7 @@ public class Main {
         //ei ole viga, nt H(x,y) := x^2 on aktsept. Viga on väljakutsel erinevate argumentide arvuga.
 
         /*
-        kontroll = new Kontroll(tagastaValem("J(x,y,z) := Ez(x = y * z) & -(y=0) J(x, 1+1+1) & -J(x, 1+1+1+1+1+1+1+1+1)"), tagastaValem("Ey(x=(1+1+1)*y) & -Ez(x=(1+1+1)*(1+1+1)*z)"));
+        kontroll = new Kontroll(tagastaValem("J(x,y,z) := ∃z(x = y * z) & ¬(y=0) J(x, 1+1+1) & ¬J(x, 1+1+1+1+1+1+1+1+1)"), tagastaValem("∃y(x=(1+1+1)*y) & ¬∃z(x=(1+1+1)*(1+1+1)*z)"));
         boolean toevaartus = kontroll.eiOleSamavaarne();
         System.out.println("Valemid ei ole samaväärsed: " + toevaartus);
         */
@@ -88,11 +113,10 @@ public class Main {
 
         //Valemis on vabu muutujaid, mis ei ole tähises kirjas
         /*
-        kontroll = new Kontroll(tagastaValem("J(x,y) := Ez(x = z * z) J(x, 1+1+1) & -J(x, 1+1+1+1+1+1+1+1+1)"), tagastaValem("Ey(x=(1+1+1)*y) & -Ez(x=(1+1+1)*(1+1+1)*z)"));
+        kontroll = new Kontroll(tagastaValem("J(x,y) := ∃z(x = y * z) & ¬(k=0) J(x, 1+1+1) & ¬J(x, 1+1+1+1+1+1+1+1+1)"), tagastaValem("∃y(x=(1+1+1)*y) & ¬∃z(x=(1+1+1)*(1+1+1)*z)"));
         boolean toevaartus = kontroll.eiOleSamavaarne();
         System.out.println("Valemid ei ole samaväärsed: " + toevaartus);
-
-    */
+        */
 
 
         //Valemid ei ole samaväärsed
@@ -178,8 +202,8 @@ public class Main {
         //Tõesuspuu meetod: samaväärsed, kui tippude arv järjekorras on väga suur
         //x on kahe y-st suurema arvu korrutis
 
-        String sisendA = "Q(x,y) := Ed(y+d=x & -(d=0)) EzEw(Q(w,y) & Q(z,y) & x= z*w)" ;
-        String sisendB = "EuEz((x=z*u) & Ew(y+w+1=z) & Et(y+t+1=u))";
+        String sisendA = "∃y(x=(1+1+1)*y) & ¬∃z(x=(1+1+1)*(1+1+1)*z)" ;
+        String sisendB = "∃y(x=(1+1+1)*y) & ¬∃z(x=(1+1+1+1+1+1+1+1+1)*z)";
         ParsePuu pak = new ParsePuu(sisendA + "~" + sisendB);
         ParseTree pp = pak.looParsePuu();
         AstNode asp = pak.createAST(pp, new HashMap<>());
@@ -189,20 +213,68 @@ public class Main {
         tõesuspuu.looPuu();
         //System.out.println("Väärtustused: " + tõesuspuu.vaartustusedVastavaltEeldusele());
         prindiPuu(tõesuspuu);
-
-
         //analüüsi esimesena valemit, mis toob sisse uue sümboli
 
 
 
+        /*
+        //String sisendA = "∃u∃z((x = z*u) & ∃w(y + w + 1 = z) & ∃t(y + t +1 = u))" ;
+        String sisendA = "∃u∃z(u = z)" ;
+        //String sisendB = "S(x, y) := ∃z(x + z = y & ¬(z = 0 )) J(x, y , z ) := x = y * z & ¬(y = 0) ∀z∀w(S(z, y ) & S (w, y) -> ∃xJ(x, z , w))"; //Fredi A
+        //String sisendB = "∃n∃m((x=(y+n)*(y+m))& ¬(m=0) & ¬(n=0))";
+        String sisendB = "∃x∃y(1=0 & 0=0 & ∃w(y+x=w))";
+        //String sisendB = "∃z(x = (y+z) * (y+z) & ¬(z=0))"; //sellega lõpetab töö. Geio I.
+        ParsePuu pak = new ParsePuu(sisendB + "~" + sisendA);
+        ParseTree pp = pak.looParsePuu();
+        AstNode asp = pak.createAST(pp, new HashMap<>());
+
+        System.out.println(asp.toString());
+        Tõesuspuu tõesuspuu = Tõesuspuu.looTõesuspuu((Valem)asp.getChildren().get(asp.getChildren().size()-1), false);
+        tõesuspuu.looPuu();
+        //System.out.println("Väärtustused: " + tõesuspuu.vaartustusedVastavaltEeldusele());
+        prindiPuu(tõesuspuu);
+        */
 
         //Files.copy(new ByteArrayInputStream(
                 //("graph graphname { " + tõesuspuu.dot() + "}").getBytes(StandardCharsets.UTF_8)), Paths.get("/tmp","toesuspuu2.dot"), StandardCopyOption.REPLACE_EXISTING);
         //System.out.println(((Valem)(ast.getChildren().get(ast.getChildren().size()-1))).getVabadMuutujad());
         //System.out.println(((AbiValem)(ast.getChildren().get(0))).vabadeMuutujateEsinemineKorrektne());
 
+        /*
+        Sisend sisend = new Sisend("R(x,y) := ∃d(y+d=x & ¬(d=0)) ∃z∃w(Q(w,y) & Q(z,y) & x= z*w)",
+                "T(x,y):=∃k(x = y + k) ∃u∃z((x=z*u) & ∃w(y+w+1=z) & ∃t(y+t+1=u))");
+        //sisend.liigutaPakkumiseAbidefintsioonidALgusesse();
+        System.out.println(sisend.getOigeVastus());
+        sisend.asendaOigesVastusesPredtahised();
+        System.out.println(sisend.getOigeVastus());
+        //System.out.println(sisend.getAbidefinitsioonid(sisend.antlriParser(sisend.getPakkumine())));
+        //System.out.println(sisend);*/
 
 
+        /*
+        kontroll = new Kontroll(tagastaValem("P := jagub 3ga Q := jagub 9ga\n" +
+                "∀x( P(x)& ¬Q(x) )"),
+                tagastaValem("∃y(x = y + y + y) & ¬∃z(x = z + z + z + z + z + z + z + z + z)"));
+        boolean toevaartus = kontroll.eiOleSamavaarne();
+        System.out.println("Valemid ei ole samaväärsed: " + toevaartus);
+        if(toevaartus){
+            System.out.println(kontroll.kontraNaideStringina());
+        }
+        */
+
+        /*
+        String sisendA = "F(x):=x=1 G:=1=0 ∀x(F(x)->G)";
+        String sisendB = "∃xF(x)->G";
+        ParsePuu pak = new ParsePuu("P(x,y) := x+1=y ∀x∃yP(x, y)");
+        ParseTree pp = pak.looParsePuu();
+        AstNode asp = pak.createAST(pp, new HashMap<>());
+
+        System.out.println(asp.toString());
+        Tõesuspuu tõesuspuu = Tõesuspuu.looTõesuspuu((Valem)asp.getChildren().get(asp.getChildren().size()-1), true);
+        tõesuspuu.looPuu();
+        //System.out.println("Väärtustused: " + tõesuspuu.vaartustusedVastavaltEeldusele());
+        prindiPuu(tõesuspuu);
+        */
 
     }
 
