@@ -91,7 +91,7 @@ public class Muutuja extends AstNode {
 
     @Override
     public String toString() {
-        return tahis + Integer.toString(jarjeNumber);
+        return tahis + Integer.toString(jarjeNumber) + predTahis;
     }
 
     public static int uusMNumber() {
