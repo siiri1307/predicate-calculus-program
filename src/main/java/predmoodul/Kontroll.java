@@ -19,6 +19,7 @@ public class Kontroll {
     private Valem vastus;
     private Valem ekvivalentsiValem;
     private Map<Muutuja, Double> vaartustused;
+    private boolean eiOleSamavaarne;
 
     public Kontroll(Valem pakkumine, Valem vastus) {
         this.pakkumine = pakkumine;
@@ -32,22 +33,44 @@ public class Kontroll {
         this.vaartustused = new HashMap<>();
     }*/
 
+    public boolean kontrolliIndiviidideArvuValemites(Set<Muutuja> pakkumiseVabadMuutujad, Set<Muutuja> oigeVabadMuutujad) throws ErinevIndiviidideArv {
+
+        int indiviidideArvPakkumine = pakkumiseVabadMuutujad.size();
+        int indiviidideArvOige = oigeVabadMuutujad.size();
+
+        if(indiviidideArvPakkumine != indiviidideArvOige){
+            throw new ErinevIndiviidideArv(indiviidideArvPakkumine, indiviidideArvOige, oigeVabadMuutujad);
+        }
+        else{
+            for(Muutuja m : oigeVabadMuutujad){
+                if(!pakkumiseVabadMuutujad.contains(m)){
+                    throw new ErinevIndiviidideArv(m);
+                }
+            }
+        }
+
+        return true;
+    }
+
     public boolean eiOleSamavaarne() throws ErinevIndiviidideArv {
 
-        int indiviidideArvPakkumine = pakkumine.getVabadMuutujad().size();
-        int indiviidideArvVastus = vastus.getVabadMuutujad().size();
+        //int indiviidideArvPakkumine = pakkumine.getVabadMuutujad().size();
+        //int indiviidideArvVastus = vastus.getVabadMuutujad().size();
 
-        if(indiviidideArvPakkumine != indiviidideArvVastus) {
+        kontrolliIndiviidideArvuValemites(pakkumine.getVabadMuutujad(), vastus.getVabadMuutujad());
+
+        /*if(indiviidideArvPakkumine != indiviidideArvVastus) {
             throw new ErinevIndiviidideArv(indiviidideArvPakkumine, indiviidideArvVastus);
-        }
+        }*/
 
         ekvivalentsiValem = moodustaEkvivalentsiValem(pakkumine, vastus);
         Valem valemVabadeMuutujateta = seoVabadMuutujad(ekvivalentsiValem);
 
         int kvantoriteArv = valemVabadeMuutujateta.getKvantoriteArv();
         double hulk = maxVaartusVastavaltKvantoritele(kvantoriteArv);
+        eiOleSamavaarne = !valemVabadeMuutujateta.vaartusta(vaartustused, hulk);
 
-        return !valemVabadeMuutujateta.vaartusta(vaartustused, hulk);
+        return eiOleSamavaarne;
     }
 
     public boolean eiOleSamavaarneIlmaErindita() throws ErinevIndiviidideArv { //see meetod on mõeldud väärtuste väljarvutamise testimiseks - see ei võta arvesse oodatavat predikaatide arvu
@@ -56,7 +79,17 @@ public class Kontroll {
         Valem valemVabadeMuutujateta = seoVabadMuutujad(ekvivalentsiValem);
         int kvantoriteArv = valemVabadeMuutujateta.getKvantoriteArv();
         double hulk = maxVaartusVastavaltKvantoritele(kvantoriteArv);
+        eiOleSamavaarne = !valemVabadeMuutujateta.vaartusta(vaartustused, hulk);
+
         return !valemVabadeMuutujateta.vaartusta(vaartustused, hulk);
+    }
+
+    public Valem getPakkumine() {
+        return pakkumine;
+    }
+
+    public Valem getVastus() {
+        return vastus;
     }
 
     private double maxVaartusVastavaltKvantoritele(int kvantoriteArv) {
@@ -86,10 +119,13 @@ public class Kontroll {
 
         Set<Muutuja> vabadMuutujad = vastus.getVabadMuutujad();
 
-        for(Muutuja ch : vabadMuutujad){
+        if(eiOleSamavaarne){
 
-            if(vaartustused.containsKey(ch)){
-                kontramudel.put(ch.getTahis(), vaartustused.get(ch).intValue()); //seesmiselt hoitakse muutujat kujul tähis + nr, väljastatakse aga algne vaba muutuja
+            for(Muutuja ch : vabadMuutujad){
+
+                if(vaartustused.containsKey(ch)){
+                    kontramudel.put(ch.getTahis(), vaartustused.get(ch).intValue()); //seesmiselt hoitakse muutujat kujul tähis + nr, väljastatakse aga algne vaba muutuja
+                }
             }
         }
 
@@ -104,8 +140,14 @@ public class Kontroll {
         //boolean tudengiVastuseToevaartus = pakkumine.vaartusta(vaartustused);
         //boolean oigeVastuseToevaartus = vastus.vaartusta(vaartustused);
 
-        String infoTudengile = "Sinu vastus on väärtustusel " + kontramudel + " " + ((Ekvivalents)ekvivalentsiValem).getVasakuToevaartus() +
-                ", aga peaks olema " + ((Ekvivalents)ekvivalentsiValem).getParemaToevaartus();
+        String infoTudengile = new String();
+
+        if(eiOleSamavaarne){
+
+            infoTudengile = "Sinu vastus on väärtustusel " + kontramudel + " " + ((Ekvivalents)ekvivalentsiValem).getVasakuToevaartus() +
+                    ", aga peaks olema " + ((Ekvivalents)ekvivalentsiValem).getParemaToevaartus() + ".";
+        }
+
 
         return infoTudengile;
     }
