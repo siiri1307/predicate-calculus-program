@@ -49,6 +49,13 @@ public class Eitus extends Valem implements Kvantor {
     }
 
     @Override
+    public Set<Muutuja> getSeotudMuutujad() {
+
+        return valem.getSeotudMuutujad();
+    }
+
+
+    @Override
     public int getKvantoriteArv() {
         return valem.getKvantoriteArv();
     }
@@ -92,8 +99,8 @@ public class Eitus extends Valem implements Kvantor {
     }
 
     @Override
-    public void uusKonstantSumbol(Muutuja uusSumbol, Muutuja vanaSumbol) {
-        valem.uusKonstantSumbol(uusSumbol, vanaSumbol);
+    public void uusKonstantSumbol(Muutuja uusSumbol, Muutuja vanaSumbol) { //, boolean vahetaKvantoriSees
+        valem.uusKonstantSumbol(uusSumbol, vanaSumbol); //, vahetaKvantoriSees
     }
 
     @Override

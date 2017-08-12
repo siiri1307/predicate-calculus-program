@@ -78,6 +78,16 @@ public class Eks extends Valem implements Kvantor {
     }
 
     @Override
+    public Set<Muutuja> getSeotudMuutujad() {
+
+        Set<Muutuja> valemiSeotudMuutujad = valem.getSeotudMuutujad();
+        valemiSeotudMuutujad.add(indiviidmuutuja);
+
+        return valemiSeotudMuutujad;
+    }
+
+
+    @Override
     public int getKvantoriteArv() {
         return 1 + valem.getKvantoriteArv();
     }
@@ -101,7 +111,7 @@ public class Eks extends Valem implements Kvantor {
             puusEsinenudTermid.add(suvalineSumbol);
 
             Valem valemiKoopia = this.valem.koopia();
-            valemiKoopia.uusKonstantSumbol(suvalineSumbol, indiviidmuutuja);
+            valemiKoopia.uusKonstantSumbol(suvalineSumbol, indiviidmuutuja);//, false
             TõesuspuuTipp laps = new TõesuspuuTipp(valemiKoopia, true);
 
             //kuulajate loogika
@@ -121,7 +131,7 @@ public class Eks extends Valem implements Kvantor {
             if(harusEsinenudTermid.isEmpty()){ //ühtegi termi harus ei esine; eeldame, et mingi element on alati olemas, sest põhihulk ei saa olla tühi
                 Muutuja term = new Muutuja('m', Muutuja.uusMNumber());
                 Valem valemiKoopia = this.valem.koopia();
-                valemiKoopia.uusKonstantSumbol(term, indiviidmuutuja);
+                valemiKoopia.uusKonstantSumbol(term, indiviidmuutuja); //, false
                 TõesuspuuTipp laps = new TõesuspuuTipp(valemiKoopia, false);
                 tõesuspuuTipud.add(laps);
                 puusEsinenudTermid.add(term);
@@ -207,7 +217,7 @@ public class Eks extends Valem implements Kvantor {
                 @Override
                 public TõesuspuuTipp kuulaKonstantSumbolit(Muutuja c) {
                     Valem koopia = valem.koopia();
-                    koopia.uusKonstantSumbol(c, indiviidmuutuja);
+                    koopia.uusKonstantSumbol(c, indiviidmuutuja);//, false
                     return new TõesuspuuTipp(koopia, false);
                 }
             });
@@ -221,11 +231,18 @@ public class Eks extends Valem implements Kvantor {
     }
 
     @Override
-    public void uusKonstantSumbol(Muutuja uusSumbol, Muutuja vanaSumbol) {
-        if (vanaSumbol.equals(getIndiviidMuutuja())) {
+    public void uusKonstantSumbol(Muutuja uusSumbol, Muutuja vanaSumbol) { //, boolean vahetaKvantoriSees
+        if(vanaSumbol.equals(getIndiviidMuutuja()) ) {
             return;
         }
-        valem.uusKonstantSumbol(uusSumbol, vanaSumbol);
+            /*if(!vahetaKvantoriSees) {
+                return;
+            }
+            else {
+                vahetaKvantoriSees = false;
+            }
+        }*/
+        valem.uusKonstantSumbol(uusSumbol, vanaSumbol); //, vahetaKvantoriSees
     }
 
     @Override
