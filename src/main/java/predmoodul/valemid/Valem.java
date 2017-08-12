@@ -23,13 +23,15 @@ public abstract class Valem extends AstNode {
 
     public abstract Set<Muutuja> getVabadMuutujad();
 
+    public abstract Set<Muutuja> getSeotudMuutujad();
+
     public abstract int getKvantoriteArv();
 
     public abstract List<TõesuspuuTipp> reegel(boolean tõeväärtus, Set<Muutuja> puusEsinenudTermid, Set<Termikuulaja> kuulajad, Set<Muutuja> harusEsinenudTermid);
 
     public abstract String dot();
 
-    public abstract void uusKonstantSumbol(Muutuja uusSumbol, Muutuja vanaSumbol);
+    public abstract void uusKonstantSumbol(Muutuja uusSumbol, Muutuja vanaSumbol); //boolean vahetaKvantoriSees
 
     public abstract void asendaTerm(Term uus, Predicate<Term> tingimus);
 
