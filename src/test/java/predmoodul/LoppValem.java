@@ -16,9 +16,9 @@ import java.util.Map;
 public class LoppValem {
 
     private LekseriVigadeKuulaja lekseriVigadeKuulaja;
-    private ParseriVigadeKuulaja parseriVigadeKuulaja;
+    private SyntaksiVigadeKuulaja syntaksiVigadeKuulaja;
 
-    public static Valem tagastaValem(String sisend) throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud, LekseriErind, ParseriErind {
+    public static Valem tagastaValem(String sisend) throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud, LekseriErind, SyntaksiViga {
         ParsePuu answer = new ParsePuu(sisend);
         answer.getLekseriVead();
         ParseTree pt = answer.looParsePuu();

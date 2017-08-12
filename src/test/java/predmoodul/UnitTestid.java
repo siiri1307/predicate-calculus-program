@@ -3,21 +3,20 @@ package predmoodul;
 import org.junit.Test;
 import predmoodul.erindid.AbiValemEiOleDefineeritud;
 import predmoodul.erindid.LekseriErind;
-import predmoodul.erindid.ParseriErind;
+import predmoodul.erindid.SyntaksiViga;
 import predmoodul.erindid.VaarVabadeMuutujateEsinemine;
 import predmoodul.kvantorid.Eitus;
 import predmoodul.kvantorid.Eks;
 import predmoodul.termid.*;
-import predmoodul.valemid.AtomaarneValem;
-import predmoodul.valemid.Konjuktsioon;
-import predmoodul.valemid.Muutuja;
-import predmoodul.valemid.Valem;
+import predmoodul.valemid.*;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Created by siiri on 15/05/17.
@@ -87,7 +86,7 @@ public class UnitTestid {
         //Ez(z=z)&z=z
         Valem konjuktsioon = new Konjuktsioon(new Eks(vordub(new Muutuja('z'), new Muutuja('z')), new Muutuja('z')), vordub(new Muutuja('z'), new Muutuja('z')));
         Valem koopia = konjuktsioon.koopia();
-        koopia.uusKonstantSumbol(new Muutuja('a'), new Muutuja('z'));
+        koopia.uusKonstantSumbol(new Muutuja('a'), new Muutuja('z'));//, false
         assertEquals(new Konjuktsioon(new Eks(vordub(new Muutuja('z'), new Muutuja('z')), new Muutuja('z')), vordub(new Muutuja('a'), new Muutuja('a'))), koopia);
 
     }
@@ -166,22 +165,92 @@ public class UnitTestid {
     }
 
     @Test
-    public void testVabuMuutujaid2() throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud, LekseriErind, ParseriErind {
+    public void testVabuMuutujaid2() throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud, LekseriErind, SyntaksiViga {
 
         assertEquals(2, LoppValem.tagastaValem("∃u∃z((x=z*u) & ∃w(y+w+1=z) & ∃t(y+t+1=u))").getVabadMuutujad().size());
     }
 
     @Test
-    public void testVabuMuutujaid0() throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud, LekseriErind, ParseriErind {
+    public void testVabuMuutujaid0() throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud, LekseriErind, SyntaksiViga {
 
         assertEquals(0, LoppValem.tagastaValem("S(a,b) := ∃c(a=b+c & ¬(c=0)) ∀x∀y∃m∃n(S(m,y) & S(n,y) -> x=m*n)").getVabadMuutujad().size());
         assertEquals(0, LoppValem.tagastaValem("J(a,b) := ∃z(a=b*z & ¬(b=0)) ∀x(J(x, 1+1+1) & ¬J(x, (1+1+1)*(1+1+1)))").getVabadMuutujad().size());
     }
 
     @Test
-    public void testVabuMuutujaid1() throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud, LekseriErind, ParseriErind {
+    public void testVabuMuutujaid1() throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud, LekseriErind, SyntaksiViga {
 
         assertEquals(1, LoppValem.tagastaValem("∃y(x=(1+1+1)*y)&¬∃z(x=(1+1+1)*(1+1+1)*z)").getVabadMuutujad().size());
+    }
+
+    @Test
+    public void vaartustaImpl1() {
+
+        //1=1 -> 0=1
+        Implikatsioon impl = new Implikatsioon(new AtomaarneValem(new ÜksTerm(), new ÜksTerm()), new AtomaarneValem(new NullTerm(), new ÜksTerm()));
+        boolean tul = impl.vaartusta(new HashMap<>(), 0);
+        assertEquals(false, tul);
+    }
+
+    @Test
+    public void vaartustaImpl2() {
+
+        //1=1 -> 1=1
+        Implikatsioon impl = new Implikatsioon(new AtomaarneValem(new ÜksTerm(), new ÜksTerm()), new AtomaarneValem(new ÜksTerm(), new ÜksTerm()));
+        boolean tul = impl.vaartusta(new HashMap<>(), 0);
+        assertEquals(true, tul);
+    }
+
+    @Test
+    public void vaartustaImpl3() {
+
+        //0=1 -> 1=1
+        Implikatsioon impl = new Implikatsioon(new AtomaarneValem(new NullTerm(), new ÜksTerm()), new AtomaarneValem(new ÜksTerm(), new ÜksTerm()));
+        boolean tul = impl.vaartusta(new HashMap<>(), 0);
+        assertEquals(true, tul);
+    }
+
+    @Test
+    public void vaartustaImpl4() {
+
+        //0=1 -> 0=1
+        Implikatsioon impl = new Implikatsioon(new AtomaarneValem(new NullTerm(), new ÜksTerm()), new AtomaarneValem(new NullTerm(), new ÜksTerm()));
+        boolean tul = impl.vaartusta(new HashMap<>(), 0);
+        assertEquals(true, tul);
+    }
+
+    @Test
+    public void testiSeotudMuutujaAsendust() throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud, SyntaksiViga, LekseriErind {
+
+        String sisend = "P(x) := ∃n(n=1 & x=0)";
+        Valem valem = LoppValem.tagastaValem(sisend);
+        Set<Muutuja> seotud = valem.getSeotudMuutujad();
+        Muutuja parastAsendust = new Muutuja('n', "P");
+        assertTrue(seotud.contains(parastAsendust));
+    }
+
+    @Test
+    public void testiMitmeJarjestikuseSeotudMuutujaAsendust() throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud, SyntaksiViga, LekseriErind {
+
+        String sisend = "P(x) := ∃n∃h(n=1 & ∃t(t=0 & h=1 & x=0))";
+        Valem valem = LoppValem.tagastaValem(sisend);
+        Set<Muutuja> seotudParastAsendus = new HashSet<>();
+        seotudParastAsendus.add(new Muutuja('n', "P"));
+        seotudParastAsendus.add(new Muutuja('t', "P"));
+        seotudParastAsendus.add(new Muutuja('h', "P"));
+        assertEquals(seotudParastAsendus, valem.getSeotudMuutujad());
+    }
+
+    @Test
+    public void testiMitmeSamaTahisegaSeotudMuutujaAsendust() throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud, SyntaksiViga, LekseriErind {
+
+        String sisend = "P(x) := ∃n(n=1) & ∃n(n=0 & x=0)";
+        Valem valem = LoppValem.tagastaValem(sisend);
+        Set<Muutuja> seotudParastAsendus = new HashSet<>();
+        System.out.println(valem);
+        seotudParastAsendus.add(new Muutuja('n', "P"));
+        //seotudParastAsendus.add(new Muutuja('t', "P"));
+        assertEquals(seotudParastAsendus, valem.getSeotudMuutujad());
     }
 
 

@@ -15,7 +15,7 @@ import static junit.framework.TestCase.assertEquals;
 public class Kontramudel {
 
     @Test
-    public void testKontraMudel() throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud, LekseriErind, ParseriErind {
+    public void testKontraMudel() throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud, LekseriErind, SyntaksiViga {
         Map<Muutuja, Double> algMudel = new HashMap<>();
         Map<Muutuja, Double> eeldatavLoppMudel = new HashMap<>();
         eeldatavLoppMudel.put(new Muutuja('x'), 0.0);
@@ -25,7 +25,7 @@ public class Kontramudel {
     }
 
     @Test
-    public void testKontraMudelYl2() throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud, ErinevIndiviidideArv, LekseriErind, ParseriErind {
+    public void testKontraMudelYl2() throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud, ErinevIndiviidideArv, LekseriErind, SyntaksiViga {
 
         String vastus = "∃u∃z((x=z*u) & ∃w(y+w+1=z) & ∃t(y+t+1=u))";
         String pakkumine = "∃a∃b(x=a*b & ∃k∃l(a=y+k & b=y+l))";

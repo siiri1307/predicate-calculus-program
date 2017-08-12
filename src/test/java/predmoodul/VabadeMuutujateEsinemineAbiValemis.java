@@ -2,7 +2,7 @@ package predmoodul;
 
 import predmoodul.erindid.AbiValemEiOleDefineeritud;
 import predmoodul.erindid.LekseriErind;
-import predmoodul.erindid.ParseriErind;
+import predmoodul.erindid.SyntaksiViga;
 import predmoodul.erindid.VaarVabadeMuutujateEsinemine;
 import predmoodul.valemid.AbiValem;
 import predmoodul.valemid.AstNode;
@@ -21,31 +21,31 @@ import static junit.framework.TestCase.assertTrue;
 public class VabadeMuutujateEsinemineAbiValemis {
 
     @Test(expected = VaarVabadeMuutujateEsinemine.class)
-    public void testKoikTahiseVabadMuutujadEsinevadValemis1() throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud, LekseriErind, ParseriErind {
+    public void testKoikTahiseVabadMuutujadEsinevadValemis1() throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud, LekseriErind, SyntaksiViga {
         AbiValem abivalem = tagastaAbiValem("M(x,y) := ∀m∀n(m=n)\n M(x,y)");
         abivalem.vabadeMuutujateEsinemineKorrektne();
     }
 
     @Test(expected = VaarVabadeMuutujateEsinemine.class)
-    public void testKoikTahiseVabadMuutujadEsinevadValemis2() throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud, LekseriErind, ParseriErind {
+    public void testKoikTahiseVabadMuutujadEsinevadValemis2() throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud, LekseriErind, SyntaksiViga {
         AbiValem abivalem = tagastaAbiValem("M(x,y) := ∃m∃n(m+n=x)\n M(x,y)");
         abivalem.vabadeMuutujateEsinemineKorrektne();
     }
 
     @Test
-    public void testKoikTahiseVabadMuutujadEsinevadValemis3() throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud, LekseriErind, ParseriErind {
+    public void testKoikTahiseVabadMuutujadEsinevadValemis3() throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud, LekseriErind, SyntaksiViga {
         AbiValem abivalem = tagastaAbiValem("M(x,y) := ∃k(k+y=x)\n M(x,y)");
         abivalem.vabadeMuutujateEsinemineKorrektne();
     }
 
     @Test
-    public void testKoikValemiVabadMuutujadEsinevadTahises1() throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud, LekseriErind, ParseriErind {
+    public void testKoikValemiVabadMuutujadEsinevadTahises1() throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud, LekseriErind, SyntaksiViga {
         AbiValem abivalem = tagastaAbiValem("M(x,y) := ∃a(x*a=y)\n M(x,y)");
         abivalem.vabadeMuutujateEsinemineKorrektne();
     }
 
     @Test(expected = VaarVabadeMuutujateEsinemine.class)
-    public void testKoikValemiVabadMuutujadEsinevadTahises2() throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud, LekseriErind, ParseriErind {
+    public void testKoikValemiVabadMuutujadEsinevadTahises2() throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud, LekseriErind, SyntaksiViga {
         AbiValem abivalem = tagastaAbiValem("M(x,y) := ∃a(x*a=y+z)\n M(x,y)");
         abivalem.vabadeMuutujateEsinemineKorrektne();
     }
@@ -53,30 +53,30 @@ public class VabadeMuutujateEsinemineAbiValemis {
     // M(a,b,c)
 
     @Test
-    public void testVabadeMuutujateErind1() throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud, LekseriErind, ParseriErind {
+    public void testVabadeMuutujateErind1() throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud, LekseriErind, SyntaksiViga {
         AbiValem abivalem = tagastaAbiValem("M(x) := ∀m∀n∃y(x = m * n -> m = 1 ∨ n = 1 ∨ y=1) & ¬(x = 1)\n M(x)");
         assertTrue(abivalem.vabadeMuutujateEsinemineKorrektne());
     }
 
     @Test(expected = VaarVabadeMuutujateEsinemine.class)
-    public void testVabadeMuutujateErind2() throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud, LekseriErind, ParseriErind {
+    public void testVabadeMuutujateErind2() throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud, LekseriErind, SyntaksiViga {
         AbiValem abivalem = tagastaAbiValem("M(x) := ∀m(m+1=y) M(x)");
         abivalem.vabadeMuutujateEsinemineKorrektne();
     }
 
     @Test
-    public void testVabadeMuutujateErind3() throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud, LekseriErind, ParseriErind {
+    public void testVabadeMuutujateErind3() throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud, LekseriErind, SyntaksiViga {
         AbiValem abivalem = tagastaAbiValem("M := ∀x∃y(x + 1 = y) M");
         assertTrue(abivalem.vabadeMuutujateEsinemineKorrektne());
     }
 
     @Test(expected = VaarVabadeMuutujateEsinemine.class)
-    public void testVabadeMuutujateErind4() throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud, LekseriErind, ParseriErind {
+    public void testVabadeMuutujateErind4() throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud, LekseriErind, SyntaksiViga {
         AbiValem abivalem = tagastaAbiValem("M := ∀x(x + 1 = z) M");
         abivalem.vabadeMuutujateEsinemineKorrektne();
     }
 
-    private AbiValem tagastaAbiValem(String sisend) throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud, LekseriErind, ParseriErind {
+    private AbiValem tagastaAbiValem(String sisend) throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud, LekseriErind, SyntaksiViga {
         ParsePuu answer = new ParsePuu(sisend);
         ParseTree pt = answer.looParsePuu();
         Map<ValemiID, Vaartus> abivalemid = new HashMap<>();

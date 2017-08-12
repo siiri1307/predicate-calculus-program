@@ -32,8 +32,8 @@ public class SisendOnKorrektne {
         catch(RuntimeException | LekseriErind e){
             e.printStackTrace();
         }
-        catch (ParseriErind parseriErind) {
-            assertEquals(Arrays.asList(7,19), parseriErind.getParseriVigadeKuulaja().getVeaPosNumbrid());
+        catch (SyntaksiViga syntaksiViga) {
+            assertEquals(Arrays.asList(7,19), syntaksiViga.getParseriVigadeKuulaja().getVeaPosNumbrid());
         }
     }
 
@@ -44,7 +44,7 @@ public class SisendOnKorrektne {
         try{
             sisend.looParsePuu();
         }
-        catch(RuntimeException | ParseriErind e){
+        catch(RuntimeException | SyntaksiViga e){
             e.printStackTrace();
         }
         catch(LekseriErind lekseriErind) {
@@ -53,7 +53,7 @@ public class SisendOnKorrektne {
     }
 
     @Test
-    public void testYleliigneSulg(){
+    public void testYleliigneSulg() throws LekseriErind, SyntaksiViga {
         ParsePuu sisend = new ParsePuu("∃q∃p(∃z(y+z+1=q))&∃w(y+w+1=p))&(x=q*p))"); //Alo
         try{
             sisend.looParsePuu();
@@ -61,27 +61,33 @@ public class SisendOnKorrektne {
         catch(RuntimeException | LekseriErind e){
             e.printStackTrace();
         }
-        catch(ParseriErind parseriErind) {
-            assertEquals(Arrays.asList(29,38), parseriErind.getParseriVigadeKuulaja().getVeaPosNumbrid());
+        catch(SyntaksiViga syntaksiViga) {
+            assertEquals(Arrays.asList(29,38), syntaksiViga.getParseriVigadeKuulaja().getVeaPosNumbrid());
         }
     }
 
     @Test
+    public void testiPuuduvSulg() throws LekseriErind, SyntaksiViga {
+        ParsePuu sisend = new ParsePuu("∃z∃y((x = z * y) & (T(z) ∨ T(y))");
+        sisend.looParsePuu();
+    }
+
+    @Test
     public void testPuuduvKorrutisMark(){
-        ParsePuu sisend = new ParsePuu("∃q∃p(∃z(y+z+1=q)&∃w(y+w+1=p)&(x=qp))");
+        ParsePuu sisend = new ParsePuu("∃q∃p(∃z(y+z+1=q)&∃w(y+w+1=p)&(x=qp))"); //no viable alternative at input qp
         try{
             sisend.looParsePuu();
         }
         catch(RuntimeException | LekseriErind e){
             e.printStackTrace();
         }
-        catch(ParseriErind parseriErind) {
-            assertEquals(Arrays.asList(33), parseriErind.getParseriVigadeKuulaja().getVeaPosNumbrid());
+        catch(SyntaksiViga syntaksiViga) {
+            assertEquals(Arrays.asList(33), syntaksiViga.getParseriVigadeKuulaja().getVeaPosNumbrid());
         }
     }
 
     @Test
-    public void testPuuduvSulg(){
+    public void testPuuduvSulg() throws LekseriErind, SyntaksiViga {
         ParsePuu sisend = new ParsePuu(("∃a∃b(∃c(y+c=a)&∃c(y+c=b)&x=a*b"));
         try{
             sisend.looParsePuu();
@@ -89,9 +95,9 @@ public class SisendOnKorrektne {
         catch(RuntimeException | LekseriErind e){
             e.printStackTrace();
         }
-        catch(ParseriErind parseriErind) {
-            assertEquals(Arrays.asList(30), parseriErind.getParseriVigadeKuulaja().getVeaPosNumbrid());
-            assertEquals("Valemi lõpust puudub sulg.", parseriErind.getParseriVigadeKuulaja().getVeaSonumid().get(0));
+        catch(SyntaksiViga syntaksiViga) {
+            assertEquals(Arrays.asList(30), syntaksiViga.getParseriVigadeKuulaja().getVeaPosNumbrid());
+            assertEquals("Valemi lõpust puudub sulg.", syntaksiViga.getParseriVigadeKuulaja().getVeaSonumid().get(0));
         }
     }
 
@@ -100,12 +106,12 @@ public class SisendOnKorrektne {
     public ExpectedException erind = ExpectedException.none();
 
     @Test
-    public void testPuuduvSulg2() throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud, LekseriErind, ParseriErind {
+    public void testPuuduvSulg2() throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud, LekseriErind, SyntaksiViga {
         try{
             new Kontroll(LoppValem.tagastaValem("∃a∃b(∃c(y + c = a) & ∃c(y + c = b) & x = a*b"), LoppValem.tagastaValem("∃u∃z((x=z*u) & ∃w(y+w+1=z) & ∃t(y+t+1=u))"));
         }
-        catch(ParseriErind parseriErind) {
-            assertEquals("Valemi lõpust puudub sulg.", parseriErind.getParseriVigadeKuulaja().getVeaSonumid().get(0));
+        catch(SyntaksiViga syntaksiViga) {
+            assertEquals("Valemi lõpust puudub sulg.", syntaksiViga.getParseriVigadeKuulaja().getVeaSonumid().get(0));
         }
         catch(RuntimeException | LekseriErind e){
             e.printStackTrace();
@@ -113,7 +119,65 @@ public class SisendOnKorrektne {
     }
 
     @Test
-    public void testErinevIndiviidideArvPredikaatides1() throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud, ErinevIndiviidideArv, LekseriErind, ParseriErind {
+    public void testPuuduvSulg3() throws LekseriErind, SyntaksiViga {
+        erind.expect(SyntaksiViga.class);
+        ParsePuu sisend = new ParsePuu("∃y(x=y*(1+1+1) & ∃z(y=z*(1+1+1))");
+        sisend.looParsePuu();
+    }
+
+    @Test
+    public void testiootamatuSumbol () throws LekseriErind, SyntaksiViga {
+        erind.expect(SyntaksiViga.class);
+        ParsePuu sisend = new ParsePuu("∃y:x=y·(1+1+1) & ¬∃f:x=f·(1+1+1+1+1+1+1+1+1)");
+        sisend.looParsePuu();
+    }
+
+    @Test
+    public void testiootamatuSumbol2 () throws LekseriErind, SyntaksiViga {
+        erind.expect(SyntaksiViga.class);
+        ParsePuu sisend = new ParsePuu(" ∀y∀z(x=(1+1+1)*y->¬(x=(1+1+1)(1+1+1)*z))");
+        sisend.looParsePuu();
+    }
+
+    @Test
+    public void testiAbimuutujaDef() throws LekseriErind, SyntaksiViga {
+        erind.expect(SyntaksiViga.class);
+        ParsePuu sisend = new ParsePuu("P3 := 1+1+1 ∃a(x= P3 *a) & ¬∃a(P3 * P3 * a)");
+        sisend.looParsePuu();
+    }
+
+    @Test
+    public void testiNumbriEsitusKahendkujul() throws LekseriErind, SyntaksiViga {
+        erind.expect(SyntaksiViga.class);
+        ParsePuu sisend = new ParsePuu("Jagub(x,y) := ∃k(x= k*y) Jagub(x,1) & ¬Jagub(x,1001)");
+        sisend.looParsePuu();
+    }
+
+    @Test
+    public void testiKomaKasutamineKvantoriteVahel() throws LekseriErind, SyntaksiViga {
+
+        ParsePuu sisend = new ParsePuu("P(x,y) := x > y ∀x,y(∃a,b( P(a,y)&P(b,y) -> Q(a,b,x)))");
+        sisend.looParsePuu();
+    }
+
+    @Test
+    public void testiPuuduvSulg2() throws LekseriErind, SyntaksiViga {
+
+        ParsePuu sisend = new ParsePuu("  ∃a∃b(∃c(y + c = a)&∃c(y + c = b)&x = a * b");
+        sisend.looParsePuu();
+    }
+
+    @Test
+    public void test() throws LekseriErind, SyntaksiViga {
+
+        ParsePuu sisend = new ParsePuu("∃(a, b, c, d): a = y+c & r = y+d & x = a·b &¬(c=0) & ¬(d=0)");
+        sisend.looParsePuu();
+    }
+
+
+
+    @Test
+    public void testErinevIndiviidideArvPredikaatides1() throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud, ErinevIndiviidideArv, LekseriErind, SyntaksiViga {
         erind.expect(ErinevIndiviidideArv.class);
         erind.expectMessage("Esitasid 0-kohalise predikaadi, ootasin aga 2-kohalist predikaati.");
         String vastus = "∃u∃z((x=z*u) & ∃w(y+w+1=z) & ∃t(y+t+1=u))";
@@ -123,7 +187,7 @@ public class SisendOnKorrektne {
     }
 
     @Test
-    public void testErinevIndiviidideArvPredikaatides2() throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud, ErinevIndiviidideArv, LekseriErind, ParseriErind {
+    public void testErinevIndiviidideArvPredikaatides2() throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud, ErinevIndiviidideArv, LekseriErind, SyntaksiViga {
         erind.expect(ErinevIndiviidideArv.class);
         erind.expectMessage("Esitasid 0-kohalise predikaadi, ootasin aga 1-kohalist predikaati.");
         String vastus = "∃y(x=(1+1+1)*y)&¬∃z(x=(1+1+1)*(1+1+1)*z)";
@@ -133,7 +197,7 @@ public class SisendOnKorrektne {
     }
 
     @Test
-    public void testErinevIndiviidideArvPredikaatides3() throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud, ErinevIndiviidideArv, LekseriErind, ParseriErind {
+    public void testErinevIndiviidideArvPredikaatides3() throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud, ErinevIndiviidideArv, LekseriErind, SyntaksiViga {
 
         erind.expect(ErinevIndiviidideArv.class);
         erind.expectMessage("Esitasid 4-kohalise predikaadi, ootasin aga 2-kohalist predikaati.");
@@ -144,7 +208,7 @@ public class SisendOnKorrektne {
     }
 
     @Test
-    public void testAsendaTermAbiDefiValjakutsel() throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud, ErinevIndiviidideArv, LekseriErind, ParseriErind {
+    public void testAsendaTermAbiDefiValjakutsel() throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud, ErinevIndiviidideArv, LekseriErind, SyntaksiViga {
 
         //S(x,y) := Ed(y + d = x & -(d=0)) (abidefinitsioon)
         //Väljakutsel S(y,z)
@@ -162,7 +226,7 @@ public class SisendOnKorrektne {
     }
 
     @Test
-    public void testiTransitiivsetAsendust() throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud, ErinevIndiviidideArv, LekseriErind, ParseriErind {
+    public void testiTransitiivsetAsendust() throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud, ErinevIndiviidideArv, LekseriErind, SyntaksiViga {
 
         Valem valem = LoppValem.tagastaValem("S(x,y) := x = y S(y,z)");
         Map<Muutuja, Double> m = new HashMap<>();
