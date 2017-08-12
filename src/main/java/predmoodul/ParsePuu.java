@@ -20,24 +20,24 @@ public class ParsePuu {
 
     private String sisend;
     private LekseriVigadeKuulaja lekseriVead;
-    private ParseriVigadeKuulaja parseriVead;
+    private SyntaksiVigadeKuulaja parseriVead;
 
     public ParsePuu(String tekstilineSisend) {
 
         this.sisend = tekstilineSisend;
         lekseriVead = new LekseriVigadeKuulaja();
-        parseriVead = new ParseriVigadeKuulaja();
+        parseriVead = new SyntaksiVigadeKuulaja();
     }
 
     public LekseriVigadeKuulaja getLekseriVead() {
         return lekseriVead;
     }
 
-    public ParseriVigadeKuulaja getParseriVead() {
+    public SyntaksiVigadeKuulaja getParseriVead() {
         return parseriVead;
     }
 
-    public ParseTree looParsePuu() throws LekseriErind, ParseriErind {
+    public ParseTree looParsePuu() throws LekseriErind, SyntaksiViga {
 
         ParseTree parseTree;
 
@@ -45,7 +45,8 @@ public class ParsePuu {
         ANTLRInputStream input = new ANTLRInputStream(sisend); //like a char[] buffer
         PredLexer lexer = new PredLexer(input);
         //LekseriVigadeKuulaja lvk = new LekseriVigadeKuulaja();
-        lexer.addErrorListener(lekseriVead);
+        //lexer.addErrorListener(lekseriVead);
+        lexer.addErrorListener(parseriVead);
 
         CommonTokenStream tokens = new CommonTokenStream(lexer); //provides access to all tokens by index
         tokens.fill(); //initiate lexing manually
@@ -53,6 +54,7 @@ public class ParsePuu {
 
         PredParser parser = new PredParser(tokens);
         //ParseriVigadeKuulaja vigadeKuulaja = new ParseriVigadeKuulaja();
+        parser.removeErrorListeners(); //eemaldame konsooli error listener'i, et mitte saada topelt veateateid
         parser.addErrorListener(parseriVead);
 
         parseTree = parser.koguvalem();
@@ -68,7 +70,7 @@ public class ParsePuu {
         List<String> parseriVeaSonumid = parseriVead.getVeaSonumid();
         if(!parseriVeaSonumid.isEmpty()){
             prindiVeasonumid(parseriVeaSonumid);
-            throw new ParseriErind(parseriVead);
+            throw new SyntaksiViga(parseriVead);
         }
 
         if (parseTree == null || parseTree.getChildCount() == 0) {
@@ -84,30 +86,37 @@ public class ParsePuu {
 
     public void prindiVeasonumid(List<String> vead){
 
+        if(!vead.isEmpty()){
+            System.out.println(vead.get(0));
+        }
+
+        /*
         for(String s: vead){
             System.out.println(s);
-        }
+        }*/
     }
     
     public AstNode createAST(ParseTree parseTreeNode, Map<ValemiID, Vaartus> abivalemid) throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud {
 
         if (parseTreeNode instanceof PredParser.KoguvalemContext) {
 
-            return createValem(parseTreeNode, abivalemid);
+            return createValem(parseTreeNode, abivalemid, null);
 
         }
 
         throw new IllegalStateException();
     }
 
-    private Valem createValem(ParseTree valemContext, Map<ValemiID, Vaartus> abivalemid) throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud {
+    private Valem createValem(ParseTree valemContext, Map<ValemiID, Vaartus> abivalemid, String abiPredikaadiNimi) throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud {
+
+        //String abiPredikaadiNimi = "";
 
         if(valemContext instanceof PredParser.KoguvalemContext) {
 
             List<Valem> ast = new ArrayList<>();
 
             for (int i = 0; i < valemContext.getChildCount(); i++) {
-                ast.add(createValem(valemContext.getChild(i), abivalemid));
+                ast.add(createValem(valemContext.getChild(i), abivalemid, abiPredikaadiNimi));
             }
 
             return new KoguValem(ast);
@@ -115,23 +124,38 @@ public class ParsePuu {
 
         else if(valemContext instanceof PredParser.AbidefContext){
 
-            Valem valem = createValem(valemContext.getChild(2), abivalemid);
 
-            String abiPredikaadiNimi = parsiAbiPredikaadiNimi(valemContext.getChild(0));
+            abiPredikaadiNimi = parsiAbiPredikaadiNimi(valemContext.getChild(0));
+
+            Valem valem = createValem(valemContext.getChild(2), abivalemid, abiPredikaadiNimi);
 
             List<Muutuja> argumendid = new ArrayList<>(); //enne Character
 
             if(valemContext.getChild(0).getChildCount() > 1){ //kui predtähisele järgnevad argumendid
                 ParseTree argumentsNode = valemContext.getChild(0).getChild(1);
                 for (int i = 1; i < argumentsNode.getChildCount() - 1; i += 2) {
-                    argumendid.add(new Muutuja(argumentsNode.getChild(i).getChild(0).getText().charAt(0)));
+                    argumendid.add(new Muutuja(argumentsNode.getChild(i).getChild(0).getText().charAt(0), abiPredikaadiNimi));
                 }
             }
 
             for(Muutuja muutuja : argumendid){
-                valem.uusKonstantSumbol(new Muutuja(muutuja.getTahis(), abiPredikaadiNimi), muutuja);
+                valem.uusKonstantSumbol(new Muutuja(muutuja.getTahis(), abiPredikaadiNimi), muutuja); //vahetaKvantoriSees: false
                 muutuja.setPredTahis(abiPredikaadiNimi);
             }
+
+            System.out.println("Abidefinitsiooni valemis on seotud muutujad: " + valem.getSeotudMuutujad());
+
+            Set<Muutuja> abiDefValemiSeotudMuutujad = valem.getSeotudMuutujad();
+
+            /*
+            for(Muutuja seotudMuutuja : abiDefValemiSeotudMuutujad){
+                valem.uusKonstantSumbol(new Muutuja(seotudMuutuja.getTahis(), abiPredikaadiNimi), seotudMuutuja, true);
+                seotudMuutuja.setPredTahis(abiPredikaadiNimi);
+            }
+            */
+
+            System.out.println("Abidef valem: " + valem);
+            System.out.println("Seotud muutujad pärast predtähisega sidumist: " + valem.getSeotudMuutujad());
 
             //ValemiID id = new ValemiID(valemContext.getChild(0).getChild(0).getChild(0).getText(), argumendid.size());
             ValemiID id = new ValemiID(abiPredikaadiNimi.toString(), argumendid.size());
@@ -140,7 +164,7 @@ public class ParsePuu {
             AbiValem abivalem = new AbiValem(id, argumendid, valem);
 
             if(!abivalem.vabadeMuutujateEsinemineKorrektne()){
-                throw new VaarVabadeMuutujateEsinemine();
+                throw new VaarVabadeMuutujateEsinemine(abivalem.getTahisestPuuduvadValemiVabadMuutujad(), abivalem.getValemistPuuduvadTahiseMuutujad());
             }
 
             abivalemid.put(id, vaartus);
@@ -152,13 +176,13 @@ public class ParsePuu {
 
             if(valemContext.getChildCount() == 1){
 
-                return createValem(valemContext.getChild(0), abivalemid);
+                return createValem(valemContext.getChild(0), abivalemid, abiPredikaadiNimi);
 
             }
             else{
                 List<Valem> alamValemid = new ArrayList<>();
                 for(int i = 0; i < valemContext.getChildCount(); i += 2){
-                    Valem ekv = createValem(valemContext.getChild(i), abivalemid);
+                    Valem ekv = createValem(valemContext.getChild(i), abivalemid, abiPredikaadiNimi);
                     alamValemid.add(ekv);
                 }
 
@@ -171,12 +195,12 @@ public class ParsePuu {
 
             if(valemContext.getChildCount() == 1){
 
-                return createValem(valemContext.getChild(0), abivalemid);
+                return createValem(valemContext.getChild(0), abivalemid, abiPredikaadiNimi);
             }
             else{
                 List<Valem> alamValemid = new ArrayList<>();
                 for(int i = 0; i < valemContext.getChildCount(); i += 2){
-                    Valem ekv = createValem(valemContext.getChild(i), abivalemid);
+                    Valem ekv = createValem(valemContext.getChild(i), abivalemid, abiPredikaadiNimi);
                     alamValemid.add(ekv);
                 }
                 return Implikatsioon.looImplikatsioonid(alamValemid);
@@ -188,12 +212,12 @@ public class ParsePuu {
 
             if(valemContext.getChildCount() == 1){
 
-                return createValem(valemContext.getChild(0), abivalemid);
+                return createValem(valemContext.getChild(0), abivalemid, abiPredikaadiNimi);
             }
             else{
                 List<Valem> alamValemid = new ArrayList<>();
                 for(int i = 0; i < valemContext.getChildCount(); i += 2){
-                    Valem ekv = createValem(valemContext.getChild(i), abivalemid);
+                    Valem ekv = createValem(valemContext.getChild(i), abivalemid, abiPredikaadiNimi);
                     alamValemid.add(ekv);
                 }
                 return Disjunktsioon.looDisjunktsioonid(alamValemid);
@@ -205,13 +229,13 @@ public class ParsePuu {
 
             if(valemContext.getChildCount() == 1){
 
-                return createValem(valemContext.getChild(0), abivalemid);
+                return createValem(valemContext.getChild(0), abivalemid, abiPredikaadiNimi);
 
             }
 
             List<Valem> alamValemid = new ArrayList<>();
             for(int i = 0; i < valemContext.getChildCount(); i += 2){
-                Valem ekv = createValem(valemContext.getChild(i), abivalemid);
+                Valem ekv = createValem(valemContext.getChild(i), abivalemid, abiPredikaadiNimi);
                 alamValemid.add(ekv);
             }
 
@@ -222,7 +246,7 @@ public class ParsePuu {
         else if(valemContext instanceof PredParser.KonjvalemContext){
 
             if(valemContext.getChildCount() == 1){
-                return createValem(valemContext.getChild(0), abivalemid);
+                return createValem(valemContext.getChild(0), abivalemid, abiPredikaadiNimi);
             }
 
             List<Modifier> kvantorid = new ArrayList<>();
@@ -231,10 +255,10 @@ public class ParsePuu {
             for(int i = 0; i < valemContext.getChildCount()-1; i++){
                 ParseTree vaadeldavLaps = valemContext.getChild(i);
                 if(vaadeldavLaps instanceof PredParser.IgaContext){
-                    kvantorid.add(new ModifierIga(new Muutuja(vaadeldavLaps.getChild(1).getChild(0).getText().charAt(0))));
+                    kvantorid.add(new ModifierIga(new Muutuja(vaadeldavLaps.getChild(1).getChild(0).getText().charAt(0), abiPredikaadiNimi)));
                 }
                 else if(vaadeldavLaps instanceof PredParser.EksContext){
-                    kvantorid.add(new ModifierEks(new Muutuja(vaadeldavLaps.getChild(1).getChild(0).getText().charAt(0))));
+                    kvantorid.add(new ModifierEks(new Muutuja(vaadeldavLaps.getChild(1).getChild(0).getText().charAt(0), abiPredikaadiNimi)));
                 }
                 else if(vaadeldavLaps.getText().charAt(0) == '¬'){
                     kvantorid.add(new ModifierEitus());
@@ -243,10 +267,10 @@ public class ParsePuu {
 
             Valem valem;
             if(valemContext.getChild(valemContext.getChildCount()-1).getChildCount()==1){
-                valem = createValem(valemContext.getChild(valemContext.getChildCount()-1).getChild(0), abivalemid);
+                valem = createValem(valemContext.getChild(valemContext.getChildCount()-1).getChild(0), abivalemid, abiPredikaadiNimi);
             }
             else{
-                valem = createValem(valemContext.getChild(valemContext.getChildCount()-1).getChild(1), abivalemid); //muuda Valemiks nt ja kaota Korgvalem ära, child 1 et sulud välja jätta
+                valem = createValem(valemContext.getChild(valemContext.getChildCount()-1).getChild(1), abivalemid, abiPredikaadiNimi); //muuda Valemiks nt ja kaota Korgvalem ära, child 1 et sulud välja jätta
             }
 
             return looModifierid(kvantorid, valem);
@@ -255,9 +279,9 @@ public class ParsePuu {
 
         else if(valemContext instanceof PredParser.KorgvalemContext){
             if(valemContext.getChildCount() == 1){
-                return createValem(valemContext.getChild(0), abivalemid);
+                return createValem(valemContext.getChild(0), abivalemid, abiPredikaadiNimi);
             }
-            return createValem(valemContext.getChild(1), abivalemid); //juhul kui laps on (predvalem)
+            return createValem(valemContext.getChild(1), abivalemid, abiPredikaadiNimi); //juhul kui laps on (predvalem)
         }
 
         else if(valemContext instanceof PredParser.AtomaarnevalemContext){
@@ -275,7 +299,7 @@ public class ParsePuu {
                         return new AtomaarneValemPredSümboliga(id, valem);
                     }
                     else{
-                        throw new AbiValemEiOleDefineeritud(valemContext.toString());
+                        throw new AbiValemEiOleDefineeritud(id.getPredSümbol(), id.getArgumentideArv());
                     }
                 }
                 else{ //vabade muutujatega predsümbol, nt P(x,y)
@@ -285,7 +309,7 @@ public class ParsePuu {
                     List<TermiPaar> termTahised = new ArrayList<>();
 
                     for(int i = 1; i < termargumendid.getChildCount()-1; i+=2){
-                        argumendid.add(createTerm(termargumendid.getChild(i)));
+                        argumendid.add(createTerm(termargumendid.getChild(i), abiPredikaadiNimi));
                     }
                     System.out.println("Termargumendid on " + argumendid);
 
@@ -310,7 +334,7 @@ public class ParsePuu {
                         return new AtomaarneValemPredSümboliga(id, termTahised, valemiKoopia);
                     }
                     else{
-                        throw new AbiValemEiOleDefineeritud(id.getPredSümbol());
+                        throw new AbiValemEiOleDefineeritud(id.getPredSümbol(), id.getArgumentideArv());
                     }
                 }
 
@@ -320,9 +344,9 @@ public class ParsePuu {
 
             else if(valemContext.getChild(1).getText().charAt(0) == '='){ //grammatikas: atomaarnevalem2
 
-                Term vasakTerm = createTerm(valemContext.getChild(0));
+                Term vasakTerm = createTerm(valemContext.getChild(0), abiPredikaadiNimi);
 
-                Term paremTerm = createTerm(valemContext.getChild(2));
+                Term paremTerm = createTerm(valemContext.getChild(2), abiPredikaadiNimi);
 
                 return new AtomaarneValem(vasakTerm, paremTerm);
             }
@@ -369,16 +393,16 @@ public class ParsePuu {
     }
 
 
-    private Term createTerm(ParseTree termContext) {
+    private Term createTerm(ParseTree termContext, String abiPredikaadiNimi) {
 
         if(termContext instanceof PredParser.TermContext){
             if(termContext.getChildCount() == 1){
-                return createTerm(termContext.getChild(0));
+                return createTerm(termContext.getChild(0), abiPredikaadiNimi);
             }
             else{
                 List<Term> liidetavad = new ArrayList<>();
                 for(int i = 0; i < termContext.getChildCount(); i += 2){
-                    liidetavad.add(createTerm(termContext.getChild(i)));
+                    liidetavad.add(createTerm(termContext.getChild(i), abiPredikaadiNimi));
                 }
                 if(termContext.getChild(1).getText().charAt(0) == '+'){
                     return LiitTerm.binaarneLiitmine(liidetavad);
@@ -390,12 +414,12 @@ public class ParsePuu {
         }
         else if(termContext instanceof PredParser.PmtermContext){
             if(termContext.getChildCount() == 1){
-                return createTerm(termContext.getChild(0));
+                return createTerm(termContext.getChild(0), abiPredikaadiNimi);
             }
             else{
                 List<Term> korrutised = new ArrayList<>();
                 for(int i = 0; i < termContext.getChildCount(); i += 2){
-                    korrutised.add(createTerm(termContext.getChild(i)));
+                    korrutised.add(createTerm(termContext.getChild(i), abiPredikaadiNimi));
                 }
                 if(termContext.getChild(1).getText().charAt(0) == '*'){
                     return KorrutisTerm.binaarneKorrutis(korrutised);
@@ -415,11 +439,11 @@ public class ParsePuu {
                     return new ÜksTerm();
                 }
                 else if(termContext.getChild(0) instanceof PredParser.IndiviidmuutujaContext){
-                    return new IndiviidTerm(new Muutuja(termContext.getChild(0).getChild(0).getText().charAt(0)));
+                    return new IndiviidTerm(new Muutuja(termContext.getChild(0).getChild(0).getText().charAt(0), abiPredikaadiNimi));
                 }
             }
             else{
-                return createTerm(termContext.getChild(1));
+                return createTerm(termContext.getChild(1), abiPredikaadiNimi);
             }
         }
 
