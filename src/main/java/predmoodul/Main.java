@@ -1,10 +1,6 @@
 package predmoodul;
 
 import org.antlr.v4.runtime.tree.ParseTree;
-import org.eclipse.jetty.server.Server;
-import org.eclipse.jetty.webapp.WebAppContext;
-import predmoodul.Kontroll;
-import predmoodul.ParsePuu;
 import predmoodul.erindid.*;
 import predmoodul.valemid.*;
 
@@ -25,28 +21,7 @@ import java.util.Map;
 
 public class Main {
 
-    public static void main(String[] args) throws Exception, VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud, ErinevIndiviidideArv, LekseriErind, ParseriErind {
-
-        String webPort = System.getenv("PORT");
-        if (webPort == null || webPort.isEmpty()) {
-                webPort = "8080";
-            }
-
-        final Server server = new Server(Integer.valueOf(webPort));
-        final WebAppContext root = new WebAppContext();
-
-        root.setContextPath("/");
-
-        root.setParentLoaderPriority(true);
-
-        final String webappDirLocation = "src/main/webapp/";
-        root.setDescriptor(webappDirLocation + "/WEB-INF/web.xml");
-        root.setResourceBase(webappDirLocation);
-
-        server.setHandler(root);
-
-        server.start();
-        server.join();
+    public static void main(String[] args) throws Exception, VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud, ErinevIndiviidideArv, LekseriErind, SyntaksiViga {
 
         Kontroll kontroll;
 
@@ -202,9 +177,11 @@ public class Main {
         //Tõesuspuu meetod: samaväärsed, kui tippude arv järjekorras on väga suur
         //x on kahe y-st suurema arvu korrutis
 
-        String sisendA = "∃y(x=(1+1+1)*y) & ¬∃z(x=(1+1+1)*(1+1+1)*z)" ;
-        String sisendB = "∃y(x=(1+1+1)*y) & ¬∃z(x=(1+1+1+1+1+1+1+1+1)*z)";
-        ParsePuu pak = new ParsePuu(sisendA + "~" + sisendB);
+        String sisendA = "∃y(x=(1+1+1)*y) & ¬∃z(x=(1+1+1)*(1+1+1)*z)";
+        String sisendB = "∃z(x=(1+1+1)*z & ¬(x=(1+1+1+1+1+1+1+1+1)*z))";
+        Kontroll kntr = new Kontroll(tagastaValem(sisendB), tagastaValem(sisendA));
+        kntr.kontrolliIndiviidideArvuValemites(kntr.getPakkumine().getVabadMuutujad(), kntr.getVastus().getVabadMuutujad());
+        ParsePuu pak = new ParsePuu(sisendB + "~" + sisendA);
         ParseTree pp = pak.looParsePuu();
         AstNode asp = pak.createAST(pp, new HashMap<>());
 
@@ -287,7 +264,7 @@ public class Main {
         Process process = pb.start();
     }
 
-    public static Valem tagastaValem(String sisend) throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud, LekseriErind, ParseriErind {
+    public static Valem tagastaValem(String sisend) throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud, LekseriErind, SyntaksiViga {
         ParsePuu answer = new ParsePuu(sisend);
         ParseTree pt = answer.looParsePuu();
         Map<ValemiID, Vaartus> abivalemid = new HashMap<>();
