@@ -129,6 +129,7 @@ public class Tõesuspuu {
 
             /*if(alampuud.size() == 0 && tipp.getLapsed().size() == 0 && !tipp.sisaldabVastuolu()){ //haru on lõpetatud, kuid mitte vastuoluline
                 //System.out.println("Lõpetatud haru leht " + tipp.toString());
+                System.out.println("Lõpetatud tipp: " + tipp.toString());
                 vaaraksMuutvadVaartustused = tipp.lisaVaaraksMuutvadVaartustused();
                 //tipp.teavitaAtomaarsestValemist();
                 System.out.println("Lausemuutujad: " + vaaraksMuutvadVaartustused.size());
@@ -182,9 +183,11 @@ public class Tõesuspuu {
         return juurtipp;
     }
 
-    public Set<Map<String, Boolean>> vaartustusedVastavaltEeldusele(){
+    public Set<Valem> vaartustusedVastavaltEeldusele(){
 
         Set<Map<String, Boolean>> vaartustused = new HashSet<>();
+
+        Set<Valem> atomaarsedValemid = new HashSet<>();
 
         Collection<TõesuspuuTipp> lehedPuus = juurtipp.getLehed();
 
@@ -196,11 +199,13 @@ public class Tõesuspuu {
 
             if(!leht.sisaldabVastuolu()){
                 System.out.println("Leidsin väärtustuse mil valem on väär");
-                vaartustused.add(leht.tagastaVaartustused());
+                atomaarsedValemid.addAll(leht.lisaVaaraksMuutvadVaartustused());
+                //vaartustused.add(leht.tagastaVaartustused());
             }
         }
 
-        return vaartustused;
+        //return vaartustused;
+        return atomaarsedValemid;
     }
 
 

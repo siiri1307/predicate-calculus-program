@@ -195,8 +195,12 @@ public class TõesuspuuTipp {
 
         String id = System.identityHashCode(this) + " [label=" + "\"" + this.getValem().dot() + " : " +
                 Boolean.toString(this.tõeväärtus) +
-                " NR: " + number + "" +
                 "\" color=\"" + (this.leidubVastuolu() ? "red" : "black") + "\""  + "]; \n";
+
+        /*String id = System.identityHashCode(this) + " [label=" + "\"" + this.getValem().dot() + " : " +
+                Boolean.toString(this.tõeväärtus) +
+                " NR: " + number + "" +
+                "\" color=\"" + (this.leidubVastuolu() ? "red" : "black") + "\""  + "]; \n";*/
 
         if(this.getVanem() != null){
             return id + "\n" + System.identityHashCode(this.getVanem()) + " -- " + System.identityHashCode(this) + "\n";
@@ -249,17 +253,20 @@ public class TõesuspuuTipp {
         return termid;
     }
 
-    public Set<TõesuspuuTipp> lisaVaaraksMuutvadVaartustused() {
+    public Set<Valem> lisaVaaraksMuutvadVaartustused() {
 
         if(vanem == null){
             return new HashSet<>();
         }
 
-        Set<TõesuspuuTipp> vaaraksMuutvadVaartustused = vanem.lisaVaaraksMuutvadVaartustused();
+        Set<Valem> vaaraksMuutvadVaartustused = vanem.lisaVaaraksMuutvadVaartustused();
 
 
         if(valem instanceof AtomaarneValemPredSümboliga){
-            vaaraksMuutvadVaartustused.add(this);
+            vaaraksMuutvadVaartustused.add(this.valem);
+        }
+        else if(valem instanceof AtomaarneValem){
+            vaaraksMuutvadVaartustused.add(this.valem);
         }
 
         return vaaraksMuutvadVaartustused;
