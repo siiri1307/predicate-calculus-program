@@ -3,15 +3,15 @@ package predmoodul.erindid;
 /**
  * Created by siiri on 30/06/17.
  */
-public class ParseriErind extends Throwable {
+public class SyntaksiViga extends Throwable {
 
-    private ParseriVigadeKuulaja kuulaja;
+    private SyntaksiVigadeKuulaja kuulaja;
 
-    public ParseriErind(ParseriVigadeKuulaja pvk){
+    public SyntaksiViga(SyntaksiVigadeKuulaja pvk){
         this.kuulaja = pvk;
     }
 
-    public ParseriVigadeKuulaja getParseriVigadeKuulaja(){
+    public SyntaksiVigadeKuulaja getParseriVigadeKuulaja(){
 
         return kuulaja;
     }

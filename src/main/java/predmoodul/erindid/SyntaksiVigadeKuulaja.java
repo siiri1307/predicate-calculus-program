@@ -10,13 +10,13 @@ import java.util.List;
 /**
  * Created by siiri on 26/06/17.
  */
-public class ParseriVigadeKuulaja extends BaseErrorListener {
+public class SyntaksiVigadeKuulaja extends BaseErrorListener {
 
     private List<String> veaSonumid;
     private List<Integer> veaPosNumbrid;
 
 
-    public ParseriVigadeKuulaja(){
+    public SyntaksiVigadeKuulaja(){
         veaSonumid = new ArrayList<>();
         veaPosNumbrid = new ArrayList<>();
     }
@@ -40,6 +40,7 @@ public class ParseriVigadeKuulaja extends BaseErrorListener {
         String[] tykeldatudSonum;
         StringBuilder viga = new StringBuilder();
 
+        //System.out.println(msg);
         if(msg.contains("missing")){
             tykeldatudSonum = msg.split("missing");;
             String[] sonumiOsad = tykeldatudSonum[1].trim().split(" ");
@@ -49,17 +50,21 @@ public class ParseriVigadeKuulaja extends BaseErrorListener {
             viga.append("Positsioonil " + charPositionInLine + " on üleliigne " + msg.split("extraneous input")[1].trim().split(" ")[0] + ".");
         }
         else if(msg.contains("token recognition error")){
-            viga.append("Positsioonil " + charPositionInLine + " on lubamatu sümbol " + msg.split(":")[1].trim() + ".");
+            viga.append("Positsioonil " + charPositionInLine + " on lubamatu sümbol " + msg.split("error at: ")[1].trim() + ".");
         }
+        /*else if(msg.contains("no viable alternative at input")){ //kui ükski alternatiividest reeglis ei sobi, siis teavitab parser sellest
+            viga.append("Positsioonil " + charPositionInLine + " on lubamatu sümbol " + msg.split("no viable alternative at input ")[1] + ".");
+        }*/
         else{
             String[] tykeldatudVordusMargilt = offendingSymbol.toString().split("=");
-            String[] vordusestParemal = tykeldatudVordusMargilt[1].split(",");
+            String[] vordusestParemal = tykeldatudVordusMargilt[1].split(",<");
             if(vordusestParemal[0].equals("'<EOF>'")){
                 viga.append("Valemi lõpust puudub sulg.");
                 return;
             }
+            System.out.println(offendingSymbol);
             viga.append("Positsioonil " + charPositionInLine + " on ");
-            viga.append("lubamatu sümbol " + vordusestParemal[0] + ".");
+            viga.append("lubamatu sümbol " + vordusestParemal[0] + ". ");
             //viga.append("sonum " + msg);
             if(msg.contains("expecting")){
                 tykeldatudSonum = msg.split("expecting");
