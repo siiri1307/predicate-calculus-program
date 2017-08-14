@@ -77,6 +77,12 @@ public class KoguValem extends Valem {
     }
 
     @Override
+    public int getKvantoriteSygavus() {
+
+        return children.get(children.size()-1).getKvantoriteSygavus();
+    }
+
+    @Override
     public List<TõesuspuuTipp> reegel(boolean tõeväärtus, Set<Muutuja> puusEsinenudTermid, Set<Termikuulaja> kuulajad, Set<Muutuja> harusEsinenudTermid) {
 
         return children.get(children.size()-1).reegel(tõeväärtus, puusEsinenudTermid, kuulajad, harusEsinenudTermid);

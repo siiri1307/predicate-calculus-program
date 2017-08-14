@@ -99,6 +99,12 @@ public class Implikatsioon extends Valem {
         return vasakLaps.getKvantoriteArv() + paremLaps.getKvantoriteArv();
     }
 
+    @Override
+    public int getKvantoriteSygavus() {
+
+        return Integer.max(vasakLaps.getKvantoriteSygavus(), paremLaps.getKvantoriteSygavus());
+    }
+
 
     public static Valem looImplikatsioonid(List<Valem> alamValemid) {
 

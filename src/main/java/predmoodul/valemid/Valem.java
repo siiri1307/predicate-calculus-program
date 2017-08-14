@@ -27,6 +27,8 @@ public abstract class Valem extends AstNode {
 
     public abstract int getKvantoriteArv();
 
+    public abstract int getKvantoriteSygavus();
+
     public abstract List<TõesuspuuTipp> reegel(boolean tõeväärtus, Set<Muutuja> puusEsinenudTermid, Set<Termikuulaja> kuulajad, Set<Muutuja> harusEsinenudTermid);
 
     public abstract String dot();

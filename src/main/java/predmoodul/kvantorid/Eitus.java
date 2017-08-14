@@ -61,6 +61,12 @@ public class Eitus extends Valem implements Kvantor {
     }
 
     @Override
+    public int getKvantoriteSygavus() {
+
+        return valem.getKvantoriteSygavus();
+    }
+
+    @Override
     public List<Object> getChildren() {
         return Arrays.asList((Object) valem);
     }

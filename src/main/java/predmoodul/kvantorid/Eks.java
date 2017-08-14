@@ -93,6 +93,12 @@ public class Eks extends Valem implements Kvantor {
     }
 
     @Override
+    public int getKvantoriteSygavus() {
+
+        return valem.getKvantoriteSygavus() + 1;
+    }
+
+    @Override
     public List<TõesuspuuTipp> reegel(boolean tõeväärtus, Set<Muutuja> puusEsinenudTermid, Set<Termikuulaja> kuulajad, Set<Muutuja> harusEsinenudTermid) {
 
         //return reegelKvantorile(tõeväärtus, puusEsinenudTermid, kuulajad);

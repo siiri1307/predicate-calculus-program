@@ -108,6 +108,12 @@ public class AtomaarneValemPredSümboliga extends Valem {
         return valem.getKvantoriteArv();
     }
 
+    @Override
+    public int getKvantoriteSygavus() {
+
+        return valem.getKvantoriteSygavus();
+    }
+
     public ValemiID getId() {
         return id;
     }

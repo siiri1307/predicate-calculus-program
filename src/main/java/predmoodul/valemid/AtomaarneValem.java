@@ -74,6 +74,12 @@ public class AtomaarneValem extends Valem {
     }
 
     @Override
+    public int getKvantoriteSygavus() {
+
+        return 0;
+    }
+
+    @Override
     public List<TõesuspuuTipp> reegel(boolean tõeväärtus, Set<Muutuja> puusEsinenudTermid, Set<Termikuulaja> kuulajad, Set<Muutuja> harusEsinenudTermid) {
 
         return new ArrayList<>();

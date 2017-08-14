@@ -98,6 +98,12 @@ public class Konjuktsioon extends Valem {
     }
 
     @Override
+    public int getKvantoriteSygavus() {
+
+        return Integer.max(vasakLaps.getKvantoriteSygavus(), paremLaps.getKvantoriteSygavus());
+    }
+
+    @Override
     public boolean vaartusta(Map<Muutuja, Double> vaartustus, double maxVaartus) {
 
         return vasakLaps.vaartusta(vaartustus, maxVaartus) && paremLaps.vaartusta(vaartustus, maxVaartus);

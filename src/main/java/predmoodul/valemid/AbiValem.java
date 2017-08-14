@@ -87,6 +87,12 @@ public class AbiValem extends Valem {
     }
 
     @Override
+    public int getKvantoriteSygavus() {
+
+        return valem.getKvantoriteSygavus();
+    }
+
+    @Override
     public List<TõesuspuuTipp> reegel(boolean tõeväärtus, Set<Muutuja> puusEsinenudTermid, Set<Termikuulaja> kuulajad, Set<Muutuja> harusEsinenudTermid) {
 
         throw new NotImplementedException();

@@ -12,6 +12,7 @@ public class Tõesuspuu {
 
     private final static Map<TõesuspuuTipp, Integer> numbrid = new HashMap<>();
     private int tootlemiseNo = 1; //mitmenda jarjekorrast välja võeti
+    private boolean eiOleAegunud = true;
 
     private final TõesuspuuTipp juurtipp;
 
@@ -37,14 +38,14 @@ public class Tõesuspuu {
 
         long algus = System.currentTimeMillis();
         long lopp = algus + 5*1000;
-
         Queue<NummerdatudTõesuspuuTipp> jrk = new PriorityQueue<>(new TippudeVordleja());
 
         //Set<TõesuspuuTipp> eemaldatudTipud = new HashSet<>();
 
         jrk.add(new NummerdatudTõesuspuuTipp(juurtipp));
 
-        while(!jrk.isEmpty() ){ // && System.currentTimeMillis() < lopp){
+        while(!jrk.isEmpty() && eiOleAegunud){
+            eiOleAegunud = System.currentTimeMillis() < lopp;
             if (jrk.size() % 100 == 0) {
                 System.out.printf("Järjekord on %d \n", jrk.size());
             }
@@ -53,10 +54,6 @@ public class Tõesuspuu {
             //System.out.println("Eemaldasin tipu: " + tipp);
             //eemaldatudTipud.add(tipp);
 
-//            if((tipp.getValem() instanceof Iga && tipp.getTõeväärtus()) || (tipp.getValem() instanceof Eks && !tipp.getTõeväärtus())){
-//                lisaJärjekorda(jrk, tipp);
-//                continue;
-//            }
 
             if(tipp.sisaldabVastuolu()){ //kui tipp annab vastuolu, siis ei lisa teda töödeldavate tippude järjekorda
                 continue;
@@ -236,6 +233,10 @@ public class Tõesuspuu {
             throw new IllegalArgumentException("Tõesuspuul puudub juurtipp!");
         }
         return valmistaDotFormaat(this.juurtipp);
+    }
+
+    public boolean eiOleAegunud() {
+        return eiOleAegunud;
     }
 
     @Override

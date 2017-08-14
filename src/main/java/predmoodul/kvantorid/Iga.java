@@ -93,6 +93,12 @@ public class Iga extends Valem implements Kvantor {
     }
 
     @Override
+    public int getKvantoriteSygavus() {
+
+        return valem.getKvantoriteSygavus() + 1;
+    }
+
+    @Override
     public List<TõesuspuuTipp> reegel(boolean tõeväärtus, Set<Muutuja> puusEsinenudTermid, Set<Termikuulaja> kuulajad,  Set<Muutuja> harusEsinenudTermid) {
 
         //Set<Character> harusEsinenudTermid = new HashSet<>();

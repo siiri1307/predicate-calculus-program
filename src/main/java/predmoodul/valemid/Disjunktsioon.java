@@ -89,6 +89,12 @@ public class Disjunktsioon extends Valem {
     }
 
     @Override
+    public int getKvantoriteSygavus() {
+
+        return Integer.max(vasakLaps.getKvantoriteSygavus(), paremLaps.getKvantoriteSygavus());
+    }
+
+    @Override
     public List<TõesuspuuTipp> reegel(boolean tõeväärtus, Set<Muutuja> puusEsinenudTermid, Set<Termikuulaja> kuulajad, Set<Muutuja> harusEsinenudTermid) {
 
         if(tõeväärtus){
