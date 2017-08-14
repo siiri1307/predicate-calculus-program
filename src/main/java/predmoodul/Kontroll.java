@@ -1,11 +1,13 @@
 package predmoodul;
 
+import predmoodul.erindid.AbiValemEiOleDefineeritud;
 import predmoodul.erindid.ErinevIndiviidideArv;
+import predmoodul.erindid.SyntaksiViga;
+import predmoodul.erindid.VaarVabadeMuutujateEsinemine;
 import predmoodul.kvantorid.Iga;
-import predmoodul.valemid.Ekvivalents;
-import predmoodul.valemid.Muutuja;
-import predmoodul.valemid.Valem;
+import predmoodul.valemid.*;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -20,11 +22,53 @@ public class Kontroll {
     private Valem ekvivalentsiValem;
     private Map<Muutuja, Double> vaartustused;
     private boolean eiOleSamavaarne;
+    private int kontrolliTulemus;
 
-    public Kontroll(Valem pakkumine, Valem vastus) {
+    public Kontroll(Valem pakkumine, Valem vastus) throws ErinevIndiviidideArv, VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud, SyntaksiViga, IOException {
+
         this.pakkumine = pakkumine;
         this.vastus = vastus;
         this.vaartustused = new HashMap<>();
+        kontrolliIndiviidideArvuValemites(pakkumine.getVabadMuutujad(), vastus.getVabadMuutujad());
+        ekvivalentsiValem = moodustaEkvivalentsiValem(pakkumine, vastus);
+        kontrolliTulemus = kontrolli(ekvivalentsiValem);
+    }
+
+    public Kontroll(String tudengiPakkumine, String oigeVastus) throws ErinevIndiviidideArv, VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud, SyntaksiViga, IOException {
+
+        Sisend sisend = new Sisend(tudengiPakkumine, oigeVastus);
+        this.pakkumine = sisend.getPakkumiseValem();
+        this.vastus = sisend.getOigeValem();
+        //this.pakkumine = pakkumine;
+        //this.vastus = vastus;
+        this.vaartustused = new HashMap<>();
+        kontrolliIndiviidideArvuValemites(pakkumine.getVabadMuutujad(), vastus.getVabadMuutujad());
+        ekvivalentsiValem = moodustaEkvivalentsiValem(pakkumine, vastus);
+        kontrolliTulemus = kontrolli(ekvivalentsiValem);
+    }
+
+    public int kontrolli(Valem ekvivalentsiValem) throws ErinevIndiviidideArv {
+
+        Tõesuspuu tp = Tõesuspuu.looTõesuspuu(ekvivalentsiValem, false);
+        tp.looPuu();
+        if(tp.vaartustusedVastavaltEeldusele().isEmpty() && tp.eiOleAegunud()){
+            System.out.println("Tõesuspuu meetod tegi kindaks et samaväärsed");
+            return 1; // "jah"
+        }
+        else{
+            System.out.println("Jõudsin väärtuste arvutamiseni");
+            boolean eiOleSamavaarne = eiOleSamavaarne();
+            if(eiOleSamavaarne){
+                return 0; //"ei"
+            }
+            else{
+                return 3; //"ei tea"
+            }
+        }
+    }
+
+    public int getKontrolliTulemus() {
+        return kontrolliTulemus;
     }
 
     /*public Kontroll(Valem valem){
@@ -63,7 +107,7 @@ public class Kontroll {
             throw new ErinevIndiviidideArv(indiviidideArvPakkumine, indiviidideArvVastus);
         }*/
 
-        ekvivalentsiValem = moodustaEkvivalentsiValem(pakkumine, vastus);
+        //ekvivalentsiValem = moodustaEkvivalentsiValem(pakkumine, vastus);
         Valem valemVabadeMuutujateta = seoVabadMuutujad(ekvivalentsiValem);
 
         int kvantoriteArv = valemVabadeMuutujateta.getKvantoriteArv();
@@ -144,12 +188,16 @@ public class Kontroll {
 
         if(eiOleSamavaarne){
 
-            infoTudengile = "Sinu vastus on väärtustusel " + kontramudel + " " + ((Ekvivalents)ekvivalentsiValem).getVasakuToevaartus() +
-                    ", aga peaks olema " + ((Ekvivalents)ekvivalentsiValem).getParemaToevaartus() + ".";
+            infoTudengile = "Sinu vastus on väärtustusel " + kontramudel + " " + toevaartusEestiKeelseks(((Ekvivalents)ekvivalentsiValem).getVasakuToevaartus()) +
+                    ", aga peaks olema " + toevaartusEestiKeelseks(((Ekvivalents)ekvivalentsiValem).getParemaToevaartus()) + ".";
         }
 
-
         return infoTudengile;
+    }
+
+    private String toevaartusEestiKeelseks(boolean toevaartus){
+
+        return toevaartus ? "tõene" : "väär";
     }
 
     private Valem seoVabadMuutujad(Valem ekvivalentsiValem) {
@@ -172,7 +220,7 @@ public class Kontroll {
 
     }
 
-    private Valem moodustaEkvivalentsiValem(Valem pakkumine, Valem vastus) {
+    public Valem moodustaEkvivalentsiValem(Valem pakkumine, Valem vastus) {
         return new Ekvivalents(pakkumine, vastus);
     }
 

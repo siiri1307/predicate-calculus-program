@@ -22,6 +22,8 @@ public class ParsePuu {
     private LekseriVigadeKuulaja lekseriVead;
     private SyntaksiVigadeKuulaja parseriVead;
 
+    public ParsePuu(){}
+
     public ParsePuu(String tekstilineSisend) {
 
         this.sisend = tekstilineSisend;
