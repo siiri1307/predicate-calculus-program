@@ -71,7 +71,7 @@ public class Yl1D {
     }
 
     @Test()
-    public void onSamavaarneVaartusteValjaarvutamine() throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud, SyntaksiViga, LekseriErind, ErinevIndiviidideArv {
+    public void onSamavaarneVaartusteValjaarvutamine() throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud, SyntaksiViga, LekseriErind, ErinevIndiviidideArv, IOException {
         Valem pakkumisValem = LoppValem.tagastaValem(pakkumine1);
         Valem oigeValem = LoppValem.tagastaValem(oige);
         //System.out.println("Õige valemi kuju parsimisjärgselt: " + oigeValem);
@@ -110,7 +110,7 @@ public class Yl1D {
     }
 
     @Test()
-    public void eiOleSamavaarneVaartusteValjaarvutamine() throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud, SyntaksiViga, LekseriErind, ErinevIndiviidideArv {
+    public void eiOleSamavaarneVaartusteValjaarvutamine() throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud, SyntaksiViga, LekseriErind, ErinevIndiviidideArv, IOException {
         Kontroll kontrollimine = new Kontroll(LoppValem.tagastaValem(pakkumine5), LoppValem.tagastaValem(oige));
         System.out.println(kontrollimine.eiOleSamavaarne());
         System.out.println(kontrollimine.kontraNaideStringina());
@@ -118,7 +118,7 @@ public class Yl1D {
     }
 
     @Test
-    public void onSamavaarneBruteForce() throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud, LekseriErind, SyntaksiViga, ErinevIndiviidideArv {
+    public void onSamavaarneBruteForce() throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud, LekseriErind, SyntaksiViga, ErinevIndiviidideArv, IOException {
 
         String sisendA = "P(x,y) := ∃z(x + z = y & ¬(z = 0))" + //1
                 "Algarv(x) := ∀y∀z(x = y * z -> y = 1 ∨ z = 1) & ¬(x = 1)" + //2
@@ -161,7 +161,7 @@ public class Yl1D {
     }
 
     @Test()
-    public void onSamavaarneVaartusteValjaarvutamine2() throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud, SyntaksiViga, LekseriErind, ErinevIndiviidideArv {
+    public void onSamavaarneVaartusteValjaarvutamine2() throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud, SyntaksiViga, LekseriErind, ErinevIndiviidideArv, IOException {
         Valem pakkumisValem = LoppValem.tagastaValem(pakkumine3);
         Valem oigeValem = LoppValem.tagastaValem(oige);
         //System.out.println("Pakkumise kuju parsimisjärgselt: " + pakkumisValem);

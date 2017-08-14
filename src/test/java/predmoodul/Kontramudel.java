@@ -4,6 +4,7 @@ import org.junit.Test;
 import predmoodul.erindid.*;
 import predmoodul.valemid.Muutuja;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -25,7 +26,7 @@ public class Kontramudel {
     }
 
     @Test
-    public void testKontraMudelYl2() throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud, ErinevIndiviidideArv, LekseriErind, SyntaksiViga {
+    public void testKontraMudelYl2() throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud, ErinevIndiviidideArv, LekseriErind, SyntaksiViga, IOException {
 
         String vastus = "∃u∃z((x=z*u) & ∃w(y+w+1=z) & ∃t(y+t+1=u))";
         String pakkumine = "∃a∃b(x=a*b & ∃k∃l(a=y+k & b=y+l))";

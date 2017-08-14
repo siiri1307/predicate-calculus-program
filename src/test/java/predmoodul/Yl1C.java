@@ -31,7 +31,7 @@ public class Yl1C {
             "V(x,y) := ∃z(x+z=y & ¬(z=0))" +
             "∀r∀z(¬(x=r*z) -> ((R(z)&V(z,y)∨(R(r)&V(r,y)))))";
     String pakkumine4 = "¬∃z∃w((x = z * w) & ∃v((z + v = y) & ¬(v = 0)) & ∀a∀b(z = a * b -> a = 1 ∨ b = 1) & ¬(z = 1)";
-    String pakkumine5 = "P(x) = ∀y∀z(x = y * z -> y = 1 ∨ z = 1) & ¬(x = 1)) ¬∃z(P(z) & z < y & ∃w(x = w * z))";
+    String pakkumine5 = "P(x) := ∀y∀z(x = y * z -> y = 1 ∨ z = 1) & ¬(x = 1) ¬∃z(P(z) & z < y & ∃w(x = w * z))";
 
     public Tõesuspuu konstrueeriPuu(String sisend, boolean eeldatavToevaartus) throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud, LekseriErind, SyntaksiViga {
 
@@ -67,7 +67,7 @@ public class Yl1C {
     }
 
     @Test
-    public void onSamavaarneBruteForce1() throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud, LekseriErind, SyntaksiViga, ErinevIndiviidideArv {
+    public void onSamavaarneBruteForce1() throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud, LekseriErind, SyntaksiViga, ErinevIndiviidideArv, IOException {
 
         Kontroll kontrollimine = new Kontroll(LoppValem.tagastaValem(pakkumine1), LoppValem.tagastaValem(oige));
         System.out.println(kontrollimine.eiOleSamavaarne());
@@ -85,7 +85,7 @@ public class Yl1C {
     }
 
     @Test
-    public void onSamavaarneBruteForce2() throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud, LekseriErind, SyntaksiViga, ErinevIndiviidideArv {
+    public void onSamavaarneBruteForce2() throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud, LekseriErind, SyntaksiViga, ErinevIndiviidideArv, IOException {
 
         Kontroll kontrollimine = new Kontroll(LoppValem.tagastaValem(pakkumine2), LoppValem.tagastaValem(oige));
         assertFalse(kontrollimine.eiOleSamavaarneIlmaErindita());
@@ -93,7 +93,7 @@ public class Yl1C {
 
 
     @Test(expected = VaarVabadeMuutujateEsinemine.class)
-    public void eiOleSamavaarneBruteForce1() throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud, LekseriErind, SyntaksiViga, ErinevIndiviidideArv {
+    public void eiOleSamavaarneBruteForce1() throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud, LekseriErind, SyntaksiViga, ErinevIndiviidideArv, IOException {
 
         String sisendA = "P(w) := (w = t*z -> t=1 ∨ z = 1) & ¬(w=1) ¬∃u((x=y*u) & ¬(y=0) & ∃m((w+m+1=y) & ∀t∀zP(w)))";
         String sisendB = "∀w(∀o∀p(w = o * p -> o = 1 ∨ p= 1) & ¬(w = 1) & ∃q(w+q+1=y) -> ¬∃z(x=w*z) & ¬(w=0))";
@@ -112,7 +112,7 @@ public class Yl1C {
     }
 
     @Test
-    public void eiOleSamavaarneBruteForce2() throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud, LekseriErind, SyntaksiViga, ErinevIndiviidideArv {
+    public void eiOleSamavaarneBruteForce2() throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud, LekseriErind, SyntaksiViga, ErinevIndiviidideArv, IOException {
 
         Kontroll kontrollimine = new Kontroll(LoppValem.tagastaValem(pakkumine3), LoppValem.tagastaValem(oige));
         System.out.println(kontrollimine.eiOleSamavaarne());
@@ -130,7 +130,7 @@ public class Yl1C {
         assertEquals(true, tp.vaartustusedVastavaltEeldusele().isEmpty());
     }
 
-    @Test()
+    @Test(expected = SyntaksiViga.class)
     public void syntaksiViga2() throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud, SyntaksiViga, LekseriErind, IOException {
 
         Sisend sisend = new Sisend(pakkumine5, oige);

@@ -11,6 +11,7 @@ import predmoodul.termid.LiitTerm;
 import predmoodul.termid.NullTerm;
 import predmoodul.valemid.*;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -72,6 +73,18 @@ public class SisendOnKorrektne {
         sisend.looParsePuu();
     }
 
+    @Test(expected = SyntaksiViga.class)
+    public void testiJagamineKeelatud() throws LekseriErind, SyntaksiViga {
+        ParsePuu sisend = new ParsePuu("∃z∃y(x = z / y)");
+        sisend.looParsePuu();
+    }
+
+    @Test(expected = SyntaksiViga.class)
+    public void testiLahutamineKeelatud() throws LekseriErind, SyntaksiViga {
+        ParsePuu sisend = new ParsePuu("∃z∃y(x = z - y)");
+        sisend.looParsePuu();
+    }
+
     @Test
     public void testPuuduvKorrutisMark(){
         ParsePuu sisend = new ParsePuu("∃q∃p(∃z(y+z+1=q)&∃w(y+w+1=p)&(x=qp))"); //no viable alternative at input qp
@@ -101,12 +114,23 @@ public class SisendOnKorrektne {
         }
     }
 
+    @Test
+    public void testLubamatuSymbol() throws LekseriErind, SyntaksiViga {
+
+        ParsePuu sisend = new ParsePuu("∃y:x=y·(1+1+1) & ¬∃f:x=f·(1+1+1+1+1+1+1+1+1)");
+        try{
+            sisend.looParsePuu();
+        }
+        catch(SyntaksiViga syntaksiviga) {
+            assertEquals(Arrays.asList(2), Arrays.asList(syntaksiviga.getParseriVigadeKuulaja().getVeaPosNumbrid().get(0)));
+        }
+    }
 
     @Rule
     public ExpectedException erind = ExpectedException.none();
 
     @Test
-    public void testPuuduvSulg2() throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud, LekseriErind, SyntaksiViga {
+    public void testPuuduvSulg2() throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud, LekseriErind, SyntaksiViga, ErinevIndiviidideArv, IOException {
         try{
             new Kontroll(LoppValem.tagastaValem("∃a∃b(∃c(y + c = a) & ∃c(y + c = b) & x = a*b"), LoppValem.tagastaValem("∃u∃z((x=z*u) & ∃w(y+w+1=z) & ∃t(y+t+1=u))"));
         }
@@ -153,6 +177,7 @@ public class SisendOnKorrektne {
         sisend.looParsePuu();
     }
 
+
     @Test
     public void testiKomaKasutamineKvantoriteVahel() throws LekseriErind, SyntaksiViga {
 
@@ -177,7 +202,7 @@ public class SisendOnKorrektne {
 
 
     @Test
-    public void testErinevIndiviidideArvPredikaatides1() throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud, ErinevIndiviidideArv, LekseriErind, SyntaksiViga {
+    public void testErinevIndiviidideArvPredikaatides1() throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud, ErinevIndiviidideArv, LekseriErind, SyntaksiViga, IOException {
         erind.expect(ErinevIndiviidideArv.class);
         erind.expectMessage("Esitasid 0-kohalise predikaadi, ootasin aga 2-kohalist predikaati.");
         String vastus = "∃u∃z((x=z*u) & ∃w(y+w+1=z) & ∃t(y+t+1=u))";
@@ -187,7 +212,7 @@ public class SisendOnKorrektne {
     }
 
     @Test
-    public void testErinevIndiviidideArvPredikaatides2() throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud, ErinevIndiviidideArv, LekseriErind, SyntaksiViga {
+    public void testErinevIndiviidideArvPredikaatides2() throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud, ErinevIndiviidideArv, LekseriErind, SyntaksiViga, IOException {
         erind.expect(ErinevIndiviidideArv.class);
         erind.expectMessage("Esitasid 0-kohalise predikaadi, ootasin aga 1-kohalist predikaati.");
         String vastus = "∃y(x=(1+1+1)*y)&¬∃z(x=(1+1+1)*(1+1+1)*z)";
@@ -197,7 +222,7 @@ public class SisendOnKorrektne {
     }
 
     @Test
-    public void testErinevIndiviidideArvPredikaatides3() throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud, ErinevIndiviidideArv, LekseriErind, SyntaksiViga {
+    public void testErinevIndiviidideArvPredikaatides3() throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud, ErinevIndiviidideArv, LekseriErind, SyntaksiViga, IOException {
 
         erind.expect(ErinevIndiviidideArv.class);
         erind.expectMessage("Esitasid 4-kohalise predikaadi, ootasin aga 2-kohalist predikaati.");

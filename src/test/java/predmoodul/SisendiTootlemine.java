@@ -1,6 +1,9 @@
 package predmoodul;
 
 import org.junit.Test;
+import predmoodul.erindid.AbiValemEiOleDefineeritud;
+import predmoodul.erindid.SyntaksiViga;
+import predmoodul.erindid.VaarVabadeMuutujateEsinemine;
 import predmoodul.valemid.Sisend;
 
 import java.io.IOException;
@@ -15,7 +18,7 @@ public class SisendiTootlemine {
 
 
     @Test
-    public void testPredtahiseAsendamineAbidefis() throws IOException {
+    public void testPredtahiseAsendamineAbidefis() throws IOException, SyntaksiViga, AbiValemEiOleDefineeritud, VaarVabadeMuutujateEsinemine {
 
         Sisend sisend = new Sisend("B(x) := ∀y∀z(x = y * z -> y = 1 ∨ z = 1) & ¬(x = 1) 1=1",
                 " ");
@@ -27,7 +30,7 @@ public class SisendiTootlemine {
     }
 
     @Test
-    public void testPredtahiseAsendamineAtomaarsesValemis() throws IOException {
+    public void testPredtahiseAsendamineAtomaarsesValemis() throws IOException, SyntaksiViga, AbiValemEiOleDefineeritud, VaarVabadeMuutujateEsinemine {
 
         Sisend sisend = new Sisend("∀z(B(z) & P(z,y))", "");
         sisend.asendaOigesVastusesPredtahised();
@@ -38,7 +41,7 @@ public class SisendiTootlemine {
     }
 
     @Test
-    public void testVastuseAbipredikaatideViimineVasakule() throws IOException {
+    public void testVastuseAbipredikaatideViimineVasakule() throws IOException, SyntaksiViga, AbiValemEiOleDefineeritud, VaarVabadeMuutujateEsinemine {
 
         Sisend sisend = new Sisend("∃a(x=a*b & ∃n(b=n*n))",
                 "J(x,y) := ∃k(x = k * y) ∃z(J(x, z) & ∃y(z = y * y))");

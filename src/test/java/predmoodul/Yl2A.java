@@ -34,7 +34,7 @@ public class Yl2A {
     }
 
     @Test(timeout=60000)
-    public void onSamavaarneValjaArvutamine1() throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud, LekseriErind, SyntaksiViga, ErinevIndiviidideArv {
+    public void onSamavaarneValjaArvutamine1() throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud, LekseriErind, SyntaksiViga, ErinevIndiviidideArv, IOException {
 
         String sisendA = "T(x) := ∃n(x = n * n)" + //x on täisruut
                 "∃z∃y((x = z * y) & (T(z) ∨ T(y)))"; //4 kvantorit
@@ -59,7 +59,7 @@ public class Yl2A {
     }
 
     @Test(expected=ErinevIndiviidideArv.class)
-    public void eiOleSamavaarneValjaArvutamine1() throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud, LekseriErind, SyntaksiViga, ErinevIndiviidideArv {
+    public void eiOleSamavaarneValjaArvutamine1() throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud, LekseriErind, SyntaksiViga, ErinevIndiviidideArv, IOException {
 
         String sisendA = "T(x) := ∃n(x = n * n)" + //x on täisruut
                 "∃a∃b(x = a * b) -> T(a) ∨ T(b)"; //6 kvantorit
@@ -83,7 +83,7 @@ public class Yl2A {
 
 
     @Test()
-    public void eiOleSamavaarneValjaArvutamine2() throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud, LekseriErind, SyntaksiViga, ErinevIndiviidideArv {
+    public void eiOleSamavaarneValjaArvutamine2() throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud, LekseriErind, SyntaksiViga, ErinevIndiviidideArv, IOException {
 
         //x = 2, y = 2, z = 1, siis vp väär
         //pp: x=2, z=1, y=1
@@ -109,7 +109,7 @@ public class Yl2A {
     }
 
     @Test()
-    public void eiOleSamavaarneValjaArvutamine3() throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud, LekseriErind, SyntaksiViga, ErinevIndiviidideArv {
+    public void eiOleSamavaarneValjaArvutamine3() throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud, LekseriErind, SyntaksiViga, ErinevIndiviidideArv, IOException {
 
         String sisendA = "∃a(x=a*b & ∃n(b=n*n))"; //Anette U.
         String sisendB = "J(x,y) := ∃k(x = k * y)" + //x jagub y'ga ehk y on x'i tegur

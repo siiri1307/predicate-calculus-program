@@ -253,6 +253,56 @@ public class UnitTestid {
         assertEquals(seotudParastAsendus, valem.getSeotudMuutujad());
     }
 
+    @Test
+    public void testiTime() {
+
+        long aeg = System.currentTimeMillis() % 1000;
+        String aegSonena = Long.toString(aeg).replaceAll("0","2");
+        aegSonena = aegSonena.replaceAll("1", "3");
+        System.out.println(aegSonena);
+    }
+
+    @Test
+    public void testiKommentaariEemaldamist() {
+
+        String a = "tere";
+        String vastus = "R(x) := ∀y∀z(x = y*z -> y=1 ∨ z=1) & ¬(x=1) // komm1 \n" +
+        "V(x,y) := ∃z(x+z=y & ¬(z=0)) // komm 2 \n" +
+        "∀r∀z(¬(x=r*z)-> ((R(z)&V(z,y)∨(R(r)&V(r,y)))))";
+
+        /*int kommentaariAlgusPos = vastus.indexOf("//");
+        System.out.println(kommentaariAlgusPos);
+        int kommentaariLoppPos = vastus.indexOf("\n");
+        System.out.println(kommentaariLoppPos);
+        String eemaldada = vastus.substring(kommentaariAlgusPos, kommentaariLoppPos);
+        System.out.println(eemaldada);
+        System.out.println("---------");
+
+        String kommentaaridetaVastus = "";*/
+
+        /*int i = vastus.indexOf("//");
+        while(i >= 0){
+            System.out.println(i);
+            i = vastus.indexOf("//", i+1);
+        }*/
+
+        /*String[] jupid = vastus.split("\n");
+        System.out.println(jupid[0]);
+
+        while(vastus.contains("//")){
+            if(-1 != kommentaariAlgusPos) {
+                String ilma = vastus.substring(0, kommentaariAlgusPos);
+                kommentaaridetaVastus += ilma;
+                kommentaariAlgusPos = vastus.indexOf("//");
+            }
+       }*/
+        System.out.println(a.matches(".*e.*"));
+        System.out.println(vastus.matches(".*∃.*"));
+        vastus = vastus.replaceAll("//.*\n", "");
+
+        System.out.println(vastus);
+    }
+
 
 
 
