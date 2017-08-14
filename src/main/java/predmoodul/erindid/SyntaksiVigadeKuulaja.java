@@ -40,7 +40,7 @@ public class SyntaksiVigadeKuulaja extends BaseErrorListener {
         String[] tykeldatudSonum;
         StringBuilder viga = new StringBuilder();
 
-        //System.out.println(msg);
+        //System.out.println("Veateade: " + msg);
         if(msg.contains("missing")){
             tykeldatudSonum = msg.split("missing");;
             String[] sonumiOsad = tykeldatudSonum[1].trim().split(" ");
@@ -50,7 +50,10 @@ public class SyntaksiVigadeKuulaja extends BaseErrorListener {
             viga.append("Positsioonil " + charPositionInLine + " on üleliigne " + msg.split("extraneous input")[1].trim().split(" ")[0] + ".");
         }
         else if(msg.contains("token recognition error")){
-            viga.append("Positsioonil " + charPositionInLine + " on lubamatu sümbol " + msg.split("error at: ")[1].trim() + ".");
+            String[] veaTeade = msg.split("error at: ");
+            //System.out.println(veaTeade[1]);
+            char veaSymbol = veaTeade[1].charAt(1);
+            viga.append("Positsioonil " + charPositionInLine + " on lubamatu sümbol '" + veaSymbol + "'.");
         }
         /*else if(msg.contains("no viable alternative at input")){ //kui ükski alternatiividest reeglis ei sobi, siis teavitab parser sellest
             viga.append("Positsioonil " + charPositionInLine + " on lubamatu sümbol " + msg.split("no viable alternative at input ")[1] + ".");
@@ -62,13 +65,13 @@ public class SyntaksiVigadeKuulaja extends BaseErrorListener {
                 viga.append("Valemi lõpust puudub sulg.");
                 return;
             }
-            System.out.println(offendingSymbol);
+            //System.out.println(offendingSymbol);
             viga.append("Positsioonil " + charPositionInLine + " on ");
             viga.append("lubamatu sümbol " + vordusestParemal[0] + ". ");
             //viga.append("sonum " + msg);
             if(msg.contains("expecting")){
                 tykeldatudSonum = msg.split("expecting");
-                viga.append("Ootasin üht järgnevast: " + tykeldatudSonum[1]);
+                viga.append("Ootasin üht järgnevast: " + tykeldatudSonum[1] + ".");
             }
         }
 

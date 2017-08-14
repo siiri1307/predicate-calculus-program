@@ -19,19 +19,19 @@ public class VaarVabadeMuutujateEsinemine extends Throwable {
         if(!valemistPuuduvadTahiseMuutujad.isEmpty()){
             if(valemistPuuduvadTahiseMuutujad.size() == 1){
                 sonum1 =  "Abipredikaadi definitsiooni kohaselt on muutuja " + valemistPuuduvadTahiseMuutujad.iterator().next().getTahis() +
-                        " vaba, kuid valemis esineb see seotuna või on puudu. ";
+                        " vaba, kuid abipredikaadis esineb see seotuna või on puudu. ";
             }
             else if(valemistPuuduvadTahiseMuutujad.size() > 1){
                 StringBuilder tahisesVabad = new StringBuilder();
                 valemistPuuduvadTahiseMuutujad.forEach(x -> tahisesVabad.append(x.getTahis() + ", "));
                 String tahisesVabadSt = tahisesVabad.toString();
                 int viimaneKoma = tahisesVabadSt.lastIndexOf(", ");
-                sonum1 = "Abipredikaadi definitsiooni kohaselt on muutujad " + tahisesVabadSt.substring(0, viimaneKoma) + " vabad, kuid valemis esinevad need seotuna või on puudu. ";
+                sonum1 = "Abipredikaadi definitsiooni kohaselt on muutujad " + tahisesVabadSt.substring(0, viimaneKoma) + " vabad, kuid abipredikaadis esinevad need seotuna või on puudu. ";
             }
         }
         if(!tahisestPuuduvadValemiVabadMuutujad.isEmpty()){
             if(tahisestPuuduvadValemiVabadMuutujad.size() == 1){
-                sonum2 = "Valemis esineb vabana muutuja " + tahisestPuuduvadValemiVabadMuutujad.iterator().next().getTahis() +
+                sonum2 = "Abipredikaadis esineb vabana muutuja " + tahisestPuuduvadValemiVabadMuutujad.iterator().next().getTahis() +
                         ", mida ei ole abipredikaadi tähises kirjas.";
             }
             else if(tahisestPuuduvadValemiVabadMuutujad.size() > 1){
@@ -39,7 +39,7 @@ public class VaarVabadeMuutujateEsinemine extends Throwable {
                 tahisestPuuduvadValemiVabadMuutujad.forEach(x -> vabad.append(x.getTahis() + ", "));
                 String vabadSt = vabad.toString();
                 int viimaneKoma = vabadSt.lastIndexOf(", ");
-                sonum2 = "Valemis esinevad vabana muutujad " + vabadSt.substring(0, viimaneKoma) +
+                sonum2 = "Abipredikaadis esinevad vabana muutujad " + vabadSt.substring(0, viimaneKoma) +
                         ", mida ei ole abipredikaadi tähises kirjas.";;
             }
         }

@@ -15,14 +15,14 @@ public class ErinevIndiviidideArv extends Throwable {
 
         String indiviididSonum;
         if(vabad.size() == 1){
-            indiviididSonum = "kus indiviid " + vabad.iterator().next().getTahis() + " esineb vabalt.";
+            indiviididSonum = "kus muutuja " + vabad.iterator().next().getTahis() + " esineb vabalt.";
         }
         else{
             StringBuilder indiviidideSB = new StringBuilder();
             vabad.forEach(x -> indiviidideSB.append(x.getTahis() + ", "));
             String indiviidideString = indiviidideSB.toString();
             int viimaneKoma = indiviidideString.lastIndexOf(", ");
-            indiviididSonum = "kus indiviidid " + indiviidideString.substring(0, viimaneKoma) + " esinevad vabalt.";
+            indiviididSonum = "kus muutujad " + indiviidideString.substring(0, viimaneKoma) + " esinevad vabalt.";
         }
 
         this.sonum = "Esitasid " + indiviidideArvPakkumine + "-kohalise predikaadi, ootasin aga " + indiviidideArvLahendus + "-kohalist predikaati, " + indiviididSonum;
