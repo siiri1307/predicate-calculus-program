@@ -70,12 +70,10 @@ termargumendid
 
 term
     : pmterm ('+' pmterm)*
-    | pmterm ('-' pmterm)*
     ;
 
 pmterm
     : kjterm ('*' kjterm)*
-    | kjterm ('/' kjterm)*
     ;
 
 
