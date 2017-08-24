@@ -47,6 +47,10 @@ public class AtomaarneValemPredSümboliga extends Valem {
         this.valem = avps.valem.koopia();
     }
 
+    public Valem getValem() {
+        return valem;
+    }
+
     @Override
     public List<Object> getChildren() {
         return Arrays.asList(id, termArgumendid, valem);
@@ -124,6 +128,11 @@ public class AtomaarneValemPredSümboliga extends Valem {
     }
 
     @Override
+    public Optional<Termikuulaja> getKuulaja(boolean tõeväärtus) {
+        return valem.getKuulaja(tõeväärtus);
+    }
+
+    @Override
     public boolean equals(Object valem) {
 
         if(this == valem){
@@ -163,6 +172,11 @@ public class AtomaarneValemPredSümboliga extends Valem {
 
         valem.uusKonstantSumbol(uusSumbol, vanaSumbol); //, vahetaKvantoriSees
     }
+
+    /*@Override
+    public boolean onSamavaarne(Valem valem) {
+        return super.onSamavaarne(valem) || this.valem.onSamavaarne(valem);
+    }*/
 
     @Override
     public void asendaTerm(Term uus, Predicate<Term> tingimus) {

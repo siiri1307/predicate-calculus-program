@@ -213,7 +213,26 @@ public class Eks extends Valem implements Kvantor {
         return this.valem.equals(leidubValem.valem);
     }
 
+    @Override
+    public boolean onSamavaarne(Valem valem) {
+        if(super.onSamavaarne(valem)){
+            return true;
+        }
 
+        if(valem instanceof Eks){
+            Eks leidubValem = (Eks) valem;
+            Muutuja uusMuutuja = new Muutuja(
+                    indiviidmuutuja.getTahis(),
+                    indiviidmuutuja.getPredTahis() + "*" + leidubValem.getIndiviidMuutuja().getPredTahis());
+            Valem koopiaValemist = this.valem.koopia();
+            koopiaValemist.uusKonstantSumbol(uusMuutuja, indiviidmuutuja);
+            Valem koopiaArgumentValemist = leidubValem.koopia();
+            koopiaArgumentValemist.uusKonstantSumbol(uusMuutuja, leidubValem.indiviidmuutuja);
+            return koopiaValemist.onSamavaarne(koopiaArgumentValemist);
+        }
+
+        return false;
+    }
 
     @Override
     public Optional<Termikuulaja> getKuulaja(boolean tõeväärtus) {

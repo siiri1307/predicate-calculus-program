@@ -139,13 +139,13 @@ public class TõesuspuuTipp {
         if(vanemTipp == null) {
             return false;
         }
-        else if(this.valem.equals(vanemTipp.valem) && !samadTõeväärtused(this, vanemTipp)){
+        /*else if(this.valem.equals(vanemTipp.valem) && !samadTõeväärtused(this, vanemTipp)){
+
             return true;
-            //this.annabVastuolu = true;
-            //System.out.println("----------------------");
-            //System.out.println("Laps: " + this.toString());
-            //System.out.println("Tipp, millega on vastuolus: " + vanemTipp.toString());
-            //System.out.println("----------------------");
+        }*/
+        else if(this.valem.onSamavaarne(vanemTipp.valem) && !samadTõeväärtused(this, vanemTipp)){
+
+            return true;
         }
         else{
             return vanemTipp.sisaldabVastuolu() || leidubVastuolu(vanemTipp.vanem);

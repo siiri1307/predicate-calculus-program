@@ -174,6 +174,28 @@ public class Iga extends Valem implements Kvantor {
         return tõesuspuuTipud;
     }
 
+    @Override
+    public boolean onSamavaarne(Valem valem) {
+        if(super.onSamavaarne(valem)){
+            return true;
+        }
+
+        if(valem instanceof Iga){
+            Iga igaValem = (Iga) valem;
+            Muutuja uusMuutuja = new Muutuja(
+                    indiviidmuutuja.getTahis(),
+                    indiviidmuutuja.getPredTahis() + "*" + igaValem.getIndiviidMuutuja().getPredTahis());
+            Valem koopiaValemist = this.valem.koopia();
+            koopiaValemist.uusKonstantSumbol(uusMuutuja, indiviidmuutuja);
+            Valem koopiaArgumentValemist = igaValem.koopia();
+            koopiaArgumentValemist.uusKonstantSumbol(uusMuutuja, igaValem.indiviidmuutuja);
+            return koopiaValemist.onSamavaarne(koopiaArgumentValemist);
+        }
+
+        return false;
+    }
+
+
     private Muutuja tagastaSuvalineKasutamataSumbol(Set<Muutuja> puusEsinenudTermid, Set<Muutuja> harusEsinenudTermid)  {
 
 //        int seniSuurim = 0;

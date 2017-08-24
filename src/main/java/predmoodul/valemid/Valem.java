@@ -42,4 +42,13 @@ public abstract class Valem extends AstNode {
     public Optional<Termikuulaja> getKuulaja(boolean tõeväärtus) {
         return Optional.empty();
     }
+
+    public boolean onSamavaarne(Valem valem) {
+
+        /*if(valem instanceof AtomaarneValemPredSümboliga){
+            return valem.annabVastuolu(this);
+        }*/
+
+        return this.equals(valem);
+    }
 }

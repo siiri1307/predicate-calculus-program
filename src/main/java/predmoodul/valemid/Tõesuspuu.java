@@ -308,6 +308,10 @@ public class Tõesuspuu {
 
 
         private boolean peabHiljemTootlema(TõesuspuuTipp o2) {
+            /*if(o2.getValem() instanceof AtomaarneValemPredSümboliga){
+                AtomaarneValemPredSümboliga avp = (AtomaarneValemPredSümboliga)o2.getValem();
+                return peabHiljemTootlema(new TõesuspuuTipp(avp.getValem(), o2.getTõeväärtus()));
+            }*/
             return leidubVäär(o2) || igaToene(o2);
         }
 

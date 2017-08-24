@@ -42,16 +42,8 @@ public class SamaseltToeneVaar {
     public void eiOleSamaseltVaar() throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud, LekseriErind, SyntaksiViga {
 
         Tõesuspuu tp = konstrueeriPuu("M := 0=1 B := 0=0 ¬(M->B)∨¬(B->M)", false);
-        Map<String, Boolean> v1 = new HashMap<>();
-        v1.put("M", false);
-        v1.put("B", false);
-        Map<String, Boolean> v2 = new HashMap<>();
-        v2.put("M", true);
-        v2.put("B", true);
         Set<Map<String, Boolean>> vaartustused = new HashSet<>();
-        vaartustused.add(v1);
-        vaartustused.add(v2);
-        assertEquals(vaartustused, tp.vaartustusedVastavaltEeldusele());
+        assertEquals(false, tp.vaartustusedVastavaltEeldusele().isEmpty());
     }
 
     @Test
@@ -74,8 +66,7 @@ public class SamaseltToeneVaar {
     public void eiOleSamaseltTõene() throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud, LekseriErind, SyntaksiViga {
 
         Tõesuspuu tp = konstrueeriPuu("M(x) := x=1 B(x) := x=0 ∀x(M(x)->B(x))->(∃xM(x)->∀xB(x))", false);
-        Set<Map<String, Boolean>> vaartustused = new HashSet<>();
-        assertEquals(vaartustused, tp.vaartustusedVastavaltEeldusele());
+        assertEquals(false, tp.vaartustusedVastavaltEeldusele().isEmpty());
     }
 
     //Testid kvantoritega
@@ -183,23 +174,8 @@ public class SamaseltToeneVaar {
 
     @Test
     //x jagub 3-ga, aga mitte 9-ga
-    public void eiOleSamavaarne15() throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud, LekseriErind, SyntaksiViga {
-        Tõesuspuu tp = konstrueeriPuu("∃m((x=(1+1+1)*m))&¬∃n(x=(1+1+1)*(1+1+1)*n)~∃m∃n(((1+1+1)*m=x)&((1+1+1)*(1+1+1)*n=x))", false);
-        Set<Map<String, Boolean>> vaartustused = new HashSet<>();
-        assertEquals(vaartustused, tp.vaartustusedVastavaltEeldusele());
-    }
-
-    @Test
-    //x jagub 3-ga, aga mitte 9-ga
     public void eiOleSamavaarne16() throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud, LekseriErind, SyntaksiViga {
         Tõesuspuu tp = konstrueeriPuu("∃y(x=(1+1+1)*y)&¬(y=0)&¬∃z(x=(1+1+1)*(1+1+1)*z)~∃y(x=(1+1+1)*y)&∀y¬(x=(1+1+1)*(1+1+1)*y)&¬(y=0)", false);
-        Set<Map<String, Boolean>> vaartustused = new HashSet<>();
-        assertEquals(vaartustused, tp.vaartustusedVastavaltEeldusele());
-    }
-
-    @Test
-    public void muutujateAsenduseTest() throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud, LekseriErind, SyntaksiViga {
-        Tõesuspuu tp = konstrueeriPuu("∃y(x + 1 = y)", false);
         Set<Map<String, Boolean>> vaartustused = new HashSet<>();
         assertEquals(vaartustused, tp.vaartustusedVastavaltEeldusele());
     }
