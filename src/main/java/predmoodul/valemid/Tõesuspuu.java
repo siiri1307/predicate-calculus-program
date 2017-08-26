@@ -11,14 +11,14 @@ import java.util.*;
 public class Tõesuspuu {
 
     private final static Map<TõesuspuuTipp, Integer> numbrid = new HashMap<>();
-    private int tootlemiseNo = 1; //mitmenda jarjekorrast välja võeti
+    private int tootlemiseNo = 1; //mitmendana jarjekorrast välja võeti
     private boolean eiOleAegunud = true;
 
     private final TõesuspuuTipp juurtipp;
 
     private Set<TõesuspuuTipp> vaaraksMuutvadVaartustused = new HashSet<>();
     private Set<Muutuja> puusEsinenudTermid = new HashSet<>();
-    //private Set<Termikuulaja> kuulajad = new HashSet<>();
+    //public List<TõesuspuuTipp> toodeldud = new ArrayList<>();
 
     private Tõesuspuu(TõesuspuuTipp juurtipp) {
         this.juurtipp = juurtipp;
@@ -37,23 +37,21 @@ public class Tõesuspuu {
     public void lisaTipp(TõesuspuuTipp juurtipp){
 
         long algus = System.currentTimeMillis();
-        long lopp = algus + 5*1000;
+        long lopp = algus + 1*1000;
         Queue<NummerdatudTõesuspuuTipp> jrk = new PriorityQueue<>(new TippudeVordleja());
-
-        //Set<TõesuspuuTipp> eemaldatudTipud = new HashSet<>();
 
         jrk.add(new NummerdatudTõesuspuuTipp(juurtipp));
 
         while(!jrk.isEmpty() && eiOleAegunud){
+
             eiOleAegunud = System.currentTimeMillis() < lopp;
-            if (jrk.size() % 100 == 0) {
+
+            /*if (jrk.size() % 100 == 0) {
                 System.out.printf("Järjekord on %d \n", jrk.size());
-            }
+            }*/
+
             TõesuspuuTipp tipp = jrk.remove().getTipp();
             numbrid.put(tipp, tootlemiseNo++);
-            //System.out.println("Eemaldasin tipu: " + tipp);
-            //eemaldatudTipud.add(tipp);
-
 
             if(tipp.sisaldabVastuolu()){ //kui tipp annab vastuolu, siis ei lisa teda töödeldavate tippude järjekorda
                 continue;
@@ -63,20 +61,13 @@ public class Tõesuspuu {
                 continue;
             }
 
-
             Set<Termikuulaja> kuulajad = tipp.getKuulajad(); //tagasta tipu ja tema vanemate Termikuulajad. Eesmärk leida: ∃xF(x) = 0, ∀xF(x) = 1.
-
-            /*Collection<TõesuspuuTipp> lehed = tipp.getLehed();
-            Set<Muutuja> tipuAllpuudeMuutujad = new HashSet<Muutuja>();
-            for(TõesuspuuTipp leht : lehed){
-                tipuAllpuudeMuutujad.addAll(leht.getTermid());
-            }*/
 
             Set<Muutuja> harusEsinenudTermid = tipp.getTermid(); //vabad muutujad
             Set<Muutuja> uuedTermid = new HashSet<>(tipp.getTermid());
             uuedTermid.removeAll(tipp.getVanem() == null ? tipp.getValem().getVabadMuutujad() : tipp.getVanem().getTermid()); //jäta välja vanema termid
-            for (Muutuja c : uuedTermid) { //iga uue konstantssümboli kohta, mis tipuga tuli, lisa puusse analüüsisamm.
-                // uued termid saavad vanad faktid. Puus ei ole teadmisi uute termide kohta mis just lisati
+            for (Muutuja c : uuedTermid) { //iga uue konstantsümboli kohta, mis tipuga tuli, lisa puusse analüüsisamm.
+                // uued termid saavad vanad faktid.
                 for (TõesuspuuTipp leht : tipp.getLehed()) {
                     if (leht.sisaldabVastuolu()) {
                         continue;
@@ -93,8 +84,6 @@ public class Tõesuspuu {
                 }
             }
 
-            //System.out.println("Haru termid on: " + harusEsinenudTermid);
-            //System.out.println("Puu termid on: " + puusEsinenudTermid);
             List<TõesuspuuTipp> alampuud = tipp.getValem().reegel(tipp.getTõeväärtus(), puusEsinenudTermid, kuulajad, harusEsinenudTermid);
 
             Optional<Termikuulaja> kuulaja = tipp.getValem().getKuulaja(tipp.getTõeväärtus()); //vanad termid saavad uue fakti. Puus ei ole uut teadmist vanade termide kohta.
@@ -115,14 +104,6 @@ public class Tõesuspuu {
                 }
             }
 
-
-//            for(TõesuspuuTipp tippp : alampuud){
-//                for (TõesuspuuTipp t : tippp.getLehed()) {
-
-//  }
-//                    }
-//                }
-//            }
 
             /*if(alampuud.size() == 0 && tipp.getLapsed().size() == 0 && !tipp.sisaldabVastuolu()){ //haru on lõpetatud, kuid mitte vastuoluline
                 //System.out.println("Lõpetatud haru leht " + tipp.toString());
@@ -155,9 +136,9 @@ public class Tõesuspuu {
             }
 
             tipp.setAnalüüsitud(true);
+
         }
     }
-
 
 
     private boolean sisaldabLehte(TõesuspuuTipp leht, TõesuspuuTipp uusLeht) {
@@ -182,7 +163,7 @@ public class Tõesuspuu {
 
     public Set<Valem> vaartustusedVastavaltEeldusele(){
 
-        Set<Map<String, Boolean>> vaartustused = new HashSet<>();
+        //Set<Map<String, Boolean>> vaartustused = new HashSet<>();
 
         Set<Valem> atomaarsedValemid = new HashSet<>();
 
@@ -201,7 +182,6 @@ public class Tõesuspuu {
             }
         }
 
-        //return vaartustused;
         return atomaarsedValemid;
     }
 
@@ -308,10 +288,7 @@ public class Tõesuspuu {
 
 
         private boolean peabHiljemTootlema(TõesuspuuTipp o2) {
-            /*if(o2.getValem() instanceof AtomaarneValemPredSümboliga){
-                AtomaarneValemPredSümboliga avp = (AtomaarneValemPredSümboliga)o2.getValem();
-                return peabHiljemTootlema(new TõesuspuuTipp(avp.getValem(), o2.getTõeväärtus()));
-            }*/
+
             return leidubVäär(o2) || igaToene(o2);
         }
 

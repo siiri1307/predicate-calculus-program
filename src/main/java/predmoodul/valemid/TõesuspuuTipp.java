@@ -162,31 +162,14 @@ public class TõesuspuuTipp {
 
         Map<String, Boolean> vaartustused = new HashMap<>();
 
-        System.out.println("Leht mis tagastab tühja mapi: " + this.toString());
-
-        /*if(this.vanem == null) {
-            if (this.getValem() instanceof AtomaarneValemPredSümboliga) {
-                AtomaarneValemPredSümboliga valem = (AtomaarneValemPredSümboliga) this.getValem();
-                vaartustused.put(valem.getId().getPredSümbol(), tõeväärtus);
-            }
-            return vaartustused;
-        }*/
-
         if(!(this.vanem == null || this == null)){
             if (this.getValem() instanceof AtomaarneValemPredSümboliga) {
                 AtomaarneValemPredSümboliga valem = (AtomaarneValemPredSümboliga) this.getValem();
                 vaartustused.put(valem.getId().getPredSümbol() + "(" + valem.getVabadMuutujad() + ")", tõeväärtus);
             }
-            /*else{
-                vaartustused.put(this.getValem().dot(), tõeväärtus);
-            }*/
+
             vaartustused.putAll(this.vanem.tagastaVaartustused());
         }
-
-        //if(this.vanem == null){
-          //  return vaartustused;
-        //}
-
 
         return vaartustused;
     }
@@ -222,7 +205,7 @@ public class TõesuspuuTipp {
     public Set<Termikuulaja> getKuulajad(){
         if(vanem == null){
             Set<Termikuulaja> set = new HashSet<>();
-            Optional<Termikuulaja> k = valem.getKuulaja(tõeväärtus); //igal valemil on see meetod, mis üldjuhul tagastab Optional.empty. See override'itakse Iga ja Eks puhul
+            Optional<Termikuulaja> k = valem.getKuulaja(tõeväärtus); //igal valemil on see meetod, mis üldjuhul tagastab Optional.empty. See kirjutatakse üle Iga ja Eks puhul
             if(k.isPresent()){
                 set.add(k.get());
             }
@@ -290,7 +273,5 @@ public class TõesuspuuTipp {
     public int hashCode() {
         return valem.hashCode();
     }
-
-
 
 }
