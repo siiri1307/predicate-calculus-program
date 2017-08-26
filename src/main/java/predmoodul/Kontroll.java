@@ -52,11 +52,11 @@ public class Kontroll {
         Tõesuspuu tp = Tõesuspuu.looTõesuspuu(ekvivalentsiValem, false);
         tp.looPuu();
         if(tp.vaartustusedVastavaltEeldusele().isEmpty() && tp.eiOleAegunud()){
-            System.out.println("Tõesuspuu meetod tegi kindaks et samaväärsed");
+            //System.out.println("Tõesuspuu meetod tegi kindaks et samaväärsed");
             return 1; // "jah"
         }
         else{
-            System.out.println("Jõudsin väärtuste arvutamiseni");
+            //System.out.println("Jõudsin väärtuste arvutamiseni");
             boolean eiOleSamavaarne = eiOleSamavaarne();
             if(eiOleSamavaarne){
                 return 0; //"ei"
@@ -70,12 +70,6 @@ public class Kontroll {
     public int getKontrolliTulemus() {
         return kontrolliTulemus;
     }
-
-    /*public Kontroll(Valem valem){
-
-        this.valem = valem;
-        this.vaartustused = new HashMap<>();
-    }*/
 
     public boolean kontrolliIndiviidideArvuValemites(Set<Muutuja> pakkumiseVabadMuutujad, Set<Muutuja> oigeVabadMuutujad) throws ErinevIndiviidideArv {
 
@@ -98,23 +92,20 @@ public class Kontroll {
 
     public boolean eiOleSamavaarne() throws ErinevIndiviidideArv {
 
-        //int indiviidideArvPakkumine = pakkumine.getVabadMuutujad().size();
-        //int indiviidideArvVastus = vastus.getVabadMuutujad().size();
 
         kontrolliIndiviidideArvuValemites(pakkumine.getVabadMuutujad(), vastus.getVabadMuutujad());
 
-        /*if(indiviidideArvPakkumine != indiviidideArvVastus) {
-            throw new ErinevIndiviidideArv(indiviidideArvPakkumine, indiviidideArvVastus);
-        }*/
-
-        //ekvivalentsiValem = moodustaEkvivalentsiValem(pakkumine, vastus);
         Valem valemVabadeMuutujateta = seoVabadMuutujad(ekvivalentsiValem);
 
-        int kvantoriteArv = valemVabadeMuutujateta.getKvantoriteArv();
-        double hulk = maxVaartusVastavaltKvantoritele(kvantoriteArv);
+        int kvantoriteSygavus = valemVabadeMuutujateta.getKvantoriteSygavus();
+        double hulk = maxVaartusVastavaltKvantoritele(kvantoriteSygavus);
         eiOleSamavaarne = !valemVabadeMuutujateta.vaartusta(vaartustused, hulk);
 
         return eiOleSamavaarne;
+    }
+
+    public Valem getEkvivalentsiValem() {
+        return ekvivalentsiValem;
     }
 
     public boolean eiOleSamavaarneIlmaErindita() throws ErinevIndiviidideArv { //see meetod on mõeldud väärtuste väljarvutamise testimiseks - see ei võta arvesse oodatavat predikaatide arvu
@@ -136,26 +127,21 @@ public class Kontroll {
         return vastus;
     }
 
-    private double maxVaartusVastavaltKvantoritele(int kvantoriteArv) {
+    private double maxVaartusVastavaltKvantoritele(int kvantoriteSygavus) {
 
-        if(kvantoriteArv < 6){
+        if(kvantoriteSygavus < 4){
             return 5000.0;
         }
-        if(kvantoriteArv < 10){
-            return 1000.0;
+        if(kvantoriteSygavus < 7){
+            return 30;
         }
-        if(kvantoriteArv < 13){
-            return 20.0;
+        if(kvantoriteSygavus < 9){
+            return 10.0;
         }
         else{
             return 2.0;
         }
     }
-
-    /*public boolean eiOleSamavaarne2(){
-        Valem valemVabadeMuutujateta = seoVabadMuutujad(valem);
-        return !valemVabadeMuutujateta.vaartusta(vaartustused);
-    }*/
 
     public Map<Character, Integer> tagastaKontramudel(){
 
