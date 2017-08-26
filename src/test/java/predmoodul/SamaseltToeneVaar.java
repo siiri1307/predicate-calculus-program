@@ -79,7 +79,6 @@ public class SamaseltToeneVaar {
     }
 
     @Test
-    //Bugi
     //õpikust lk 65: leidub kvantori distributiivsus. Eeldus, et leidub väärtustus, mil valem on väär, on vale (tagastatav väärtustuste hulk on tühi), seega valem on samaselt tõene.
     public void onSamavaarne2() throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud, LekseriErind, SyntaksiViga {
         Tõesuspuu tp = konstrueeriPuu("F(x) := x=1 G(x) := x=0 ∃x(F(x)∨G(x)) ~ ∃xF(x)∨∃xG(x)", false);
