@@ -15,6 +15,7 @@ import static org.junit.Assert.assertEquals;
 
 public class Integratsioon {
 
+    String test = "1 + 1 = x";
     String vastus1A ="∃y(x=(1+1+1)*y) & ¬∃z(x=(1+1+1)*(1+1+1)*z)";
     String vastus1B = "∃q∃p(∃z(y+z+1=q) & ∃w(y+w+1=p) & (x=q*p))";
     String vastus1C = "A(x) := ∀y∀z(x = y * z -> y = 1 ∨ z = 1) & ¬(x = 1)" +
@@ -31,6 +32,17 @@ public class Integratsioon {
 
     @Rule
     public ExpectedException erand = ExpectedException.none();
+
+    @Test
+    public void test() throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud, SyntaksiViga, IOException, ErinevIndiviidideArv {
+
+        pakkumine = "1 = 0 -> x = x + 1";
+
+        knt = new Kontroll(pakkumine, vastus1A);
+        System.out.println(knt.getKontrolliTulemus());
+        System.out.println(knt.kontraNaideStringina());
+        //assertEquals(1, knt.getKontrolliTulemus());
+    }
 
     @Test
     public void testYl1A_1() throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud, SyntaksiViga, IOException, ErinevIndiviidideArv {

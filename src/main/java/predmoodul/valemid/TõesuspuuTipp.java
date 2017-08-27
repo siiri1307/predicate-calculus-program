@@ -176,14 +176,14 @@ public class TõesuspuuTipp {
 
     public String dotFormaat(String number){
 
-        String id = System.identityHashCode(this) + " [label=" + "\"" + this.getValem().dot() + " : " +
-                Boolean.toString(this.tõeväärtus) +
-                "\" color=\"" + (this.leidubVastuolu() ? "red" : "black") + "\""  + "]; \n";
-
         /*String id = System.identityHashCode(this) + " [label=" + "\"" + this.getValem().dot() + " : " +
                 Boolean.toString(this.tõeväärtus) +
-                " NR: " + number + "" +
                 "\" color=\"" + (this.leidubVastuolu() ? "red" : "black") + "\""  + "]; \n";*/
+
+        String id = System.identityHashCode(this) + " [label=" + "\"" + this.getValem().dot() + " : " +
+                Boolean.toString(this.tõeväärtus) +
+                " NR: " + number + "" +
+                "\" color=\"" + (this.leidubVastuolu() ? "red" : "black") + "\""  + "]; \n";
 
         if(this.getVanem() != null){
             return id + "\n" + System.identityHashCode(this.getVanem()) + " -- " + System.identityHashCode(this) + "\n";

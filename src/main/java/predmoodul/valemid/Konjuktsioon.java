@@ -11,19 +11,12 @@ import java.util.function.Predicate;
  */
 public class Konjuktsioon extends Valem {
 
-    //private List<Kvantor> kvantorid;
-    //private Valem valem;
-    //private boolean eitus;
-
     private Valem vasakLaps;
     private Valem paremLaps;
 
     public Konjuktsioon(Valem valem1, Valem valem2){
         this.vasakLaps = valem1;
         this.paremLaps = valem2;
-        //this.kvantorid = kvantorid;
-        //this.valem = valem;
-        //this.eitus = eitus;
     }
 
     //copy constructor
@@ -46,7 +39,6 @@ public class Konjuktsioon extends Valem {
         indiviidTermid.addAll(paremLaps.getIndiviidTermid());
 
         return indiviidTermid;
-        //return valem.getIndiviidTermid();
     }
 
     @Override
@@ -59,25 +51,6 @@ public class Konjuktsioon extends Valem {
 
         return vabad;
 
-        /*Set<Character> kvantoritegaSeotud = new HashSet<>();
-        Set<Character> koikMuutujad = new HashSet<>();
-
-        for(Kvantor kv : kvantorid){
-            kvantoritegaSeotud.add(kv.getIndiviidMuutuja());
-        }
-
-        Set<IndiviidTerm> koikIndiviidMuutujad = getIndiviidTermid();
-
-        for(IndiviidTerm indterm : koikIndiviidMuutujad){
-            koikMuutujad.add(indterm.getTahis());
-        }
-
-        koikMuutujad.removeAll(kvantoritegaSeotud);
-        System.out.println("Kvantoriga seotud muutujad on: " + kvantoritegaSeotud);
-
-        System.out.println("Vabad muutujad on: " + koikMuutujad);
-
-        return koikMuutujad;*/
     }
 
     @Override
@@ -90,7 +63,6 @@ public class Konjuktsioon extends Valem {
 
         return seotud;
     }
-
 
     @Override
     public int getKvantoriteArv() {
@@ -108,32 +80,7 @@ public class Konjuktsioon extends Valem {
 
         return vasakLaps.vaartusta(vaartustus, maxVaartus) && paremLaps.vaartusta(vaartustus, maxVaartus);
 
-        /*if(eitus){
-            return !vaartustaAbi(vaartustus, new ArrayList<>(kvantorid));
-        }
-
-        return vaartustaAbi(vaartustus, new ArrayList<>(kvantorid));*/
     }
-
-    /*boolean vaartustaAbi(Map<Character, Double> vaartustus, List<Kvantor> kvantorid){
-
-        if (kvantorid.isEmpty()) {
-            return valem.vaartusta(vaartustus);
-        }
-
-        List<Kvantor> koopiakvantoritest = new ArrayList<>(kvantorid);
-        Kvantor kvantor = koopiakvantoritest.remove(0);
-        for(double j= 0; j < 10; j++){
-            vaartustus.put(kvantor.getIndiviidMuutuja(), j);
-            boolean toeVaartus = vaartustaAbi(vaartustus, koopiakvantoritest);
-            if(kvantor.lõpetamiseTingimus() == toeVaartus){
-                return kvantor.lõpetamiseTingimus();
-            }
-        }
-
-        return !kvantor.lõpetamiseTingimus();
-
-    }*/
 
     public static Valem looKonjuktsioonid(List<Valem> alamValemid) {
 
@@ -189,10 +136,10 @@ public class Konjuktsioon extends Valem {
     }
 
     @Override
-    public void uusKonstantSumbol(Muutuja uusSumbol, Muutuja vanaSumbol) { //, boolean vahetaKvantoriSees
+    public void uusKonstantSumbol(Muutuja uusSumbol, Muutuja vanaSumbol) {
 
-        vasakLaps.uusKonstantSumbol(uusSumbol, vanaSumbol); //, vahetaKvantoriSees
-        paremLaps.uusKonstantSumbol(uusSumbol, vanaSumbol); //, vahetaKvantoriSees
+        vasakLaps.uusKonstantSumbol(uusSumbol, vanaSumbol);
+        paremLaps.uusKonstantSumbol(uusSumbol, vanaSumbol);
     }
 
     @Override

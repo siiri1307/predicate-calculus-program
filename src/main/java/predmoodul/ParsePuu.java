@@ -92,10 +92,6 @@ public class ParsePuu {
             System.out.println(vead.get(0));
         }
 
-        /*
-        for(String s: vead){
-            System.out.println(s);
-        }*/
     }
     
     public AstNode createAST(ParseTree parseTreeNode, Map<ValemiID, Vaartus> abivalemid) throws VaarVabadeMuutujateEsinemine, AbiValemEiOleDefineeritud {
@@ -189,7 +185,6 @@ public class ParsePuu {
                 }
 
                 return Ekvivalents.looEkvivalentsid(alamValemid);
-                //return new PredValem(alamValemid);
             }
         }
 
@@ -206,7 +201,6 @@ public class ParsePuu {
                     alamValemid.add(ekv);
                 }
                 return Implikatsioon.looImplikatsioonid(alamValemid);
-                //return Ekvivalents.looEkvivalentsid(alamValemid);
             }
         }
 
@@ -223,7 +217,6 @@ public class ParsePuu {
                     alamValemid.add(ekv);
                 }
                 return Disjunktsioon.looDisjunktsioonid(alamValemid);
-                //return Implikatsioon.looImplikatsioonid(alamValemid);
             }
         }
 
@@ -242,7 +235,6 @@ public class ParsePuu {
             }
 
             return Konjuktsioon.looKonjuktsioonid(alamValemid);
-            //return Disjunktsioon.looDisjunktsioonid(alamValemid);
         }
 
         else if(valemContext instanceof PredParser.KonjvalemContext){

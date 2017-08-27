@@ -167,9 +167,6 @@ public class Kontroll {
 
         Map<Character, Integer> kontramudel = tagastaKontramudel();
 
-        //boolean tudengiVastuseToevaartus = pakkumine.vaartusta(vaartustused);
-        //boolean oigeVastuseToevaartus = vastus.vaartusta(vaartustused);
-
         String infoTudengile = new String();
 
         if(eiOleSamavaarne){

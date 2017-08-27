@@ -113,8 +113,8 @@ public class KoguValem extends Valem {
     }
 
     @Override
-    public void uusKonstantSumbol(Muutuja uusSumbol, Muutuja vanaSumbol) { //, boolean vahetaKvantoriSees
-        children.get(children.size()-1).uusKonstantSumbol(uusSumbol, vanaSumbol); //, vahetaKvantoriSees
+    public void uusKonstantSumbol(Muutuja uusSumbol, Muutuja vanaSumbol) {
+        children.get(children.size()-1).uusKonstantSumbol(uusSumbol, vanaSumbol);
     }
 
     @Override

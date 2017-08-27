@@ -44,9 +44,6 @@ public class Implikatsioon extends Valem {
 
         return implikatsioon(vasakLaps.vaartusta(vaartustus, maxVaartus), paremLaps.vaartusta(vaartustus, maxVaartus));
 
-        /*return  disjunktsiooniValemid.stream()
-                .map(valem -> valem.vaartusta(vaartustus))
-                .reduce((valem1,valem2) -> valem1 || valem2).get();*/
     }
 
     private boolean implikatsioon(boolean valem1, boolean valem2) {
@@ -63,9 +60,6 @@ public class Implikatsioon extends Valem {
         indiviidTermid.addAll(paremLaps.getIndiviidTermid());
         indiviidTermid.addAll(vasakLaps.getIndiviidTermid());
 
-        /*for(Valem valem : disjunktsiooniValemid){
-            indiviidTermid.addAll(valem.getIndiviidTermid());
-        }*/
         return indiviidTermid;
     }
 
@@ -75,10 +69,6 @@ public class Implikatsioon extends Valem {
 
         vabad.addAll(paremLaps.getVabadMuutujad());
         vabad.addAll(vasakLaps.getVabadMuutujad());
-
-        /*for(Valem valem : disjunktsiooniValemid){
-            vabad.addAll(valem.getVabadMuutujad());
-        }*/
 
         return vabad;
     }
@@ -157,10 +147,10 @@ public class Implikatsioon extends Valem {
     }
 
     @Override
-    public void uusKonstantSumbol(Muutuja uusSumbol, Muutuja vanaSumbol) { //, boolean vahetaKvantoriSees
+    public void uusKonstantSumbol(Muutuja uusSumbol, Muutuja vanaSumbol) {
 
-        vasakLaps.uusKonstantSumbol(uusSumbol, vanaSumbol); //, vahetaKvantoriSees
-        paremLaps.uusKonstantSumbol(uusSumbol, vanaSumbol); //, vahetaKvantoriSees
+        vasakLaps.uusKonstantSumbol(uusSumbol, vanaSumbol);
+        paremLaps.uusKonstantSumbol(uusSumbol, vanaSumbol);
     }
 
     @Override

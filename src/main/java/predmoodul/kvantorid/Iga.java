@@ -101,15 +101,6 @@ public class Iga extends Valem implements Kvantor {
     @Override
     public List<TõesuspuuTipp> reegel(boolean tõeväärtus, Set<Muutuja> puusEsinenudTermid, Set<Termikuulaja> kuulajad,  Set<Muutuja> harusEsinenudTermid) {
 
-        //Set<Character> harusEsinenudTermid = new HashSet<>();
-
-        //return reegelKvantorile(tõeväärtus, harusEsinenudTermid, kuulajad);
-    //}
-
-    //private List<TõesuspuuTipp> reegelKvantorile(boolean tõeväärtus, Set<Character> harusEsinenudTermid, Set<Termikuulaja> kuulajad) {
-
-        // Map<Character, Optional<Double>> vaartustus
-
         List<TõesuspuuTipp> tõesuspuuTipud = new ArrayList<>();
 
         if(tõeväärtus){
@@ -124,49 +115,15 @@ public class Iga extends Valem implements Kvantor {
                 tõesuspuuTipud.add(laps);
                 puusEsinenudTermid.add(term);
             }
-            else {
-
-                //vt õpikus näide 22, lk 62; kui harus on kasutatud mitut konstantsümbolit, siis tuleb valemis kõiki neid kasutada
-
-                /*see loogika on nüüd Tõesuspuu klassis Set<Character> harusEsinenudTermidKoopia = new HashSet<>(harusEsinenudTermid);
-                Iterator<Character> it = harusEsinenudTermidKoopia.iterator();
-                Character term = it.next();
-                Valem valemiKoopia = this.valem.koopia();
-                valemiKoopia.uusKonstantSumbol(term, indiviidmuutuja);
-                TõesuspuuTipp juur = new TõesuspuuTipp(valemiKoopia, true);
-                TõesuspuuTipp leht = juur;*/
-
- /*               while (it.hasNext()) {
-                    term = it.next();
-                    valemiKoopia = this.valem.koopia();
-                    valemiKoopia.uusKonstantSumbol(term, indiviidmuutuja);
-                    TõesuspuuTipp laps = new TõesuspuuTipp(valemiKoopia, true);
-                    leht.setVasakLaps(laps);
-                    leht = laps;
-                }*/
-
-                //tõesuspuuTipud.add(juur);
-            }
         }
         else{
-
             //too sisse uus konstantsümbol, mida harus ei esine
             Muutuja suvalineSumbol = tagastaSuvalineKasutamataSumbol(puusEsinenudTermid, harusEsinenudTermid);
             puusEsinenudTermid.add(suvalineSumbol);
 
-            //Character uus = 'z';
-
             Valem valemiKoopia = this.valem.koopia();
             valemiKoopia.uusKonstantSumbol(suvalineSumbol, indiviidmuutuja);//, false
             TõesuspuuTipp laps = new TõesuspuuTipp(valemiKoopia, false);
-
-            //Kuulajate loogika
-            /*TõesuspuuTipp leht = laps;
-            for (Termikuulaja kuulaja : kuulajad) {
-                TõesuspuuTipp kvantoriTipp = kuulaja.kuulaKonstantSumbolit(suvalineSumbol);
-                leht.setVasakLaps(kvantoriTipp);
-                leht = kvantoriTipp;
-            }*/
 
             tõesuspuuTipud.add(laps);
         }
@@ -198,30 +155,9 @@ public class Iga extends Valem implements Kvantor {
 
     private Muutuja tagastaSuvalineKasutamataSumbol(Set<Muutuja> puusEsinenudTermid, Set<Muutuja> harusEsinenudTermid)  {
 
-//        int seniSuurim = 0;
-//
-//        for(Muutuja m : harusEsinenudTermid){
-//            if(m.getTahis().equals('m') && m.getJarjeNumber() > seniSuurim){
-//                seniSuurim = m.getJarjeNumber();
-//            }
-//        }
-
         Muutuja uusMuutuja = new Muutuja('m', Muutuja.uusMNumber());
-        //harusEsinenudTermid.add(uusMuutuja);
+
         return uusMuutuja;
-
-        //Set<Character> voimalikudTermid = new HashSet<>();
-
-        /*for(int i = 0; i < 256; i++){
-            voimalikudTermid.add((char) i);
-        }*/
-
-        //Set<Character> voimalikudTermid = new HashSet<>(Arrays.asList('b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 't'));
-
-        //voimalikudTermid.removeAll(puusEsinenudTermid); //kahe set'i vahe, et saada teada sümbolid, mida pole veel harus kasutatud
-
-        //return new Muutuja(voimalikudTermid.iterator().next(),0);
-        //throw new NotImplementedException();
     }
 
     @Override
@@ -245,18 +181,11 @@ public class Iga extends Valem implements Kvantor {
     }
 
     @Override
-    public void uusKonstantSumbol(Muutuja uusSumbol, Muutuja vanaSumbol) { //, boolean vahetaKvantoriSees
+    public void uusKonstantSumbol(Muutuja uusSumbol, Muutuja vanaSumbol) {
         if (vanaSumbol.equals(getIndiviidMuutuja()) ) {
             return;
         }
-            /*if (!vahetaKvantoriSees) {
-                return;
-            }
-            else {
-                vahetaKvantoriSees = false;
-            }
-        }*/
-        valem.uusKonstantSumbol(uusSumbol, vanaSumbol);//, vahetaKvantoriSees
+        valem.uusKonstantSumbol(uusSumbol, vanaSumbol);
     }
 
     @Override

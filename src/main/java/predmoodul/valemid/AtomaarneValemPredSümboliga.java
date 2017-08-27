@@ -61,7 +61,6 @@ public class AtomaarneValemPredSümboliga extends Valem {
         if(termArgumendid != null){
             //System.out.println("Predsümboliga valemi termargumendid on: ");
             for(TermiPaar paar : termArgumendid){
-                //System.out.println(paar.getTerm());
                 if(paar.getTerm() instanceof NullTerm){
                     vaartustus.put(paar.getTahis(), 0.0);
                 }
@@ -86,7 +85,7 @@ public class AtomaarneValemPredSümboliga extends Valem {
                 }
             }
         }
-        //System.out.println("Atom valem predsümboliga valem on: " + valem.toString());
+
         return valem.vaartusta(vaartustus, maxVaartus);
     }
 
@@ -162,7 +161,7 @@ public class AtomaarneValemPredSümboliga extends Valem {
     }*/
 
     @Override
-    public void uusKonstantSumbol(Muutuja uusSumbol, Muutuja vanaSumbol) { //, boolean vahetaKvantoriSees
+    public void uusKonstantSumbol(Muutuja uusSumbol, Muutuja vanaSumbol) {
 
         for(TermiPaar tp : termArgumendid){
             //if(tp.getTahis().getTahis() == 'x'){
@@ -170,7 +169,7 @@ public class AtomaarneValemPredSümboliga extends Valem {
             //}
         }
 
-        valem.uusKonstantSumbol(uusSumbol, vanaSumbol); //, vahetaKvantoriSees
+        valem.uusKonstantSumbol(uusSumbol, vanaSumbol);
     }
 
     /*@Override

@@ -109,9 +109,6 @@ public class Ekvivalents extends Valem {
 
     public static Valem looEkvivalentsid(List<Valem> alamValemid) {
 
-        //return alamValemid.stream().reduce((x,y) -> new Ekvivalents(x,y)).orElse(alamValemid.get(0));
-
-
         Valem vasak = alamValemid.get(0);
 
         for(int i = 1; i < alamValemid.size(); i++){
@@ -186,10 +183,10 @@ public class Ekvivalents extends Valem {
     }
 
     @Override
-    public void uusKonstantSumbol(Muutuja uusSumbol, Muutuja vanaSumbol) { //, boolean vahetaKvantoriSees
+    public void uusKonstantSumbol(Muutuja uusSumbol, Muutuja vanaSumbol) {
 
-        vasakLaps.uusKonstantSumbol(uusSumbol, vanaSumbol); //, vahetaKvantoriSees
-        paremLaps.uusKonstantSumbol(uusSumbol, vanaSumbol); //, vahetaKvantoriSees
+        vasakLaps.uusKonstantSumbol(uusSumbol, vanaSumbol);
+        paremLaps.uusKonstantSumbol(uusSumbol, vanaSumbol);
     }
 
     @Override

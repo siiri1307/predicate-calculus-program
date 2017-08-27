@@ -169,14 +169,14 @@ public class Tõesuspuu {
 
         Collection<TõesuspuuTipp> lehedPuus = juurtipp.getLehed();
 
-        System.out.println("Selles puus on " + lehedPuus.size() + " lehte.");
+        //System.out.println("Selles puus on " + lehedPuus.size() + " lehte.");
 
         for(TõesuspuuTipp leht : lehedPuus){
 
-            System.out.println("Leidsin lehe: " + leht.toString());
+            //System.out.println("Leidsin lehe: " + leht.toString());
 
             if(!leht.sisaldabVastuolu()){
-                System.out.println("Leidsin väärtustuse mil valem on väär");
+                //System.out.println("Leidsin väärtustuse mil valem on väär");
                 atomaarsedValemid.addAll(leht.lisaVaaraksMuutvadVaartustused());
                 //vaartustused.add(leht.tagastaVaartustused());
             }

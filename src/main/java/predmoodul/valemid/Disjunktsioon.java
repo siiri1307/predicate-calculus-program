@@ -132,10 +132,10 @@ public class Disjunktsioon extends Valem {
     }
 
     @Override
-    public void uusKonstantSumbol(Muutuja uusSumbol, Muutuja vanaSumbol) {//, boolean vahetaKvantoriSees
+    public void uusKonstantSumbol(Muutuja uusSumbol, Muutuja vanaSumbol) {
 
-        vasakLaps.uusKonstantSumbol(uusSumbol, vanaSumbol); //, vahetaKvantoriSees
-        paremLaps.uusKonstantSumbol(uusSumbol, vanaSumbol); //, vahetaKvantoriSees
+        vasakLaps.uusKonstantSumbol(uusSumbol, vanaSumbol);
+        paremLaps.uusKonstantSumbol(uusSumbol, vanaSumbol);
     }
 
     @Override
